@@ -1,0 +1,15 @@
+Config { font = "xft:Liberation Sans-10"
+       , bgColor = "black"
+       , fgColor = "white"
+       , position = Bottom
+       , lowerOnStart = False
+       , commands = [ Run MultiCpu ["-L","3","-H","50","--normal","green","--high","red"] 10
+                    , Run CpuFreq ["-t","Freq:<cpu0>/<cpu1>/<cpu2>/<cpu3>/<cpu4>/<cpu5>/<cpu6>/<cpu5>","-L","2","-H","3","-l","white","-n","white","-h","lightblue"] 50
+                    , Run Memory ["-t","Mem: <usedratio>%"] 10
+                    , Run StdinReader
+         ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %multicpu% | %memory% || %cpufreq%"
+       }
+

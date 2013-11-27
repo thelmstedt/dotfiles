@@ -1,0 +1,5 @@
+#!/bin/bash
+
+
+#crontab 01 * * * * /home/tim/dotfiles/organiser-export
+emacs --batch --eval "(setq org-export-headline-levels 1)" --visit /home/tim/Dropbox/organiser.org --funcall org-export-as-html

@@ -1,0 +1,11 @@
+backups/
+elpa/
+places
+el-get/
+auto-save-list/
+ac-comphist.dat
+eshell/
+url/
+swank/
+.smex-items
+session.*

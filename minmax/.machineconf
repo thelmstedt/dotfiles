@@ -1,0 +1,6 @@
+#archlinux
+
+source /etc/profile
+export PATH="$PATH:/usr/bin/vendor_perl/ack"
+alias packer="packer --auronly"
+alias ssh="TERM=xterm ssh"
