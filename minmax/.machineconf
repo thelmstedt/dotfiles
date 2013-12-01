@@ -4,3 +4,7 @@ source /etc/profile
 export PATH="$PATH:/usr/bin/vendor_perl/ack"
 alias packer="packer --auronly"
 alias ssh="TERM=xterm ssh"
+
+export EDITOR="emacs"
+export ALTERNATE_EDITOR="emacsnw"
+export GIT_EDITOR="emacsclient -t"
