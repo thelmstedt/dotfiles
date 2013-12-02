@@ -4,11 +4,7 @@ out_to_x no
 update_interval 1
  
 TEXT
-${uptime} \
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF) ${acpitemp} \
-^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% ${exec cpufreq-info | grep "current CPU frequency" | cut -c28-35} ${freq}GHz \
-^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% - ${mem} / ${memeasyfree} \
-^fg(\#ebac54) ${if_existing /proc/net/route wlp10s0} ^i(/home/tim/.xmonad/dzen2/wifi_01.xbm)\
-^fg(\#00aa4a) ^i(/home/tim/.xmonad/dzen2/net_down_03.xbm)${downspeed wlp10s0}\
-^fg(\#ff3333) ^i(/home/tim/.xmonad/dzen2/net_up_03.xbm)${upspeed wlp10s0}\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF) ${acpitemp}°C \
+^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% / ${exec cpufreq-info | grep "current CPU frequency" | cut -c28-35} ${freq}GHz \
+^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% - ${mem} \
 ^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/clock.xbm) ^fg(\#FFFFFF) ${time %Y-%m-%d} ^fg(\#ebac54) ${time %R:%S}  
