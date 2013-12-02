@@ -29,7 +29,29 @@ import qualified XMonad.StackSet                 as W
 
 import XMonad.Hooks.UrgencyHook
 
-myLayouts =
+
+modMask' = mod4Mask
+
+
+main = do
+  workspaceBar <- spawnDzen myStatusBar 
+  conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
+
+  xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
+    modMask              = modMask'
+    , layoutHook         = avoidStruts layoutHook'
+    , terminal           = "urxvt"
+    , borderWidth        = 2
+    , normalBorderColor  = "#cccccc"
+    , manageHook         = manageHook' <+> manageHook xfceConfig
+    , logHook            = myLogHook workspaceBar
+    , workspaces = workspaces'
+    }  `additionalKeysP` keys'
+
+
+
+
+layoutHook' =
   smartBorders
   $ onWorkspaces ["9.im"] imLayout
   $ standardLayouts
@@ -48,15 +70,7 @@ myLayouts =
 
 
 
-------------------------------------------------------------------------
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
-myManageHook =
+manageHook' =
   composeAll
     [ moveC "jetbrains-idea" "1.code"
     , moveC "Firefox" "3.web"
@@ -75,22 +89,13 @@ myManageHook =
     floatC c = (className =? c) --> doFloat
 
 
-modm =
-  mod4Mask
 
-
-myWorkspaces :: [String]
-myWorkspaces =
+workspaces' :: [String]
+workspaces' =
   [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
-workspaceKeys =
-  [ (otherModMasks ++ "M-" ++ key, action tag)
-    | (tag, key)  <- zip myWorkspaces (map show [1,2,3,4,5,6,7,8,9,0])
-    , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
-    , ("S-", windows . W.shift)]
-  ]
 
-moreKeys =
+keys' =
     [
       ("C-\\", spawn "dmenu_run")
     , ("C-S-\\", gotoMenu)
@@ -98,7 +103,12 @@ moreKeys =
     , ("<F2>", sendMessage $ JumpToLayout "Tall")
     , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("<F4>", sendMessage $ JumpToLayout "circle")
-    ] ++ workspaceKeys
+    ] ++ 
+    [ (otherModMasks ++ "M-" ++ key, action tag)
+    | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
+    , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
+    , ("S-", windows . W.shift)]
+    ]
 
 
 
@@ -144,20 +154,3 @@ myPrettyPrinter h = defaultPP {
     , ppSep             = "  |  "
 }
 
-main = do
-  workspaceBar <- spawnDzen myStatusBar 
-  conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
-
-  xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
-    modMask              = modm
-    , layoutHook         = avoidStruts myLayouts
-    , terminal           = "urxvt"
-    , borderWidth        = 2
-    , normalBorderColor  = "#cccccc"
-    , manageHook         = myManageHook <+> manageHook xfceConfig
-    , logHook            = myLogHook workspaceBar
-    , workspaces = myWorkspaces
-    }  `additionalKeysP` moreKeys
-
-
- 
