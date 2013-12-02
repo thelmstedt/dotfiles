@@ -4,10 +4,7 @@ xftfont 123:size=8
 xftalpha 0.1
 update_interval 1
 total_run_times 0
-own_window yes
-own_window_type normal
-own_window_transparent yes
-own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
 double_buffer yes
  
 maximum_width 250
@@ -19,7 +16,7 @@ default_color lightgray
 default_shade_color red
 default_outline_color green
 alignment top_right
-gap_x 24
+gap_x 50
  
 no_buffers yes
 uppercase no
@@ -55,6 +52,11 @@ ${font}Core 0 ${color dodgerblue3}${execi 30 sensors | grep 'Core 0:' | cut -c18
 ${font}Core 1 ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18-19}°C${color} @ ${cpu cpu2} % $alignc ${color dodgerblue3}${cpubar cpu2}${color}
 ${font}Core 2 ${color dodgerblue3}${execi 30 sensors | grep 'Core 2:' | cut -c18-19}°C${color} @ ${cpu cpu3} % $alignc ${color dodgerblue3}${cpubar cpu3}${color}
 ${font}Core 3 ${color dodgerblue3}${execi 30 sensors | grep 'Core 3:' | cut -c18-19}°C${color} @ ${cpu cpu4} % $alignc ${color dodgerblue3}${cpubar cpu4}${color}
+
+#FAN
+${font Open Sans:Bold:size=10}${color dodgerblue3}FAN${hr 2}
+$color${font}Fan 2${alignr}$font${exec sensors | grep fan2: | cut -c1-22 | grep -o "[0-9]* RPM"}
+Fan 3${alignr}${exec sensors | grep fan3: | cut -c1-22 | grep -o "[0-9]* RPM"}
  
 # TOP
 ${font Open Sans:Bold:size=10}${color dodgerblue3}TOP${hr 2}
