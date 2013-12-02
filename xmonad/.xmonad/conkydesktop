@@ -16,7 +16,7 @@ default_color lightgray
 default_shade_color red
 default_outline_color green
 alignment top_right
-gap_x 50
+gap_x 25
  
 no_buffers yes
 uppercase no
