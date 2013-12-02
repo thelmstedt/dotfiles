@@ -1,40 +1,42 @@
-import XMonad hiding ( (|||) )
-import XMonad.Config.Xfce(xfceConfig)
+import           XMonad                          hiding ((|||))
+import           XMonad.Config.Xfce              (xfceConfig)
 
-import XMonad.Layout.NoBorders(smartBorders)
-import XMonad.Layout.IM(withIM, Property(..))
-import XMonad.Layout.PerWorkspace(onWorkspaces)
-import XMonad.Layout.Reflect(reflectHoriz)
-import XMonad.Layout.Named(named)
-import XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
+import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
+import           XMonad.Layout.IM                (Property (..), withIM)
+import           XMonad.Layout.Named             (named)
+import           XMonad.Layout.NoBorders         (smartBorders)
+import           XMonad.Layout.PerWorkspace      (onWorkspaces)
+import           XMonad.Layout.Reflect           (reflectHoriz)
 
-import XMonad.Hooks.ManageDocks(avoidStruts)
-import XMonad.Hooks.DynamicLog(dynamicLogWithPP, xmobarPP, ppOutput, xmobarColor, shorten, ppTitle)
-import XMonad.Hooks.ManageHelpers(isFullscreen, doFullFloat)
+import           XMonad.Hooks.DynamicLog         (dynamicLogWithPP, ppOutput,
+                                                  ppTitle, shorten, xmobarColor,
+                                                  xmobarPP)
+import           XMonad.Hooks.ManageDocks        (avoidStruts)
+import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 
-import XMonad.Util.Run(spawnPipe, hPutStrLn)
-import XMonad.Util.EZConfig(additionalKeysP)
+import           XMonad.Util.EZConfig            (additionalKeysP)
+import           XMonad.Util.Run                 (hPutStrLn, spawnPipe)
 
-import XMonad.Actions.WindowBringer(gotoMenu)
+import           XMonad.Actions.WindowBringer    (gotoMenu)
 
-import Data.Ratio ((%))
-import Data.List(isPrefixOf)
+import           Data.List                       (isPrefixOf)
+import           Data.Ratio                      ((%))
 
-import Control.Applicative ((<$>))
+import           Control.Applicative             ((<$>))
 
-import qualified XMonad.StackSet as W
-import XMonad.Layout.LayoutCombinators((|||), JumpToLayout(..))
+import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
+import qualified XMonad.StackSet                 as W
 
-myLayouts = 
-  smartBorders 
-  $ onWorkspaces ["9.im"] imLayout 
+myLayouts =
+  smartBorders
+  $ onWorkspaces ["9.im"] imLayout
   $ standardLayouts
   where
     standardLayouts = Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
     nmaster = 1
     ratio   = 1/2
-    delta   = 3/100  
+    delta   = 3/100
     circle = named "circle" $ avoidStruts circleSimpleDefaultResizable
     imLayout =  named "im" $ avoidStruts $ reflectHoriz
                 $ withIM (1%9) pidginRoster
@@ -42,7 +44,7 @@ myLayouts =
     pidginRoster = ClassName "Pidgin" `And` Role "buddy_list"
     skypeRoster = ClassName "Skype" `And` Title "tim.helmstedt - Skype"
 
-     
+
 
 ------------------------------------------------------------------------
 -- To find the property name associated with a program, use
@@ -52,7 +54,7 @@ myLayouts =
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
-myManageHook = 
+myManageHook =
   composeAll
     [ moveC "jetbrains-idea" "1.code"
     , moveC "Firefox" "3.web"
@@ -71,20 +73,20 @@ myManageHook =
     floatC c = (className =? c) --> doFloat
 
 
-modm = 
+modm =
   mod4Mask
 
 
 myWorkspaces :: [String]
-myWorkspaces = 
+myWorkspaces =
   [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
-workspaceKeys = 
+workspaceKeys =
   [ (otherModMasks ++ "M-" ++ key, action tag)
     | (tag, key)  <- zip myWorkspaces (map show [1,2,3,4,5,6,7,8,9,0])
     , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
     , ("S-", windows . W.shift)]
-  ]   
+  ]
 
 moreKeys =
     [
@@ -92,10 +94,10 @@ moreKeys =
     , ("C-S-\\", gotoMenu)
     , ("<F1>", sendMessage $ JumpToLayout "Full")
     , ("<F2>", sendMessage $ JumpToLayout "Tall")
-    , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")  
-    , ("<F4>", sendMessage $ JumpToLayout "circle")         
+    , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
+    , ("<F4>", sendMessage $ JumpToLayout "circle")
     ] ++ workspaceKeys
-    
+
 
 
 main = do
@@ -103,13 +105,13 @@ main = do
   xmonad $ xfceConfig {
     modMask              = modm
     , layoutHook         = avoidStruts myLayouts
-    , terminal           = "urxvt"                           
+    , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
     , manageHook         = myManageHook <+> manageHook xfceConfig
-    , logHook            = dynamicLogWithPP 
+    , logHook            = dynamicLogWithPP
                             $ xmobarPP { ppOutput = hPutStrLn xmproc, ppTitle = xmobarColor "green" "" . shorten 50 }
     , workspaces = myWorkspaces
-    }  `additionalKeysP` moreKeys 
+    }  `additionalKeysP` moreKeys
 
 
