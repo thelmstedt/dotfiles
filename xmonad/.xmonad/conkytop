@@ -5,6 +5,7 @@ out_to_x no
 update_interval 1
  
 TEXT
+${uptime} \
 ^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF) ${acpitemp} \
 ^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% ${exec cpufreq-info | grep "current CPU frequency" | cut -c28-35} ${freq}GHz \
 ^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% - ${mem} / ${memeasyfree} \
