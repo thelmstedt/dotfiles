@@ -35,9 +35,9 @@ modMask' = mod4Mask
 
 main = do
   workspaceBar <- spawnDzen myStatusBar
-  conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
-  conky <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
-
+  _ <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
+  _ <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
+  _ <- spawn "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 200 --widthtype pixel --transparent true --tint 0x000000 --alpha 0 --height 24"
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modMask'
     , layoutHook         = avoidStruts layoutHook'
@@ -45,11 +45,9 @@ main = do
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
     , manageHook         = manageHook' <+> manageHook xfceConfig
-    , logHook            = myLogHook workspaceBar
+    , logHook            = logHook' workspaceBar
     , workspaces = workspaces'
     }  `additionalKeysP` keys'
-
-
 
 
 layoutHook' =
@@ -70,7 +68,6 @@ layoutHook' =
     skypeRoster = ClassName "Skype" `And` Title "tim.helmstedt - Skype"
 
 
-
 manageHook' =
   composeAll
     [ moveC "jetbrains-idea" "1.code"
@@ -88,7 +85,6 @@ manageHook' =
     moveC c w = (className =? c) --> doShift w
     ignoreC c = (className =? c) --> doIgnore
     floatC c = (className =? c) --> doFloat
-
 
 
 workspaces' :: [String]
@@ -112,11 +108,9 @@ keys' =
     ]
 
 
-
-
 myStatusBar = DzenConf {
       x_position = Just 0
-    , y_position = Just (-1)
+    , y_position = Just 0
     , width      = Just 1200
     , height     = Just 24
     , alignment  = Just LeftAlign
@@ -127,11 +121,10 @@ myStatusBar = DzenConf {
     , addargs    = []
 }
 
-
 conkyBar = DzenConf {
       x_position = Just 1200
-    , y_position = Just (-1)
-    , width      = Just 720
+    , y_position = Just 0
+    , width      = Just 520
     , height     = Just 24
     , alignment  = Just RightAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
@@ -141,14 +134,12 @@ conkyBar = DzenConf {
     , addargs    = []
 }
 
-myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 
 
 highlight = dzenColor "#ebac54" "#000000"
 plain = dzenColor "#e5e5e5" "#000000"
 
--- Pretty printer for dzen workspace bar
-myPrettyPrinter h = dzenPP {
+pp' h = dzenPP {
       ppOutput          = hPutStrLn h
     , ppCurrent         =  wrap (highlight "[ ") (highlight " ]")  <$> plain
     , ppHidden          = plain
@@ -160,3 +151,4 @@ myPrettyPrinter h = dzenPP {
     , ppSep             = " | "
 }
 
+logHook' h = dynamicLogWithPP $ pp' h
