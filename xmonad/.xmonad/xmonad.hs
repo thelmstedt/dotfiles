@@ -1,3 +1,5 @@
+import Dzen
+
 import           XMonad                          hiding ((|||))
 import           XMonad.Config.Xfce              (xfceConfig)
 
@@ -8,9 +10,7 @@ import           XMonad.Layout.NoBorders         (smartBorders)
 import           XMonad.Layout.PerWorkspace      (onWorkspaces)
 import           XMonad.Layout.Reflect           (reflectHoriz)
 
-import           XMonad.Hooks.DynamicLog         (dynamicLogWithPP, ppOutput,
-                                                  ppTitle, shorten, xmobarColor,
-                                                  xmobarPP)
+import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 
@@ -26,6 +26,8 @@ import           Control.Applicative             ((<$>))
 
 import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import qualified XMonad.StackSet                 as W
+
+import XMonad.Hooks.UrgencyHook
 
 myLayouts =
   smartBorders
@@ -100,18 +102,47 @@ moreKeys =
 
 
 
+
+myStatusBar = DzenConf {
+      x_position = Just 0
+    , y_position = Just (-1)
+    , width      = Just 1920
+    , height     = Just 24
+    , alignment  = Just LeftAlign
+    , font       = Just "Bitstream Sans Vera:pixelsize=11"
+    , fg_color   = Just "#ffffff"
+    , bg_color   = Just "#000000"
+    , exec       = []
+    , addargs    = []
+}
+
+-- Log hook that prints out everything to a dzen handler
+myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
+ 
+-- Pretty printer for dzen workspace bar
+myPrettyPrinter h = defaultPP {
+      ppOutput          = hPutStrLn h
+    , ppCurrent         = dzenColor "#000000" "#e5e5e5"
+    , ppHidden          = dzenColor "#e5e5e5" "#000000"
+    , ppHiddenNoWindows = dzenColor "#444444" "#000000"
+    , ppUrgent          = dzenColor "#ff0000" "#000000". dzenStrip
+    , ppWsSep           = "  "
+    , ppSep             = "  |  "
+}
+
+
 main = do
-  xmproc <- spawnPipe "`which xmobar` ~/.xmonad/xmobarrc"
-  xmonad $ xfceConfig {
+  workspaceBar <- spawnDzen myStatusBar 
+  xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modm
     , layoutHook         = avoidStruts myLayouts
     , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
     , manageHook         = myManageHook <+> manageHook xfceConfig
-    , logHook            = dynamicLogWithPP
-                            $ xmobarPP { ppOutput = hPutStrLn xmproc, ppTitle = xmobarColor "green" "" . shorten 50 }
+    , logHook            = myLogHook workspaceBar
     , workspaces = myWorkspaces
     }  `additionalKeysP` moreKeys
 
 
+ 
