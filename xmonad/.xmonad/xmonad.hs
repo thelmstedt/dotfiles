@@ -136,10 +136,10 @@ myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 -- Pretty printer for dzen workspace bar
 myPrettyPrinter h = defaultPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         = dzenColor "#000000" "#e5e5e5"
+    , ppCurrent         = wrap "[" "]" <$> dzenColor "#e5e5e5" "#000000"
     , ppHidden          = dzenColor "#e5e5e5" "#000000"
     , ppHiddenNoWindows = dzenColor "#444444" "#000000"
-    , ppUrgent          = dzenColor "#ff0000" "#000000". dzenStrip
+    , ppUrgent          = dzenColor "#D43D1A" "#000000". dzenStrip
     , ppWsSep           = "  "
     , ppSep             = "  |  "
 }
