@@ -143,13 +143,19 @@ conkyBar = DzenConf {
 -- Log hook that prints out everything to a dzen handler
 myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 
+
+highlight = dzenColor "#D43D1A" "#000000"
+
+
 -- Pretty printer for dzen workspace bar
-myPrettyPrinter h = defaultPP {
+myPrettyPrinter h = dzenPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         = wrap "[" "]" <$> dzenColor "#e5e5e5" "#000000"
+    , ppCurrent         =  wrap (highlight "["::String) (highlight "]"::String)  <$> dzenColor "#e5e5e5" "#000000"
     , ppHidden          = dzenColor "#e5e5e5" "#000000"
+    , ppTitle           = dzenColor "#e5e5e5" "#000000"
     , ppHiddenNoWindows = dzenColor "#444444" "#000000"
     , ppUrgent          = dzenColor "#D43D1A" "#000000". dzenStrip
+    , ppLayout          = dzenColor "#465E84" "#000000"
     , ppWsSep           = "  "
     , ppSep             = "  |  "
 }
