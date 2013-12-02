@@ -1,24 +1,21 @@
 import XMonad hiding ( (|||) )
-import XMonad.Config.Xfce
+import XMonad.Config.Xfce(xfceConfig)
 
-import XMonad.Layout.NoBorders
-import XMonad.Layout.IM
-import XMonad.Layout.Grid
-import XMonad.Layout.PerWorkspace
+import XMonad.Layout.NoBorders(smartBorders)
+import XMonad.Layout.IM(withIM, Property(..))
+import XMonad.Layout.PerWorkspace(onWorkspaces)
 import XMonad.Layout.Reflect(reflectHoriz)
-import XMonad.Layout.Circle
-import XMonad.Layout.Named
-import XMonad.Layout.DecorationMadness
+import XMonad.Layout.Named(named)
+import XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 
 import XMonad.Hooks.ManageDocks(avoidStruts)
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.DynamicLog(dynamicLogWithPP, xmobarPP, ppOutput, xmobarColor, shorten, ppTitle)
+import XMonad.Hooks.ManageHelpers(isFullscreen, doFullFloat)
 
 import XMonad.Util.Run(spawnPipe, hPutStrLn)
-import XMonad.Util.EZConfig
+import XMonad.Util.EZConfig(additionalKeysP)
 
-import XMonad.Actions.WindowGo
-import XMonad.Actions.WindowBringer
+import XMonad.Actions.WindowBringer(gotoMenu)
 
 import Data.Ratio ((%))
 import Data.List(isPrefixOf)
