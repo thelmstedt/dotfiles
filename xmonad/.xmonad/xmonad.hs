@@ -116,10 +116,10 @@ keys' =
 myStatusBar = DzenConf {
       x_position = Just 0
     , y_position = Just (-1)
-    , width      = Just 1400
+    , width      = Just 1200
     , height     = Just 24
     , alignment  = Just LeftAlign
-    , font       = Just "Bitstream Sans Vera:pixelsize=11"
+    , font       = Just "Bitstream Sans Vera:pixelsize=13"
     , fg_color   = Just "#ffffff"
     , bg_color   = Just "#000000"
     , exec       = []
@@ -128,35 +128,34 @@ myStatusBar = DzenConf {
 
 
 conkyBar = DzenConf {
-      x_position = Just 1400
+      x_position = Just 1200
     , y_position = Just (-1)
-    , width      = Just 520
+    , width      = Just 720
     , height     = Just 24
     , alignment  = Just RightAlign
-    , font       = Just "Bitstream Sans Vera:pixelsize=11"
+    , font       = Just "Bitstream Sans Vera:pixelsize=13"
     , fg_color   = Just "#ffffff"
     , bg_color   = Just "#000000"
     , exec       = []
     , addargs    = []
 }
 
--- Log hook that prints out everything to a dzen handler
 myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
 
 
 highlight = dzenColor "#D43D1A" "#000000"
-
+plain = dzenColor "#e5e5e5" "#000000"
 
 -- Pretty printer for dzen workspace bar
 myPrettyPrinter h = dzenPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         =  wrap (highlight "["::String) (highlight "]"::String)  <$> dzenColor "#e5e5e5" "#000000"
-    , ppHidden          = dzenColor "#e5e5e5" "#000000"
-    , ppTitle           = dzenColor "#e5e5e5" "#000000"
+    , ppCurrent         =  wrap (highlight "[ ") (highlight " ]")  <$> plain
+    , ppHidden          = plain
+    , ppTitle           = plain
     , ppHiddenNoWindows = dzenColor "#444444" "#000000"
-    , ppUrgent          = dzenColor "#D43D1A" "#000000". dzenStrip
+    , ppUrgent          = highlight . dzenStrip
     , ppLayout          = dzenColor "#465E84" "#000000"
     , ppWsSep           = "  "
-    , ppSep             = "  |  "
+    , ppSep             = " | "
 }
 
