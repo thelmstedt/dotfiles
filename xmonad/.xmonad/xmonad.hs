@@ -36,6 +36,7 @@ modMask' = mod4Mask
 main = do
   workspaceBar <- spawnDzen myStatusBar
   conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
+  conky <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
 
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modMask'
