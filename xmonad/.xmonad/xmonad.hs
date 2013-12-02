@@ -106,9 +106,23 @@ moreKeys =
 myStatusBar = DzenConf {
       x_position = Just 0
     , y_position = Just (-1)
-    , width      = Just 1920
+    , width      = Just 1400
     , height     = Just 24
     , alignment  = Just LeftAlign
+    , font       = Just "Bitstream Sans Vera:pixelsize=11"
+    , fg_color   = Just "#ffffff"
+    , bg_color   = Just "#000000"
+    , exec       = []
+    , addargs    = []
+}
+
+
+conkyBar = DzenConf {
+      x_position = Just 1400
+    , y_position = Just (-1)
+    , width      = Just 520
+    , height     = Just 24
+    , alignment  = Just RightAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=11"
     , fg_color   = Just "#ffffff"
     , bg_color   = Just "#000000"
@@ -130,9 +144,10 @@ myPrettyPrinter h = defaultPP {
     , ppSep             = "  |  "
 }
 
-
 main = do
   workspaceBar <- spawnDzen myStatusBar 
+  conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
+
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modm
     , layoutHook         = avoidStruts myLayouts
