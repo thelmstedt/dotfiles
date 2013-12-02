@@ -1,4 +1,4 @@
-import Dzen
+import           Dzen
 
 import           XMonad                          hiding ((|||))
 import           XMonad.Config.Xfce              (xfceConfig)
@@ -27,14 +27,14 @@ import           Control.Applicative             ((<$>))
 import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import qualified XMonad.StackSet                 as W
 
-import XMonad.Hooks.UrgencyHook
+import           XMonad.Hooks.UrgencyHook
 
 
 modMask' = mod4Mask
 
 
 main = do
-  workspaceBar <- spawnDzen myStatusBar 
+  workspaceBar <- spawnDzen myStatusBar
   conky <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
 
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
@@ -103,7 +103,7 @@ keys' =
     , ("<F2>", sendMessage $ JumpToLayout "Tall")
     , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("<F4>", sendMessage $ JumpToLayout "circle")
-    ] ++ 
+    ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
     | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
     , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
@@ -142,7 +142,7 @@ conkyBar = DzenConf {
 
 -- Log hook that prints out everything to a dzen handler
 myLogHook h = dynamicLogWithPP $ myPrettyPrinter h
- 
+
 -- Pretty printer for dzen workspace bar
 myPrettyPrinter h = defaultPP {
       ppOutput          = hPutStrLn h
