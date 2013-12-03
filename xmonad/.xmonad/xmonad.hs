@@ -36,7 +36,6 @@ modMask' = mod4Mask
 
 
 main = do
-  _ <- spawn "pgrep conky | xargs kill -9"
   workspaceBar <- spawnDzen myStatusBar
   _ <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
   _ <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
@@ -110,6 +109,7 @@ keys' =
     , ("<F2>", sendMessage $ JumpToLayout "Tall")
     , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("<F4>", sendMessage $ JumpToLayout "circle")
+    , ("M-r", spawn "$(pgrep conky | xargs kill -9) && xmonad --recompile && xmonad --restart")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
       | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
