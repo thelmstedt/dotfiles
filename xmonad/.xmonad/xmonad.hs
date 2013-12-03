@@ -7,19 +7,20 @@ import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
 import           XMonad.Layout.Named             (named)
 import           XMonad.Layout.NoBorders         (smartBorders)
-import           XMonad.Layout.PerWorkspace      (onWorkspaces)
+import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
 
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
+import           XMonad.Hooks.UrgencyHook
 
 import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Run                 (hPutStrLn, spawnPipe)
 
 import           XMonad.Actions.WindowBringer    (gotoMenu)
 
-import           Data.List                       (isPrefixOf)
+import           Data.List                       (isPrefixOf, elemIndex)
 import           Data.Ratio                      ((%))
 
 import           Control.Applicative             ((<$>))
@@ -27,7 +28,7 @@ import           Control.Applicative             ((<$>))
 import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import qualified XMonad.StackSet                 as W
 
-import           XMonad.Hooks.UrgencyHook
+
 
 
 modMask' = mod4Mask
@@ -37,10 +38,9 @@ main = do
   workspaceBar <- spawnDzen myStatusBar
   _ <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
   _ <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
-  _ <- spawn "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand false --width 200 --widthtype pixel --transparent true --tint 0x000000 --alpha 0 --height 24"
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modMask'
-    , layoutHook         = avoidStruts layoutHook'
+    , layoutHook         = layoutHook'
     , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
@@ -49,11 +49,26 @@ main = do
     , workspaces = workspaces'
     }  `additionalKeysP` keys'
 
+wsNames = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
+
+workspaces' = clickable . (map dzenEscape) $ wsNames
+    where clickable l = [
+                          "^ca(1,xdotool key super+" ++ show (n) ++ ")" ++ ws ++ "^ca()"
+                          | (i,ws) <- zip [1..] l
+                          , let n = i
+                        ]
+
+wsNamed :: String -> WorkspaceId
+wsNamed w = 
+    workspaces' !! 
+    (case (elemIndex w wsNames) of 
+        Nothing ->  666
+        Just x -> x)
+
+
 
 layoutHook' =
-  smartBorders
-  $ onWorkspaces ["9.im"] imLayout
-  $ standardLayouts
+  avoidStruts $ smartBorders $ onWorkspace (wsNamed "9.im") imLayout $ standardLayouts
   where
     standardLayouts = Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
@@ -62,10 +77,8 @@ layoutHook' =
     delta   = 3/100
     circle = named "circle" $ avoidStruts circleSimpleDefaultResizable
     imLayout =  named "im" $ avoidStruts $ reflectHoriz
-                $ withIM (1%9) pidginRoster
-                $ withIM (1%8) skypeRoster standardLayouts
+                $ withIM (1%9) pidginRoster standardLayouts
     pidginRoster = ClassName "Pidgin" `And` Role "buddy_list"
-    skypeRoster = ClassName "Skype" `And` Title "tim.helmstedt - Skype"
 
 
 manageHook' =
@@ -73,7 +86,7 @@ manageHook' =
     [ moveC "jetbrains-idea" "1.code"
     , moveC "Firefox" "3.web"
     , moveC "Emacs" "4.emacs"
-    , moveC "Hipchat" "7.hipchat"
+    , moveC "Hipchat" "7.chat"
     , moveC "Evolution" "8.mail"
     , moveC "Pidgin" "9.im"
     , ignoreC "vlc"
@@ -82,14 +95,10 @@ manageHook' =
     , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
     ]
   where
-    moveC c w = (className =? c) --> doShift w
+    moveC c w = (className =? c) -->  doF (W.shift $ wsNamed w)
     ignoreC c = (className =? c) --> doIgnore
     floatC c = (className =? c) --> doFloat
 
-
-workspaces' :: [String]
-workspaces' =
-  [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
 
 keys' =
@@ -102,16 +111,17 @@ keys' =
     , ("<F4>", sendMessage $ JumpToLayout "circle")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
-    | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
-    , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
-    , ("S-", windows . W.shift)]
+      | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
+      , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
+      , ("S-", windows . W.shift)]
     ]
+
 
 
 myStatusBar = DzenConf {
       x_position = Just 0
     , y_position = Just 0
-    , width      = Just 1200
+    , width      = Just 1000
     , height     = Just 24
     , alignment  = Just LeftAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
@@ -122,9 +132,9 @@ myStatusBar = DzenConf {
 }
 
 conkyBar = DzenConf {
-      x_position = Just 1200
+      x_position = Just 1000
     , y_position = Just 0
-    , width      = Just 520
+    , width      = Just 720
     , height     = Just 24
     , alignment  = Just RightAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
