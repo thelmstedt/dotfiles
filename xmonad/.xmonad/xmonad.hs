@@ -36,6 +36,7 @@ modMask' = mod4Mask
 
 
 main = do
+  _ <- spawn "pgrep conky | xargs kill -9"
   workspaceBar <- spawnDzen myStatusBar
   _ <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
   _ <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
@@ -49,6 +50,7 @@ main = do
     , logHook            = logHook' workspaceBar
     , workspaces = workspaces'
     }  `additionalKeysP` keys'
+
 
 wsNames = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
@@ -159,7 +161,7 @@ pp' h = dzenPP {
     , ppLayout          = dzenColor "#1874CD" "#000000"
     , ppWsSep           = "  "
     , ppSep             = " | "
-    , ppOrder           = \(ws:l:title:num:_) -> [ws, l, "(" ++ num ++ ")  " ++ title]
+    , ppOrder           = \(ws:l:title:num:_) -> [ws, "^ca(1,xdotool key super+space)" ++ l ++ "^ca()"  ++ " " ++ num, title]
 }
 
 
