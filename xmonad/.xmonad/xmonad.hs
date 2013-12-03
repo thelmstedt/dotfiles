@@ -5,6 +5,7 @@ import           XMonad.Config.Xfce              (xfceConfig)
 
 import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
+import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import           XMonad.Layout.Named             (named)
 import           XMonad.Layout.NoBorders         (smartBorders)
 import           XMonad.Layout.PerWorkspace      (onWorkspace)
@@ -15,17 +16,17 @@ import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.UrgencyHook
 
+import           XMonad.Actions.WindowBringer    (gotoMenu)
 import           XMonad.Util.EZConfig            (additionalKeysP)
+import           XMonad.Util.Loggers
 import           XMonad.Util.Run                 (hPutStrLn, spawnPipe)
 
-import           XMonad.Actions.WindowBringer    (gotoMenu)
-
-import           Data.List                       (isPrefixOf, elemIndex)
-import           Data.Ratio                      ((%))
-
 import           Control.Applicative             ((<$>))
+import           Data.List                       (elemIndex, isPrefixOf)
+import           Data.Maybe                      (fromMaybe)
+import           Data.Ratio                      ((%))
+import           Data.Traversable                (traverse)
 
-import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import qualified XMonad.StackSet                 as W
 
 
@@ -51,19 +52,17 @@ main = do
 
 wsNames = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
-workspaces' = clickable . (map dzenEscape) $ wsNames
+workspaces' = clickable . map dzenEscape $ wsNames
     where clickable l = [
-                          "^ca(1,xdotool key super+" ++ show (n) ++ ")" ++ ws ++ "^ca()"
+                          "^ca(1,xdotool key super+" ++ show n ++ ")" ++ ws ++ "^ca()"
                           | (i,ws) <- zip [1..] l
                           , let n = i
                         ]
 
 wsNamed :: String -> WorkspaceId
-wsNamed w = 
-    workspaces' !! 
-    (case (elemIndex w wsNames) of 
-        Nothing ->  666
-        Just x -> x)
+wsNamed w =
+    workspaces' !! fromMaybe 666 (elemIndex w wsNames)
+
 
 
 
@@ -151,14 +150,23 @@ plain = dzenColor "#e5e5e5" "#000000"
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         =  wrap (highlight "[ ") (highlight " ]")  <$> plain
+    , ppCurrent         = wrap (highlight "[ ") (highlight " ]")  <$> plain
     , ppHidden          = plain
     , ppTitle           = plain
+    , ppExtras          = [ logNumWindows ]
     , ppHiddenNoWindows = dzenColor "#444444" "#000000"
     , ppUrgent          = highlight . dzenStrip
     , ppLayout          = dzenColor "#1874CD" "#000000"
     , ppWsSep           = "  "
     , ppSep             = " | "
+    , ppOrder           = \(ws:l:title:num:_) -> [ws, l, "(" ++ num ++ ")  " ++ title]
 }
 
+
 logHook' h = dynamicLogWithPP $ pp' h
+
+logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
+
+numWindows :: W.Screen a b c d e -> String
+numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
+
