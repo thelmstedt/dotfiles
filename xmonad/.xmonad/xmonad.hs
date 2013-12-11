@@ -110,6 +110,7 @@ keys' =
     , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("<F4>", sendMessage $ JumpToLayout "circle")
     , ("M-r", spawn "$(pgrep conky | xargs kill -9) && xmonad --recompile && xmonad --restart")
+    , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
       | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
