@@ -31,7 +31,7 @@ TEXT
 ${alignc 32}${font Open Sans:size=20}${color lightgray}arch${color dodgerblue3} linux$font$color
 ${alignc}${font Open Sans:size=10}${color white}${execi 30 users | cut -c1-5}@$nodename
 $color${font}${font Open Sans:size=20}$alignr${time %H:%M}$font
-${color dodgerblue3}${font Open Sans:Bold:size=10}Date${hr 2}$color$font
+${color dodgerblue3}${font Open Sans:Bold:size=10}DATE${hr 2}$color$font
 $color${font Open Sans:size=12}$alignr${time %a}, ${time %d %b %Y}$font$color
  
 # SYS
@@ -41,11 +41,6 @@ Uptime $alignr $uptime
 MB Temperature $alignr ${execi 30 sensors | grep 'SYSTIN:' | cut -c17-18}°C
 GPU Temperature $alignr ${execi 30 sensors | grep 'temp1:' | cut -c16-17}°C
  
-# Clementine
-${font Open Sans:Bold:size=10}${color dodgerblue3}Now Playing${hr 2}
-$color${font}${alignr}${execi 30 python /home/tim/.xmonad/cc.py -t}
-${alignr}${execi 10 python /home/tim/.xmonad/cc.py -a} / ${color}${execi 30 python /home/tim/.xmonad/cc.py -l} (${execi 30 python /home/tim/.xmonad/cc.py -y})
-
 # CPU
 ${font Open Sans:Bold:size=10}${color dodgerblue3}CPU${hr 2}
 $color${font}Intel i5 2500k $alignr ${freq_g cpu0}GHz
@@ -76,7 +71,7 @@ $mem / $memmax ($cached cached) $alignr $memperc %
 $membar
   
 # NETWORK
-${font Open Sans:Bold:size=10}${color dodgerblue3}Network${hr 2}
+${font Open Sans:Bold:size=10}${color dodgerblue3}NETWORK${hr 2}
 $color${font Open Sans:bold:size=8.5}External IP ${font}${alignr}${execi 86400 wget -O - http://ip.tupeux.com | tail}$font
  
 ${font Open Sans:bold:size=8.5}wlp10s0 $font$alignr ${addr wlp10s0}
@@ -85,7 +80,7 @@ up $alignr ${upspeedf wlp10s0} kb/s
 down total ${totaldown wlp10s0} $alignr up total ${totalup wlp10s0}
 
 # HDD
-${font Open Sans:Bold:size=10}${color dodgerblue3}Disks${hr 2}
+${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}
 $color${font Open Sans:bold:size=8.5}/dev/sda $font$alignr ${execi 30 sudo hddtemp /dev/sda | grep '/dev/sda:' | cut -c28-29}°C
  
 ${font Open Sans:bold:size=8.5}ROOT $font$font$alignr ${fs_type /}
@@ -95,3 +90,8 @@ ${fs_bar /}
 ${font Open Sans:bold:size=8.5}STORAGE $font$alignr ${fs_type /storage}
 ${fs_used /storage} / ${fs_size /storage} $alignr ${fs_used_perc /storage} %
 ${fs_bar /storage}
+
+# Clementine
+${font Open Sans:Bold:size=10}${color dodgerblue3}MUSIC${hr 2}
+$color${font}${alignr}${execi 30 python /home/tim/.xmonad/cc.py -t}
+${alignr}${execi 10 python /home/tim/.xmonad/cc.py -a} / ${color}${execi 30 python /home/tim/.xmonad/cc.py -l} (${execi 30 python /home/tim/.xmonad/cc.py -y})
