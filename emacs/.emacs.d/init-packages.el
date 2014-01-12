@@ -57,13 +57,6 @@
 
         ;; TODO replace redo+ with undotree
 
-
-         (:name org-mode-confluence
-                :type git
-                :website "https://github.com/sdelafond/org-confluence"
-                :url "https://github.com/sdelafond/org-confluence.git"
-                :after (progn (require 'org-e-confluence)))
-        
         (:name auto-complete
                :after (progn
                         (require 'auto-complete-config)

@@ -16,6 +16,8 @@
 (load-theme 'solarized-dark t)
 
 (setq mouse-autoselect-window t)
+(menu-bar-mode -1)
+(tool-bar-mode -1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
