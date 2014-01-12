@@ -28,12 +28,19 @@ else:
     import atexit
     atexit.register(readline.write_history_file, histfile)
     del histfile, atexit
+
     # tab completion
-    import rlcompleter
-    readline.parse_and_bind ("bind ^I rl_complete")
-        #readline.parse_and_bind("tab: complete")
-    del rlcompleter
+    try:
+        sys.path.append(os.path.join(os.getenv('HOME'), 'src', 'rlcompleter2'))
+        import rlcompleter2
+        rlcompleter2.setup()
+        del rlcompleter2
+    except ImportError:
+        import rlcompleter
+        readline.parse_and_bind("tab: complete")
+        del rlcompleter
     del readline
+
 
 del sys
 del os
