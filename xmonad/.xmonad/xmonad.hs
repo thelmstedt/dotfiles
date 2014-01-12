@@ -29,8 +29,8 @@ import           Data.Traversable                (traverse)
 
 import qualified XMonad.StackSet                 as W
 
-
-
+import ResizableSpacing 
+import XMonad.Layout.MouseResizableTile
 
 modMask' = mod4Mask
 
@@ -65,12 +65,10 @@ wsNamed w =
     workspaces' !! fromMaybe 666 (elemIndex w wsNames)
 
 
-
-
-layoutHook' =
+layoutHook' = 
   avoidStruts $ smartBorders $ onWorkspace (wsNamed "9.im") imLayout $ standardLayouts
   where
-    standardLayouts = Full ||| tiled ||| Mirror tiled ||| circle
+    standardLayouts = spacing 0 $ Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
     nmaster = 1
     ratio   = 1/2
@@ -109,6 +107,8 @@ keys' =
     , ("<F2>", sendMessage $ JumpToLayout "Tall")
     , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("<F4>", sendMessage $ JumpToLayout "circle")
+    , ("<F5>", sendMessage $ IncSpacing 10)
+    , ("<F6>", sendMessage $ DecSpacing 10)
     , ("M-r", spawn "$(pgrep conky | xargs kill -9) && xmonad --recompile && xmonad --restart")
     , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
     ] ++
