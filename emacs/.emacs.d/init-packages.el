@@ -1,3 +1,5 @@
+;; TODO replace redo+ with undotree
+
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
 (package-initialize)
@@ -38,14 +40,6 @@
                         ;'paredit-backward-kill-word)
                         ))
 
-        (:name autopair
-               :after (progn
-                        (autopair-global-mode)
-                        (set-default 'autopair-dont-activate #'(lambda () (eq major-mode 'sldb-mode)))
-                        (add-hook 'sldb-mode-hook #'(lambda () (setq autopair-dont-activate t)))))
-
-
-        ;; TODO replace starter-kit-{list,js,ruby} with own code
         
         (:name rainbow-delimiters
                :after (progn
@@ -55,7 +49,6 @@
                         (add-hook 'octave-mode-hook 'rainbow-delimiters-mode)
                         (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
 
-        ;; TODO replace redo+ with undotree
 
         (:name auto-complete
                :after (progn
@@ -98,22 +91,6 @@
                         
                         (setq dabbrev-friend-buffer-function 'smp-dabbrev-friend-buffer)))
         
-        (:name ac-slime
-               :after (progn
-                        (require 'ac-slime)
-                        (add-hook 'slime-mode-hook 'set-up-slime-ac)
-                        (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
-                        (add-hook 'slime-connected-hook 
-                                  (lambda () 
-                                    (define-key slime-mode-map (kbd "TAB") 'auto-complete) 
-                                    (define-key slime-repl-mode-map (kbd "TAB") 'auto-complete)))))
-
-        (:name ac-octave
-               :after (progn
-                        (defun ac-octave-mode-setup ()
-                          (setq ac-sources '(ac-source-octave)))
-                        (add-hook 'octave-mode-hook '(lambda () (ac-octave-mode-setup)))))
-
         (:name smex
                :after (progn
                         (global-set-key "\M-x" 'smex)
@@ -122,7 +99,7 @@
                         (global-set-key "\C-c\C-m" 'smex)))))
 
 ;; dired+ -  w - copy file name, F - open all marked files, A - regex search marked files
-;; TODO investigate pinning org-mode to a tag - for now done manually to 7.9 
+
 (setq my-packages
       (append
        '(el-get fuzzy dired+ haml-mode sass-mode color-theme rainbow-mode popup ido-ubiquitous color-theme-solarized org-mode haskell-mode)

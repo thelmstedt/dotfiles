@@ -19,6 +19,12 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+
+;(add-to-list 'load-path "~/.emacs.d/packages/structured-haskell-mode/elisp")
+;(require 'shm)
+;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
+;(remove-hook 'haskell-mode-hook 'haskell-indent-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
