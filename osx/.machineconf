@@ -1,0 +1,2 @@
+PATH=${ZDOTDIR:-$HOME}/.bin:$PATH
+alias emacsclient=ec
