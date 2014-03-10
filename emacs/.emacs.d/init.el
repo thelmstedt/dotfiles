@@ -3,6 +3,10 @@
   (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
   (push "/usr/local/bin" exec-path))
 
+(progn 
+  (setenv "PATH" (concat "~/.emacs-haskell/.cabal-sandbox/bin:" (getenv "PATH")))
+  (push "~/.emacs-haskell/.cabal-sandbox/bin" exec-path))
+
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path dotfiles-dir)
@@ -15,17 +19,6 @@
 ;(require 'color-theme-vibi)
 (load-theme 'solarized-dark t)
 
-(setq mouse-autoselect-window t)
-(menu-bar-mode -1)
-(tool-bar-mode -1)
-(setq-default indent-tabs-mode nil)
-
-
-;(add-to-list 'load-path "~/.emacs.d/packages/structured-haskell-mode/elisp")
-;(require 'shm)
-;(add-hook 'haskell-mode-hook 'structured-haskell-mode)
-;(remove-hook 'haskell-mode-hook 'haskell-indent-mode)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -35,6 +28,11 @@
  '(fill-column 120)
  '(global-linum-mode 1)
  '(global-visual-line-mode t)
+ '(indent-tabs-mode nil)
+ '(inhibit-startup-screen t)
+ '(menu-bar-mode nil)
+ '(mouse-autoselect-window t)
+ '(tool-bar-mode nil)
  '(visible-bell nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

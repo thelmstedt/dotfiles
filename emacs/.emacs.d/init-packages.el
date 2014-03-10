@@ -16,6 +16,7 @@
        (end-of-buffer)
        (eval-print-last-sexp)))))
 
+
 (require 'el-get)
 
 (setq el-get-sources
@@ -36,8 +37,8 @@
                         ;; stop ruby complaining about mismatched parens.. might screw with other modes
                         (defun gy-paredit-override-check-parens-interactively (condition)  t)
                         (setq paredit-override-check-parens-function 'gy-paredit-override-check-parens-interactively)
-                        ;(define-key paredit-mode-map (kbd "C-w")
-                        ;'paredit-backward-kill-word)
+                                        ;(define-key paredit-mode-map (kbd "C-w")
+                                        ;'paredit-backward-kill-word)
                         ))
 
         
@@ -48,6 +49,54 @@
                         (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
                         (add-hook 'octave-mode-hook 'rainbow-delimiters-mode)
                         (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
+
+
+
+        (:name haskell-mode
+               :depends (auto-complete)
+               :post-init
+               (progn
+                 ;; haskell-mode
+                 (require 'haskell-mode-autoloads)
+                 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+                 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+                 (setq haskell-process-type 'cabal-repl
+                       haskell-process-args-cabal-repl '("--ghc-option=-ferror-spans"
+                                                         "--with-ghc=ghci-ng"))
+                 (define-key haskell-mode-map (kbd "C-x C-d") nil)
+                 (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+                 (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-file)
+                 (define-key haskell-mode-map (kbd "C-c C-b") 'haskell-interactive-switch)
+                 (define-key haskell-mode-map (kbd "C-c C-t") 'haskell-process-do-type)
+                 (define-key haskell-mode-map (kbd "C-c C-i") 'haskell-process-do-info)
+                 (define-key haskell-mode-map (kbd "C-c M-.") nil)
+                 (define-key haskell-mode-map (kbd "C-c C-d") nil)
+                 (define-key haskell-mode-map (kbd "C-c v c") 'haskell-cabal-visit-file)
+                 ;; auto-complete
+                 (defun el-get-ac-haskell-candidates (prefix)
+                   (let ((cs (haskell-process-get-repl-completions (haskell-process) prefix)))
+                     (remove-if (lambda (c) (string= "" c)) cs)))
+                 (ac-define-source haskell
+                   '((candidates . (el-get-ac-haskell-candidates ac-prefix))))
+                 (defun el-get-haskell-hook ()
+                   (add-to-list 'ac-sources 'ac-source-haskell))
+                 (add-hook 'haskell-mode-hook 'el-get-haskell-hook)))
+
+        (:name structured-haskell-mode
+               :depends haskell-mode
+               :type github
+               :pkgname "chrisdone/structured-haskell-mode"
+               :features shm
+               :load-path "elisp")
+
+        (:name ghc-mod
+               :post-init
+               (progn
+                 (autoload 'ghc-init "ghc" nil t)
+                 (defun el-get-ghc-mod-hook ()
+                   (ghc-init)
+                   (flymake-mode))
+                 (add-hook 'haskell-mode-hook 'el-get-ghc-mod-hook)))
 
 
         (:name auto-complete

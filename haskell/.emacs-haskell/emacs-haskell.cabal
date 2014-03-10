@@ -1,0 +1,33 @@
+name:               emacs-haskell
+version:            0.0.1
+license:            BSD3
+license-File:       LICENCE
+author:             Tim Helmstedt
+maintainer:         Tim Helmstedt
+copyright:          Copyright (C) 2014 Tim Helmstedt
+synopsis:           emacs haskell mode(s) dependencies
+category:           Development
+description:        
+homepage:           
+bug-reports:        
+cabal-version:      >= 1.18
+build-type:         Simple
+
+
+flag                small_base
+  description:      Choose the new, split-up base package.
+
+library
+  default-language:
+                    Haskell2010
+
+  build-depends:
+                    base < 5 && >= 3
+                    , happy
+                    , alex
+                    , ghci-ng
+                    , ghc-mod
+                    , structured-haskell-mode
+                    , stylish-haskell
+
+
