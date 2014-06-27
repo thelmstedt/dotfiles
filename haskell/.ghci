@@ -1,0 +1,30 @@
+import Control.Applicative
+import Control.Monad
+
+import Data.String
+import Data.Char
+import Data.List
+import Data.Monoid
+
+:set prompt "λ> "
+
+:def hlint const . return $ ":! hlint \"src\""
+:def hoogle \s -> return $ ":! hoogle --count=15 \"" ++ s ++ "\""
+:def pl \s -> return $ ":! pointfree \"" ++ s ++ "\""
+
+:set +t
+
+:m + Data.List
+:m + Control.Arrow
+:m + Control.Applicative
+:m + Control.Monad
+:m + Data.Maybe
+:m + Data.Function
+:m + Data.Monoid
+
+:set -Wall
+:set -fno-warn-missing-signatures
+:set -fno-warn-type-defaults
+:set -fno-warn-name-shadowing
+:set -fno-warn-unused-do-bind
+
