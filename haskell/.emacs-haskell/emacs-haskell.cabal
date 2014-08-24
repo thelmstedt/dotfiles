@@ -25,9 +25,8 @@ library
                     base < 5 && >= 3
                     , happy
                     , alex
-                    , ghci-ng
-                    , ghc-mod
-                    , structured-haskell-mode
+                    , ghc-mod == 5.0.0
+                    , structured-haskell-mode 
                     , stylish-haskell
 
 
