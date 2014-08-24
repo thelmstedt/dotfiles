@@ -1,11 +1,16 @@
-;;osx path shenanigans. needed for el-get to find brew-managed git
-(when (equal system-type 'darwin)
-  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
-  (push "/usr/local/bin" exec-path))
+(defun ammend-path (p) 
+  (progn 
+    (setenv "PATH" (concat p ":" (getenv "PATH")))
+    (push p exec-path)))
 
-(progn 
-  (setenv "PATH" (concat "~/.emacs-haskell/.cabal-sandbox/bin:" (getenv "PATH")))
-  (push "~/.emacs-haskell/.cabal-sandbox/bin" exec-path))
+;;osx path shenanigans
+(when (equal system-type 'darwin)
+  (ammend-path "/usr/local/bin")
+  (ammend-path "/Applications/ghc-7.8.3.app/Contents/bin")
+  (ammend-path "/Users/tim/.cabal/bin"))
+
+
+(ammend-path "~/.emacs-haskell/.cabal-sandbox/bin")
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
