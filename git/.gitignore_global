@@ -7,3 +7,4 @@ target/*
 *.o
 .DS_Store
 *.ipr
+*_flymake*
