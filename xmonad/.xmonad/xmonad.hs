@@ -88,6 +88,8 @@ manageHook' =
     , moveC "Evolution" "8.mail"
     , moveC "Pidgin" "9.im"
     , ignoreC "vlc"
+    , ignoreC "wine"
+    , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
     , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
@@ -103,12 +105,12 @@ keys' =
     [
       ("C-\\", spawn "dmenu_run")
     , ("C-S-\\", gotoMenu)
-    , ("<F1>", sendMessage $ JumpToLayout "Full")
-    , ("<F2>", sendMessage $ JumpToLayout "Tall")
-    , ("<F3>", sendMessage $ JumpToLayout "Mirror Tall")
-    , ("<F4>", sendMessage $ JumpToLayout "circle")
-    , ("<F5>", sendMessage $ IncSpacing 10)
-    , ("<F6>", sendMessage $ DecSpacing 10)
+    , ("M-<F1>", sendMessage $ JumpToLayout "Full")
+    , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
+    , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
+    , ("M-<F4>", sendMessage $ JumpToLayout "circle")
+    , ("M-<F5>", sendMessage $ IncSpacing 10)
+    , ("M-<F6>", sendMessage $ DecSpacing 10)
     , ("M-r", spawn "$(pgrep conky | xargs kill -9) && xmonad --recompile && xmonad --restart")
     , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
     ] ++
