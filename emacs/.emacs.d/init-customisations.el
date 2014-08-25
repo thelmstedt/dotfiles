@@ -1,45 +1,62 @@
-;;; buffers
-;;TODO - make this skip confirmation?
-  
-(defun my-revert-buffer()
-  "revert buffer without asking for confirmation"
-  (interactive "")
-  (revert-buffer t t))
-(global-set-key (kbd "s-r") 'my-revert-buffer)
+; deft
+(require 'deft)
+(global-set-key [f1] 'deft)
+(setq deft-directory "~/Dropbox/deft")
+(setq deft-extension "org")
+(setq deft-text-mode 'org-mode)
+(add-hook 'deft-mode-hook 'deft-filter-clear t)
+(define-key deft-mode-map (kbd "C-w") 'deft-filter-clear)
 
-(defvar killed-buffers '())
+;; magit
+(global-set-key (kbd "C-x C-z") 'magit-status)
 
-(defun my-kill-buffer()
-  "kills the current buffer without confirmation, appending it to a list of killed buffers"
+;; rainbow-delimiters
+(require 'rainbow-delimiters)
+(setq-default frame-background-mode 'dark)
+(add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'octave-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
+(add-hook 'haskell-mode-hook 'rainbow-delimiters-mode)
+
+;company-mode
+(global-company-mode 1)
+
+;undo-tree
+(require 'undo-tree)
+(global-undo-tree-mode 1)
+
+(defalias 'redo 'undo-tree-redo)
+(global-set-key (kbd "s-z") 'undo) 
+(global-set-key (kbd "s-S-z") 'redo)
+
+;;smex
+(global-set-key "\M-x" 'smex)
+(global-set-key "\M-c" 'smex)
+(global-set-key "\C-x\C-m" 'smex)
+(global-set-key "\C-c\C-m" 'smex)
+
+;neotree
+(require 'neotree)
+(global-set-key (kbd "C-1") 'neotree-toggle)
+
+;; requires find-file-in-project
+(defun neotree-project-dir ()
+  "Open dirtree using the git root."
+
+  (require 'find-file-in-project)
+
   (interactive)
+  (let ((project-dir (ffip-project-root))
+        (file-name (buffer-file-name)))
+    (if project-dir
+        (progn
+          (neotree-dir project-dir)
+          (neotree-find file-name))
+      (message "Could not find git project root."))))
 
-  (let ((filename (buffer-file-name))
-        (buffername (buffer-name)))
-    (if filename
-        (setq killed-buffers (append (list filename) killed-buffers)))
-    (kill-buffer buffername)))
-(global-set-key (kbd "s-w") 'my-kill-buffer)
+(global-set-key (kbd "C-c C-p") 'neotree-project-dir)
 
-(defun my-unkill-buffer()
-  "reinstates the last killed buffer, removing all instances of it from the list of killed buffers"
-  (interactive)
-  (let* ((last-killed (first killed-buffers))
-         (remaining (remq last-killed killed-buffers)))
-    (message (format "unkilling buffer %s, state: %s" last-killed remaining))
-    (setq killed-buffers remaining)
-    (find-file last-killed)))
-
-(global-set-key (kbd "s-W") 'my-unkill-buffer)
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; fixes graphical bug in osx
-(linum-mode +1)
-(setq linum-format "%d ")
-
-;(require 'tramp)
-                                        ;(setq tramp-default-method "ssh")
-
+; ido-mode
 (ido-mode t)
 (ido-ubiquitous t)
 (setq ido-enable-prefix nil
@@ -51,6 +68,7 @@
       ido-handle-duplicate-virtual-buffers 2
       ido-max-prospects 10)
 
+;; octave mode
 (autoload 'octave-mode "octave-mod" nil t)
 (setq auto-mode-alist
       (cons '("\\.m$" . octave-mode) auto-mode-alist))
@@ -64,17 +82,6 @@
 
 (setq auto-mode-alist
       (cons '("\\.zsh$" . sh-mode) auto-mode-alist))
-
-(setq
-   backup-by-copying t      ; don't clobber symlinks
-   backup-directory-alist
-    '(("." . "~/.emacs-saves"))    ; don't litter my fs tree
-   delete-old-versions t
-   kept-new-versions 6
-   kept-old-versions 2
-   version-control t)       ; use versioned backups
-
-(setq-default ispell-program-name "aspell")
 
 (provide 'init-customisations)
 
