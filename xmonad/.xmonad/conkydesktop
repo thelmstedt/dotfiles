@@ -2,7 +2,7 @@ background no
 use_xft yes
 xftfont 123:size=8
 xftalpha 0.1
-update_interval 1
+update_interval 60
 total_run_times 0
 
 double_buffer yes
@@ -81,7 +81,7 @@ down total ${totaldown wlp10s0} $alignr up total ${totalup wlp10s0}
 
 # HDD
 ${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}
-$color${font Open Sans:bold:size=8.5}/dev/sda $font$alignr ${execi 30 sudo hddtemp /dev/sda | grep '/dev/sda:' | cut -c28-29}°C
+$color${font Open Sans:bold:size=8.5}/dev/sda
  
 ${font Open Sans:bold:size=8.5}ROOT $font$font$alignr ${fs_type /}
 ${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /} %

@@ -15,6 +15,7 @@ import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.UrgencyHook
+import           XMonad.Hooks.SetWMName
 
 import           XMonad.Actions.WindowBringer    (gotoMenu)
 import           XMonad.Util.EZConfig            (additionalKeysP)
@@ -36,15 +37,16 @@ modMask' = mod4Mask
 
 
 main = do
+  spawnToDzen "/home/tim/.xmonad/startup.sh" conkyBar
+  
   workspaceBar <- spawnDzen myStatusBar
-  _ <- spawnToDzen "conky -c /home/tim/.xmonad/conkytop" conkyBar
-  _ <- spawn "conky -c /home/tim/.xmonad/conkydesktop"
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modMask'
     , layoutHook         = layoutHook'
     , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
+    , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook xfceConfig
     , logHook            = logHook' workspaceBar
     , workspaces = workspaces'
