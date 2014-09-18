@@ -10,7 +10,7 @@ category:           Development
 description:        
 homepage:           
 bug-reports:        
-cabal-version:      >= 1.18
+cabal-version:      >= 1.20
 build-type:         Simple
 
 
@@ -23,10 +23,10 @@ library
 
   build-depends:
                     base < 5 && >= 3
-                    , happy
-                    , alex
-                    , ghc-mod == 5.0.0
+--                    , ghc-mod >= 5.0.1.1
                     , structured-haskell-mode 
                     , stylish-haskell
+                    , hasktags
+--                    , present
 
 
