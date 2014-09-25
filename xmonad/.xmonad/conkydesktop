@@ -2,7 +2,7 @@ background no
 use_xft yes
 xftfont 123:size=8
 xftalpha 0.1
-update_interval 60
+update_interval 1
 total_run_times 0
 
 double_buffer yes
@@ -39,7 +39,6 @@ ${font Open Sans:Bold:size=10}${color dodgerblue3}SYSTEM${hr 2}$color${font}
 $sysname $kernel $alignr $machine
 Uptime $alignr $uptime
 MB Temperature $alignr ${execi 30 sensors | grep 'SYSTIN:' | cut -c17-18}°C
-GPU Temperature $alignr ${execi 30 sensors | grep 'temp1:' | cut -c16-17}°C
  
 # CPU
 ${font Open Sans:Bold:size=10}${color dodgerblue3}CPU${hr 2}
@@ -80,9 +79,7 @@ up $alignr ${upspeedf wlp10s0} kb/s
 down total ${totaldown wlp10s0} $alignr up total ${totalup wlp10s0}
 
 # HDD
-${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}
-$color${font Open Sans:bold:size=8.5}/dev/sda
- 
+${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}$color${font Open Sans:bold:size=8.5}
 ${font Open Sans:bold:size=8.5}ROOT $font$font$alignr ${fs_type /}
 ${fs_used /} / ${fs_size /} $alignr ${fs_used_perc /} %
 ${fs_bar /}
@@ -91,7 +88,6 @@ ${font Open Sans:bold:size=8.5}STORAGE $font$alignr ${fs_type /storage}
 ${fs_used /storage} / ${fs_size /storage} $alignr ${fs_used_perc /storage} %
 ${fs_bar /storage}
 
-# Clementine
-${font Open Sans:Bold:size=10}${color dodgerblue3}MUSIC${hr 2}
-$color${font}${alignr}${execi 30 python /home/tim/.xmonad/cc.py -t}
-${alignr}${execi 10 python /home/tim/.xmonad/cc.py -a} / ${color}${execi 30 python /home/tim/.xmonad/cc.py -l} (${execi 30 python /home/tim/.xmonad/cc.py -y})
+${font Open Sans:bold:size=8.5}/dev/shm $font$alignr ${fs_type /dev/shm}
+${fs_used /dev/shm} / ${fs_size /dev/shm} $alignr ${fs_used_perc /dev/shm} %
+${fs_bar /dev/shm}
