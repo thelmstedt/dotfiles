@@ -68,6 +68,10 @@ ${font Open Sans:Bold:size=10}${color dodgerblue3}MEMORY${hr 2}
 $color${font}${font Open Sans:bold:size=8.5}RAM$font
 $mem / $memmax ($cached cached) $alignr $memperc %
 $membar
+
+${font Open Sans:bold:size=8.5}/dev/shm $font$alignr ${fs_type /dev/shm}
+${fs_used /dev/shm} / ${fs_size /dev/shm} $alignr ${fs_used_perc /dev/shm} %
+${fs_bar /dev/shm}
   
 # NETWORK
 ${font Open Sans:Bold:size=10}${color dodgerblue3}NETWORK${hr 2}
@@ -87,7 +91,3 @@ ${fs_bar /}
 ${font Open Sans:bold:size=8.5}STORAGE $font$alignr ${fs_type /storage}
 ${fs_used /storage} / ${fs_size /storage} $alignr ${fs_used_perc /storage} %
 ${fs_bar /storage}
-
-${font Open Sans:bold:size=8.5}/dev/shm $font$alignr ${fs_type /dev/shm}
-${fs_used /dev/shm} / ${fs_size /dev/shm} $alignr ${fs_used_perc /dev/shm} %
-${fs_bar /dev/shm}
