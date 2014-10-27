@@ -12,6 +12,8 @@
                      fuzzy 
                      dired+ 
                      color-theme 
+                     markdown-mode
+
 ;;                     rainbow-mode 
                      popup 
                      ido-ubiquitous 
