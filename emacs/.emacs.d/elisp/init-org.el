@@ -1,6 +1,8 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (global-set-key (kbd "C-c a") 'org-agenda)
-(setq org-agenda-files '("~/.deft"))
+(global-set-key "\C-cl" 'org-store-link)
+
+(setq org-agenda-files '("~/Dropbox/deft"))
 
 (setq org-agenda-include-diary t)
 (setq org-agenda-include-all-todo t)

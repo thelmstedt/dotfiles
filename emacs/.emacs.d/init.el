@@ -9,6 +9,7 @@
   (ammend-path "/Applications/ghc-7.8.3.app/Contents/bin")
   (ammend-path "/Users/tim/.cabal/bin"))
 
+
 (ammend-path "~/.emacs-haskell/.cabal-sandbox/bin")
 
 (setq dotfiles-dir (file-name-directory
@@ -33,7 +34,8 @@
    kept-new-versions 6
    kept-old-versions 2
    version-control t  ; use versioned backups
-   linum-format "%d")
+   linum-format "%d"
+   initial-scratch-message "")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -60,3 +62,8 @@
 
 (load "server")
 (unless (server-running-p) (server-start))
+
+;; :( osx
+(when (equal system-type 'darwin)
+  (require 'maxframe)
+  (add-hook 'window-setup-hook 'maximize-frame t))

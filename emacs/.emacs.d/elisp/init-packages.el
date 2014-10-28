@@ -1,4 +1,6 @@
-; list the packages you want
+(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
+
 (setq package-list '(haskell-mode
                      shm
                      company
@@ -14,20 +16,23 @@
                      color-theme 
                      markdown-mode
 
-;;                     rainbow-mode 
+                     ;;rainbow-mode 
                      popup 
                      ido-ubiquitous 
                      color-theme-solarized 
-                     org ;;todo can we have this installed from orgmode automatically? currently just skips as it's included
+
+
                      find-file-in-project
                      deft 
                      magit 
+                     git-commit-mode
+                     git-rebase-mode
                      rainbow-delimiters 
-                     ))
+                     ;; just for osx
+                     maxframe
 
-; list the repositories containing them
-(setq package-archives '(("melpa" . "http://melpa.milkbox.net/packages/")
-                         ("org" . "http://orgmode.org/elpa/")))
+                     ;;todo can we have this installed from orgmode automatically? currently just skips as it's included
+                     org))
 
 ; activate all the packages (in particular autoloads)
 (package-initialize)
@@ -40,5 +45,16 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(defun package-list-unaccounted-packages ()
+  "Like `package-list-packages', but shows only the packages that
+  are installed and are not in `package-list'.  Useful for
+  cleaning out unwanted packages."
+  (interactive)
+  (package-show-package-list
+   (remove-if-not (lambda (x) (and (not (memq x package-list))
+                            (not (package-built-in-p x))
+                            (package-installed-p x)))
+                  (mapcar 'car package-archive-contents))))
 
 (provide 'init-packages)

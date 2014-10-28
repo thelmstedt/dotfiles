@@ -18,7 +18,7 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode)
 
-;company-mode
+;company-mode ;; TODO just turn it on for elisp/haskell/etc
 (global-company-mode 1)
 
 ;undo-tree
