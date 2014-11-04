@@ -166,7 +166,7 @@ pp' h = dzenPP {
     , ppLayout          = dzenColor "#1874CD" "#000000"
     , ppWsSep           = "  "
     , ppSep             = " | "
-    , ppOrder           = \(ws:l:title:num:_) -> [ws, "^ca(1,xdotool key super+space)" ++ l ++ "^ca()"  ++ " " ++ num, title]
+    , ppOrder           = \(ws:l:title:num:_) -> [ws, "^ca(1,xdotool key super+Tab)" ++ l ++ "^ca()"  ++ " " ++ num, title]
 }
 
 
