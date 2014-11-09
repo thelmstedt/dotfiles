@@ -105,7 +105,7 @@ manageHook' =
 
 keys' =
     [
-      ("C-\\", spawn "dmenu_run")
+      ("C-\\", spawn "exe=`/home/tim/.xmonad/bin/dmenu-with-yeganesh` && eval \"exec $exe\"")
     , ("C-S-\\", gotoMenu)
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")

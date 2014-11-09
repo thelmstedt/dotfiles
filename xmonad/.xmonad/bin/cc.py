@@ -5,19 +5,19 @@
 #
 # Connects to dbus and retrieves
 # information about the currently
-# playing track in amarok.
+# playing track in clementine.
 #
 
 import dbus, optparse, shutil
 
 class Nowplaying():
         def __init__(self):
-                ''' Connect to dbus and retrieve the amarok dictionary containg
+                ''' Connect to dbus and retrieve the clementine dictionary containg
                  all the information about the currently playing track
                 '''
                 bus = dbus.SessionBus()
-                amarok = bus.get_object('org.mpris.MediaPlayer2.clementine', '/Player')
-                xs = amarok.GetMetadata()
+                clementine = bus.get_object('org.mpris.MediaPlayer2.clementine', '/Player')
+                xs = clementine.GetMetadata()
                 
                 self.artist = self.title = self.album = self.genre = self.year = \
                 self.track = self.bitrate = self.sample = self.cover = ""
@@ -58,7 +58,7 @@ class Nowplaying():
                 return self.sample
 
         def getCover(self, destination):
-                ''' Copy amaroks cache cover art to a static location so it can be used in conky'''
+                ''' Copy clementines cache cover art to a static location so it can be used in conky'''
                 if self.cover != "" :
                         try :
                                 shutil.copyfile(self.cover.replace('file://', ''), destination)
