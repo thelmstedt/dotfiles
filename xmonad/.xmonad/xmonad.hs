@@ -22,8 +22,7 @@ import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Loggers
 import           XMonad.Util.Run                 (hPutStrLn)
 
-import           Data.List                       (elemIndex, isPrefixOf)
-import           Data.Maybe                      (fromMaybe)
+import           Data.List                       (isPrefixOf)
 import           Data.Ratio                      ((%))
 
 import qualified XMonad.StackSet                 as W
@@ -164,13 +163,15 @@ numWindows :: W.Screen a b c d e -> String
 numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
 
 -- Wraps a workspace name with a dzen clickable action that focuses that workspace
-clickable workspaces = clickableExp workspaces 1
-
-clickableExp [] _ ws = ws
-clickableExp (ws:other) n l | l == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
-                            | otherwise = clickableExp other (n+1) l
+clickable :: [String] -> String -> String
+clickable workspaces =
+  clickableExp workspaces 1
   where
+    clickableExp :: [String] -> Integer -> String -> String
+    clickableExp [] _ ws = ws
+    clickableExp (ws:other) n match | match == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
+                            | otherwise = clickableExp other (n+1) match
     -- 10th workspace is the 0 key
+    fudge :: Integer -> Integer
     fudge 10 = 0
     fudge n = n
-
