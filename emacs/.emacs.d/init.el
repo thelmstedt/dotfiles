@@ -1,5 +1,5 @@
-(defun ammend-path (p) 
-  (progn 
+(defun ammend-path (p)
+  (progn
     (setenv "PATH" (concat p ":" (getenv "PATH")))
     (push p exec-path)))
 
@@ -28,7 +28,7 @@
 (setq-default ispell-program-name "aspell")
 
 ;; backup/autosave settings
-(defvar --backup-directory (concat user-emacs-directory "~/.emacs-backups"))
+(defvar --backup-directory (concat user-emacs-directory ".emacs-backups"))
 (if (not (file-exists-p --backup-directory))
         (make-directory --backup-directory t))
 (setq backup-directory-alist `(("." . ,--backup-directory)))
@@ -45,6 +45,7 @@
       )
 
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (setq
  linum-format "%d"
