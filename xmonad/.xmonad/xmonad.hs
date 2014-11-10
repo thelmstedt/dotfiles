@@ -14,8 +14,8 @@ import           XMonad.Layout.Reflect           (reflectHoriz)
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
-import           XMonad.Hooks.UrgencyHook
 import           XMonad.Hooks.SetWMName
+import           XMonad.Hooks.UrgencyHook
 
 import           XMonad.Actions.WindowBringer    (gotoMenu)
 import           XMonad.Util.EZConfig            (additionalKeysP)
@@ -28,14 +28,14 @@ import           Data.Ratio                      ((%))
 
 import qualified XMonad.StackSet                 as W
 
-import ResizableSpacing 
+import           ResizableSpacing
 
 modMask' = mod4Mask
 
 
 main = do
   spawnToDzen "/home/tim/.xmonad/startup.sh" conkyBar
-  
+
   workspaceBar <- spawnDzen myStatusBar
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
     modMask              = modMask'
@@ -52,8 +52,8 @@ main = do
 
 myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
-layoutHook' = 
-  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
+layoutHook' =
+  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout standardLayouts
   where
     standardLayouts = spacing 0 $ Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
@@ -164,8 +164,8 @@ numWindows :: W.Screen a b c d e -> String
 numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
 
 -- Wraps a workspace name with a dzen clickable action that focuses that workspace
-clickable workspaces workspace = clickableExp workspaces 1 workspace
- 
+clickable workspaces = clickableExp workspaces 1
+
 clickableExp [] _ ws = ws
 clickableExp (ws:other) n l | l == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
                             | otherwise = clickableExp other (n+1) l
