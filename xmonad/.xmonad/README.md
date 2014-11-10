@@ -5,3 +5,4 @@ Requires
  - xdotool
  - conky
  - dzen
+ - yeganesh

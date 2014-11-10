@@ -33,7 +33,7 @@ modMask' = mod4Mask
 
 
 main = do
-  spawnToDzen "/home/tim/.xmonad/startup.sh" conkyBar
+  spawnToDzen "/home/tim/.xmonad/bin/startup.sh" conkyBar
 
   workspaceBar <- spawnDzen myStatusBar
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
@@ -51,6 +51,7 @@ main = do
 
 myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
+-- todo why isn't 9.im firing?
 layoutHook' =
   avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout standardLayouts
   where
@@ -169,8 +170,10 @@ clickable workspaces =
   where
     clickableExp :: [String] -> Integer -> String -> String
     clickableExp [] _ ws = ws
-    clickableExp (ws:other) n match | match == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
-                            | otherwise = clickableExp other (n+1) match
+    clickableExp (ws:other) n match
+      | match == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
+      | otherwise = clickableExp other (n+1) match
+
     -- 10th workspace is the 0 key
     fudge :: Integer -> Integer
     fudge 10 = 0
