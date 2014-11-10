@@ -20,18 +20,15 @@ import           XMonad.Hooks.SetWMName
 import           XMonad.Actions.WindowBringer    (gotoMenu)
 import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Loggers
-import           XMonad.Util.Run                 (hPutStrLn, spawnPipe)
+import           XMonad.Util.Run                 (hPutStrLn)
 
-import           Control.Applicative             ((<$>))
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Maybe                      (fromMaybe)
 import           Data.Ratio                      ((%))
-import           Data.Traversable                (traverse)
 
 import qualified XMonad.StackSet                 as W
 
 import ResizableSpacing 
-import XMonad.Layout.MouseResizableTile
 
 modMask' = mod4Mask
 
@@ -49,23 +46,15 @@ main = do
     , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook xfceConfig
     , logHook            = logHook' workspaceBar
-    , workspaces = workspaces'
+    , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
 
 
-wsNames = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
-
-workspaces' = clickable . map dzenEscape $ wsNames
-    where clickable l = [
-                          "^ca(1,xdotool key super+" ++ show n ++ ")" ++ ws ++ "^ca()"
-                          | (i,ws) <- zip [1..] l
-                          , let n = i
-                        ]
+myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
 wsNamed :: String -> WorkspaceId
 wsNamed w =
-    workspaces' !! fromMaybe 666 (elemIndex w wsNames)
-
+    myWorkspaces !! fromMaybe 666 (elemIndex w myWorkspaces)
 
 layoutHook' = 
   avoidStruts $ smartBorders $ onWorkspace (wsNamed "9.im") imLayout $ standardLayouts
@@ -113,11 +102,11 @@ keys' =
     , ("M-<F4>", sendMessage $ JumpToLayout "circle")
     , ("M-<F5>", sendMessage $ IncSpacing 10)
     , ("M-<F6>", sendMessage $ DecSpacing 10)
-    , ("M-r", spawn "$(pgrep conky | xargs kill -9) && xmonad --recompile && xmonad --restart")
+    , ("M-r", spawn "xmonad --recompile && xmonad --restart")
     , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
-      | (tag, key)  <- zip workspaces' (map show [1,2,3,4,5,6,7,8,9,0])
+      | (tag, key)  <- zip myWorkspaces (map show [1,2,3,4,5,6,7,8,9,0])
       , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
       , ("S-", windows . W.shift)]
     ]
@@ -157,14 +146,14 @@ plain = dzenColor "#e5e5e5" "#000000"
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         = wrap (highlight "[ ") (highlight " ]")  <$> plain
-    , ppHidden          = plain
-    , ppTitle           = plain
-    , ppExtras          = [ logNumWindows ]
-    , ppHiddenNoWindows = dzenColor "#444444" "#000000"
+    , ppCurrent         = (wrap (highlight "[ ") (highlight " ]")  <$> plain) . clickable myWorkspaces
+    , ppHidden          = plain . clickable myWorkspaces
+    , ppHiddenNoWindows = dzenColor "#444444" "#000000" . clickable myWorkspaces
     , ppUrgent          = highlight . dzenStrip
+    , ppTitle           = plain
+    , ppExtras          = [ logNumWindows  ] -- 4th index onwards from [] arg to ppOrder
     , ppLayout          = dzenColor "#1874CD" "#000000"
-    , ppWsSep           = "  "
+    , ppWsSep           = " "
     , ppSep             = " | "
     , ppOrder           = \(ws:l:title:num:_) -> [ws, "^ca(1,xdotool key super+Tab)" ++ l ++ "^ca()"  ++ " " ++ num, title]
 }
@@ -172,8 +161,15 @@ pp' h = dzenPP {
 
 logHook' h = dynamicLogWithPP $ pp' h
 
+logNumWindows :: X (Maybe String)
 logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
 
 numWindows :: W.Screen a b c d e -> String
 numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
 
+-- Wraps a workspace name with a dzen clickable action that focusses that workspace
+clickable workspaces workspace = clickableExp workspaces 1 workspace
+ 
+clickableExp [] _ ws = ws
+clickableExp (ws:other) n l | l == ws = "^ca(1,xdotool key super+" ++ show (n) ++ ")" ++ ws ++ "^ca()"
+                            | otherwise = clickableExp other (n+1) l
