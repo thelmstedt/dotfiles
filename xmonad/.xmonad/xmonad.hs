@@ -52,12 +52,8 @@ main = do
 
 myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
 
-wsNamed :: String -> WorkspaceId
-wsNamed w =
-    myWorkspaces !! fromMaybe 666 (elemIndex w myWorkspaces)
-
 layoutHook' = 
-  avoidStruts $ smartBorders $ onWorkspace (wsNamed "9.im") imLayout $ standardLayouts
+  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
   where
     standardLayouts = spacing 0 $ Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
@@ -76,7 +72,7 @@ manageHook' =
     , moveC "Firefox" "3.web"
     , moveC "Emacs" "4.emacs"
     , moveC "Hipchat" "7.chat"
-    , moveC "Evolution" "8.mail"
+    , moveC "Thunderbird" "8.mail"
     , moveC "Pidgin" "9.im"
     , ignoreC "vlc"
     , ignoreC "wine"
@@ -86,7 +82,7 @@ manageHook' =
     , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
     ]
   where
-    moveC c w = (className =? c) -->  doF (W.shift $ wsNamed w)
+    moveC c w = (className =? c) -->  doShift w
     ignoreC c = (className =? c) --> doIgnore
     floatC c = (className =? c) --> doFloat
 
@@ -167,9 +163,14 @@ logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current w
 numWindows :: W.Screen a b c d e -> String
 numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
 
--- Wraps a workspace name with a dzen clickable action that focusses that workspace
+-- Wraps a workspace name with a dzen clickable action that focuses that workspace
 clickable workspaces workspace = clickableExp workspaces 1 workspace
  
 clickableExp [] _ ws = ws
-clickableExp (ws:other) n l | l == ws = "^ca(1,xdotool key super+" ++ show (n) ++ ")" ++ ws ++ "^ca()"
+clickableExp (ws:other) n l | l == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
                             | otherwise = clickableExp other (n+1) l
+  where
+    -- 10th workspace is the 0 key
+    fudge 10 = 0
+    fudge n = n
+
