@@ -1,4 +1,4 @@
 #!/bin/sh
 # Stolen from https://github.com/hallettj/config_files/blob/master/.xmonad/bin/dmenu-with-yeganesh
 
-dmenu_path | yeganesh -- -nb '#002b36' -nf '#839496' -sb '#586e75' -sf '#002b36' -fn '-*-*-*-*-*-*-18-*-*-*-*-*-*-*'
+dmenu_path | yeganesh -- -z -nb '#002b36' -nf '#839496' -sb '#586e75' -sf '#002b36' -fn '-*-*-*-*-*-*-18-*-*-*-*-*-*-*'
