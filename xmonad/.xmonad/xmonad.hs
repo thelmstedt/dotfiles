@@ -1,4 +1,5 @@
 import           Dzen
+import           ResizableSpacing
 
 import           XMonad                          hiding ((|||))
 import           XMonad.Config.Xfce              (xfceConfig)
@@ -17,34 +18,29 @@ import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
 
-import           XMonad.Actions.WindowBringer    (gotoMenu, gotoMenuArgs)
+import           XMonad.Actions.WindowBringer    (gotoMenuArgs)
 import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Loggers
 import           XMonad.Util.Run                 (hPutStrLn)
 
-import           Data.List                       (isPrefixOf, elemIndex)
+import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
 
 import qualified XMonad.StackSet                 as W
-
-import           ResizableSpacing
-
-modMask' = mod4Mask
-
 
 main = do
   spawnToDzen "/home/tim/.xmonad/bin/startup.sh" conkyBar
 
   workspaceBar <- spawnDzen myStatusBar
   xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
-    modMask              = modMask'
+    modMask              = mod4Mask
     , layoutHook         = layoutHook'
     , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
     , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook xfceConfig
-    , logHook            = logHook' workspaceBar
+    , logHook            = dynamicLogWithPP $ pp' workspaceBar
     , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
 
@@ -109,8 +105,6 @@ keys' =
       , ("S-", windows . W.shift)]
     ]
 
-
-
 myStatusBar = DzenConf {
       x_position = Just 0
     , y_position = Just 0
@@ -137,11 +131,10 @@ conkyBar = DzenConf {
     , addargs    = []
 }
 
-
-
 highlight = dzenColor "#ebac54" "#000000"
 plain = dzenColor "#e5e5e5" "#000000"
 red = dzenColor "#CD0000" "#000000"
+
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
@@ -149,16 +142,14 @@ pp' h = dzenPP {
     , ppHidden          = plain . clickable myWorkspaces
     , ppHiddenNoWindows = dzenColor "#444444" "#000000" . clickable myWorkspaces
     , ppUrgent          = (wrap (red "[ ") (red " ]") <$> plain) . clickable myWorkspaces
-    , ppTitle           = plain
+    , ppTitle           = plain . wrapClickable "super+Tab" . dzenEscape
     , ppExtras          = [ logNumWindows  ] -- 4th index onwards from [] arg to ppOrder
     , ppLayout          = dzenColor "#1874CD" "#000000"
     , ppWsSep           = " "
     , ppSep             = " | "
-    , ppOrder           = \(ws:l:title:num:_) -> [ws, "^ca(1,xdotool key super+Tab)" ++ l ++ "^ca()"  ++ " " ++ num, title]
+    , ppOrder           = \(ws:layout:title:num:_) ->
+                           [ws, wrapClickable "super+space" (layout ++ " " ++ num), title ]
 }
-
-
-logHook' h = dynamicLogWithPP $ pp' h
 
 logNumWindows :: X (Maybe String)
 logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
@@ -171,12 +162,12 @@ clickable :: [String] -> String -> String
 clickable workspaces x =
   case elemIndex x workspaces of
     Nothing -> x
-    Just n -> makeClickable x (n +1)
-
-makeClickable :: (Show a, Num a, Eq a) => String -> a -> String
-makeClickable x n =
-  "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ x ++ "^ca()"
+    Just n -> let key = "super+" ++ show (fudge n + 1)
+              in wrapClickable key x
   where
-    -- 10th workspace is the 0 key
-    fudge 10 = 0
+    fudge 10 = 0 --10th is 0 key
     fudge n = n
+
+wrapClickable :: String -> String -> String
+wrapClickable k x =
+ "^ca(1, xdotool key " ++ k ++ ")" ++ x ++ "^ca()"
