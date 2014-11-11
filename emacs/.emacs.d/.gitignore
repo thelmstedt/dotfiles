@@ -10,3 +10,4 @@ swank/
 .smex-items
 session.*
 tramp
+.emacs-backups

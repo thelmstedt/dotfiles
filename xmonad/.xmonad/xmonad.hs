@@ -17,12 +17,12 @@ import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
 
-import           XMonad.Actions.WindowBringer    (gotoMenu)
+import           XMonad.Actions.WindowBringer    (gotoMenu, gotoMenuArgs)
 import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Loggers
 import           XMonad.Util.Run                 (hPutStrLn)
 
-import           Data.List                       (isPrefixOf)
+import           Data.List                       (isPrefixOf, elemIndex)
 import           Data.Ratio                      ((%))
 
 import qualified XMonad.StackSet                 as W
@@ -86,12 +86,14 @@ manageHook' =
     ignoreC c = (className =? c) --> doIgnore
     floatC c = (className =? c) --> doFloat
 
-
+myDzenFontLarge = ["-fn", "-*-*-*-*-*-18-*-*-*-*-*-*-*"]
+myDzenColorsSolarized = ["-nb","#002b36","-nf","#839496","-sb","#586e75","-sf","#002b36"]
+myDzenGoto = ["-p","Go to window:"] ++ myDzenColorsSolarized ++ myDzenFontLarge
 
 keys' =
     [
       ("C-\\", spawn "exe=`/home/tim/.xmonad/bin/dmenu-with-yeganesh` && eval \"exec $exe\"")
-    , ("C-S-\\", gotoMenu)
+    , ("C-S-\\", gotoMenuArgs myDzenGoto)
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
     , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
@@ -139,13 +141,14 @@ conkyBar = DzenConf {
 
 highlight = dzenColor "#ebac54" "#000000"
 plain = dzenColor "#e5e5e5" "#000000"
+red = dzenColor "#CD0000" "#000000"
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
     , ppCurrent         = (wrap (highlight "[ ") (highlight " ]")  <$> plain) . clickable myWorkspaces
     , ppHidden          = plain . clickable myWorkspaces
     , ppHiddenNoWindows = dzenColor "#444444" "#000000" . clickable myWorkspaces
-    , ppUrgent          = highlight . dzenStrip
+    , ppUrgent          = (wrap (red "[ ") (red " ]") <$> plain) . clickable myWorkspaces
     , ppTitle           = plain
     , ppExtras          = [ logNumWindows  ] -- 4th index onwards from [] arg to ppOrder
     , ppLayout          = dzenColor "#1874CD" "#000000"
@@ -165,16 +168,15 @@ numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.works
 
 -- Wraps a workspace name with a dzen clickable action that focuses that workspace
 clickable :: [String] -> String -> String
-clickable workspaces =
-  clickableExp workspaces 1
-  where
-    clickableExp :: [String] -> Integer -> String -> String
-    clickableExp [] _ ws = ws
-    clickableExp (ws:other) n match
-      | match == ws = "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ ws ++ "^ca()"
-      | otherwise = clickableExp other (n+1) match
+clickable workspaces x =
+  case elemIndex x workspaces of
+    Nothing -> x
+    Just n -> makeClickable x (n +1)
 
+makeClickable :: (Show a, Num a, Eq a) => String -> a -> String
+makeClickable x n =
+  "^ca(1,xdotool key super+" ++ show (fudge n) ++ ")" ++ x ++ "^ca()"
+  where
     -- 10th workspace is the 0 key
-    fudge :: Integer -> Integer
     fudge 10 = 0
     fudge n = n
