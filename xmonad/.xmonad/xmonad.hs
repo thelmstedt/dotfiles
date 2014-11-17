@@ -26,6 +26,8 @@ import           XMonad.Util.Run                 (hPutStrLn)
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
 
+import XMonad.Actions.WindowGo(runOrRaise)
+
 import qualified XMonad.StackSet                 as W
 
 main = do
@@ -88,16 +90,22 @@ myDzenGoto = ["-p","Go to window:"] ++ myDzenColorsSolarized ++ myDzenFontLarge
 
 keys' =
     [
-      ("C-\\", spawn "exe=`/home/tim/.xmonad/bin/dmenu-with-yeganesh` && eval \"exec $exe\"")
-    , ("C-S-\\", gotoMenuArgs myDzenGoto)
+      ("M-\\", spawn "exe=`/home/tim/.xmonad/bin/dmenu-with-yeganesh` && eval \"exec $exe\"")
+    , ("M-S-\\", gotoMenuArgs myDzenGoto)
+
+    , ("M-S-n", spawn "thunar")
+    , ("M-S-t", runOrRaise "spacefm" (className =? "Spacefm"))
+
+    , ("M-S-r", spawn "xmonad --recompile && xmonad --restart")
+
+    , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
+
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
     , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
     , ("M-<F4>", sendMessage $ JumpToLayout "circle")
     , ("M-<F5>", sendMessage $ IncSpacing 10)
     , ("M-<F6>", sendMessage $ DecSpacing 10)
-    , ("M-r", spawn "xmonad --recompile && xmonad --restart")
-    , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
       | (tag, key)  <- zip myWorkspaces (map show [1,2,3,4,5,6,7,8,9,0])

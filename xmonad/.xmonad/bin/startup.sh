@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 
-killall conky 
+killall conky
 killall trayer
 
 conky -c /home/tim/.xmonad/bin/conkydesktop &
@@ -10,4 +10,4 @@ trayer --edge top --align right --SetDockType true --SetPartialStrut true --expa
 
 conky -c /home/tim/.xmonad/bin/conkytop &
 
-setxkbmap -option 'ctrl:nocaps'
+#setxkbmap -option 'ctrl:nocaps'

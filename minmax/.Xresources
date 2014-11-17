@@ -1,3 +1,18 @@
+! reload with xrdb -merge ~/.Xresources
+
+
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.dpi: 96
+Xft.rgba: rgb
+
+
+Xcursor.theme: Vanilla-DMZ-AA
+Xcursor.size: 22
+
 
 !-------------------------------------------------------------------------------
 ! URxvt settings
@@ -5,8 +20,6 @@
 ! More info at:
 ! http://pod.tst.eu/http://cvs.schmorp.de/rxvt-unicode/doc/rxvt.1.pod
 !-------------------------------------------------------------------------------
- 
-
 URxvt*iso14755: False
 
 URxvt.depth:                32
@@ -18,20 +31,20 @@ URxvt.urgentOnBell:         true
 URxvt.loginShell:           true
 URxvt.internalBorder:       3
 URxvt.lineSpace:            0
- 
+
 ! Fonts
-URxvt.allow_bold:           false
+URxvt.allow_bold:           true
 /* URxvt.font:                 -*-terminus-medium-r-normal-*-12-120-72-72-c-60-iso8859-1 */
-URxvt*font: xft:Monospace:pixelsize=14
-URxvt*boldFont: xft:Monospace:pixelsize=14
- 
+URxvt*font: xft:Monospace:pixelsize=12
+URxvt*boldFont: xft:Monospace:pixelsize=12
+
 ! Fix font space
-URxvt*letterSpace: -1
- 
+URxvt*letterSpace: -3
+
 ! Scrollbar
 URxvt.scrollStyle:          rxvt
 URxvt.scrollBar:            false
- 
+
 ! Perl extensions
 URxvt.perl-ext-common:      default,matcher,clipboard,url-select,keyboard-select
 URxvt.matcher.button:       1
@@ -45,12 +58,12 @@ URxvt.keysym.M-s:           perl:keyboard-select:search
 ! Perl copy extension
 URxvt.keysym.C-C: perl:clipboard:copy
 URxvt.keysym.C-V: perl:clipboard:paste
- 
+
 ! Cursor
 URxvt.cursorBlink:          true
 URxvt.cursorColor:          #657b83
 URxvt.cursorUnderline:      true
- 
+
 ! Pointer
 URxvt.pointerBlank:         true
 
