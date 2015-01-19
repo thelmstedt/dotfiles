@@ -39,6 +39,7 @@
              ((and (> n-not-done 0) (> n-done 0)) "STARTED")
              (t "TODO"))))
 
+
 ;; todo - this doesn't handle nested checkboxes - org-back-to-heading
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2011-06/msg00303.html
 (add-hook 'org-checkbox-statistics-hook 'ndk/checkbox-list-complete)
@@ -58,12 +59,28 @@
                     (t (org-todo "STARTED")))
             (cond ((and (> (match-end 2) (match-beginning 2))
                         (equal (match-string 2) (match-string 3)))
-                   ;; all done - do the state change               
+                   ;; all done - do the state change
                    (org-todo 'done))
                   ((and (> (match-end 2) (match-beginning 2))
                         (equal (match-string 2) "0"))
                    (org-todo "TODO"))
                   (t (org-todo "STARTED"))))))))
+
+(require 'ob)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (haskell . t)))
+
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
+
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (condition-case nil
+                                              (org-display-inline-images)
+                                            (error nil)))
+          'append)
 
 
 (provide 'init-org)

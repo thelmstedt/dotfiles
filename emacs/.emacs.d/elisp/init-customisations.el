@@ -4,6 +4,7 @@
 (setq deft-directory "~/Dropbox/deft")
 (setq deft-extension "org")
 (setq deft-text-mode 'org-mode)
+
 (add-hook 'deft-mode-hook 'deft-filter-clear t)
 (define-key deft-mode-map (kbd "C-w") 'deft-filter-clear)
 
@@ -18,14 +19,11 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'haskell-mode-hook 'rainbow-delimiters-mode)
 
-;company-mode ;; TODO just turn it on for elisp/haskell/etc
-(global-company-mode 1)
-
 ;undo-tree
 (require 'undo-tree)
 (global-undo-tree-mode 1)
 (defalias 'redo 'undo-tree-redo)
-(global-set-key (kbd "s-z") 'undo) 
+(global-set-key (kbd "s-z") 'undo)
 (global-set-key (kbd "s-S-z") 'redo)
 
 ;;smex
@@ -99,4 +97,3 @@
 (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 
 (provide 'init-customisations)
-

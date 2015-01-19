@@ -35,7 +35,7 @@
   (define-key haskell-cabal-mode-map (kbd "C-c C-k") 'haskell-interactive-ode-clear)
   (define-key haskell-cabal-mode-map (kbd "C-c C-c") 'haskell-process-cabal-build)
   (define-key haskell-cabal-mode-map (kbd "C-c c") 'haskell-process-cabal)))
-  
+
 ; GHC-MOD
 ; -------
 
@@ -49,12 +49,30 @@
 ; Enable company-mode
 (require 'company)
 ; Use company in Haskell buffers
-; (add-hook 'haskell-mode-hook 'company-mode)
+(add-hook 'haskell-mode-hook 'company-mode)
 ; Use company in all buffers
-(add-hook 'after-init-hook 'global-company-mode)
+;;(add-hook 'after-init-hook 'global-company-mode)
 
 (add-to-list 'company-backends 'company-ghc)
 (custom-set-variables '(company-ghc-show-info t))
+
+
+(require 'cl-lib)
+(require 'thingatpt)
+
+(defun haskell-process-completions-at-point ()
+  "A company-mode-compatible complete-at-point function."
+  (-when-let (process (haskell-process))
+    (-when-let (symbol (symbol-at-point))
+      (destructuring-bind (start . end) (bounds-of-thing-at-point 'symbol)
+        (let ((completions (haskell-process-get-repl-completions (haskell-process)
+                                                                 (symbol-name symbol))))
+          (list start end completions))))))
+
+(add-hook 'haskell-mode-hook
+          (lambda ()
+            (setq-local completion-at-point-functions
+                        '(haskell-process-completions-at-point))))
 
 
 (provide 'init-haskell)

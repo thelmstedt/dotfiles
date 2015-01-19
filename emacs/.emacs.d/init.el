@@ -40,16 +40,14 @@
       kept-old-versions 6               ; oldest versions to keep when a new numbered backup is made (default: 2)
       kept-new-versions 9               ; newest versions to keep when a new numbered backup is made (default: 2)
       auto-save-default t               ; auto-save every buffer that visits a file
-      auto-save-timeout 20              ; number of seconds idle time before auto-save (default: 30)
-      auto-save-interval 200            ; number of keystrokes between auto-saves (default: 300)
+      auto-save-timeout 30              ; number of seconds idle time before auto-save (default: 30)
+      auto-save-interval 300            ; number of keystrokes between auto-saves (default: 300)
       )
 
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-(setq
- linum-format "%d"
- initial-scratch-message "")
+(add-hook 'before-save-hook
+          (lambda ()
+            (unless (eq major-mode 'org-mode)
+              (delete-trailing-whitespace))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -66,6 +64,7 @@
  '(mouse-autoselect-window t)
  '(tool-bar-mode nil)
  '(visible-bell nil)
+ '(initial-scratch-message "")
 )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
