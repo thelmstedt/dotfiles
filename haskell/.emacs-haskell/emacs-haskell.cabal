@@ -7,9 +7,9 @@ maintainer:         Tim Helmstedt
 copyright:          Copyright (C) 2014 Tim Helmstedt
 synopsis:           emacs haskell mode(s) dependencies
 category:           Development
-description:        
-homepage:           
-bug-reports:        
+description:
+homepage:
+bug-reports:
 cabal-version:      >= 1.20
 build-type:         Simple
 
@@ -23,10 +23,10 @@ library
 
   build-depends:
                     base < 5 && >= 3
---                    , ghc-mod >= 5.0.1.1
-                    , structured-haskell-mode 
+                    , structured-haskell-mode >= 1.0.4
+                    , happy
                     , stylish-haskell
                     , hasktags
+                    , ghc-mod
+
 --                    , present
-
-

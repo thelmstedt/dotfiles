@@ -13,6 +13,7 @@ import Data.Monoid
 :def pl \s -> return $ ":! pointfree \"" ++ s ++ "\""
 
 :set +t
+:set +c
 
 :m + Data.List
 :m + Control.Arrow
@@ -27,4 +28,3 @@ import Data.Monoid
 :set -fno-warn-type-defaults
 :set -fno-warn-name-shadowing
 :set -fno-warn-unused-do-bind
-
