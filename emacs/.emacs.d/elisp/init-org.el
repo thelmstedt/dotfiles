@@ -1,34 +1,46 @@
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(global-set-key (kbd "C-c a") 'org-agenda)
+
+;; keybindings
 (global-set-key "\C-cl" 'org-store-link)
-
-(setq org-agenda-files '("~/Dropbox/deft"))
-
-(setq org-agenda-include-diary t)
-(setq org-agenda-include-all-todo t)
-(setq org-hide-leading-stars t)
-(setq org-startup-folded "showall")
-(setq org-startup-indented "indent")
+(global-set-key (kbd "C-c a") 'org-agenda)
 
 
-(setq org-startup-align-all-tables "align")
-;(setq org-export-with-toc 4)
-;(setq org-export-headline-levels 4)
-
-(setq org-log-into-drawer t
+;; general
+(setq org-hide-leading-stars t
+      org-startup-folded "showall"
+      org-startup-indented "indent"
+      org-startup-align-all-tables "align"
+      org-log-into-drawer t
       org-clock-modeline-total 'today
       org-clock-persist 'history)
 
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!)" "CANCELED(c@!)")
-        (sequence "WAITING(w@/!)")))
+;; todos
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
 
-(setq org-todo-keyword-faces
-      '(("TODO" . (:foreground "LightSalmon" :weight bold))
-        ("STARTED" . (:foreground "red"))
-        ("WAITING" . (:foreground "red"))
-        ("DONE" . (:foreground "forest green"))
-        ("CANCELLED" . (:foreground "blue"))))
+;; habits
+(require 'org)
+(require 'org-install)
+(require 'org-habit)
+(add-to-list 'org-modules "org-habit")
+(setq org-habit-preceding-days 14
+      org-habit-following-days 1
+      org-habit-graph-column 40
+      org-habit-show-habits-only-for-today t
+      org-habit-show-all-today t)
+
+;; agenda
+(setq org-agenda-files '("~/Dropbox/deft")
+      org-agenda-include-diary t
+      org-agenda-include-all-todo t
+      org-agenda-show-log t)
+
+;; export
+;; (setq org-export-with-toc 4
+;;       org-export-headline-levels 4)
+
+
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 (defun org-summary-todo (n-done n-not-done)
@@ -36,9 +48,8 @@
   (org-todo (cond
              ((and (> n-done 0) (= n-not-done 0)) "DONE")
              ((and (> n-not-done 0) (= n-done 0)) "TODO")
-             ((and (> n-not-done 0) (> n-done 0)) "STARTED")
+             ((and (> n-not-done 0) (> n-done 0)) "INPROGRESS")
              (t "TODO"))))
-
 
 ;; todo - this doesn't handle nested checkboxes - org-back-to-heading
 ;; http://lists.gnu.org/archive/html/emacs-orgmode/2011-06/msg00303.html
@@ -66,6 +77,7 @@
                    (org-todo "TODO"))
                   (t (org-todo "STARTED"))))))))
 
+;; babel
 (require 'ob)
 
 (org-babel-do-load-languages
@@ -76,11 +88,13 @@
 (setq org-src-fontify-natively t
       org-confirm-babel-evaluate nil)
 
-(add-hook 'org-babel-after-execute-hook (lambda ()
-                                          (condition-case nil
-                                              (org-display-inline-images)
-                                            (error nil)))
+(add-hook 'org-babel-after-execute-hook
+          (lambda ()
+            (condition-case nil
+                (org-display-inline-images)
+              (error nil)))
           'append)
+
 
 
 (provide 'init-org)
