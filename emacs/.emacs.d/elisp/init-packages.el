@@ -10,24 +10,26 @@
                      undo-tree
                      smex
                      neotree
-                     paredit 
-                     fuzzy 
-                     dired+ 
-                     color-theme 
+                     paredit
+                     fuzzy
+                     dired+
+                     color-theme
                      markdown-mode
 
-                     ;;rainbow-mode 
-                     popup 
-                     ido-ubiquitous 
-                     color-theme-solarized 
+                     ;;rainbow-mode
+                     popup
+                     ido-ubiquitous
+                     color-theme-solarized
 
 
                      find-file-in-project
-                     deft 
-                     magit 
+                     deft
+                     magit
                      git-commit-mode
                      git-rebase-mode
-                     rainbow-delimiters 
+                     rainbow-delimiters
+                     ibuffer-vc fullframe
+
                      ;; just for osx
                      maxframe
 
@@ -37,7 +39,7 @@
 ; activate all the packages (in particular autoloads)
 (package-initialize)
 
-; fetch the list of packages available 
+; fetch the list of packages available
 (unless package-archive-contents
   (package-refresh-contents))
 

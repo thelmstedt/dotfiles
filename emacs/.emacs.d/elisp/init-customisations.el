@@ -10,6 +10,8 @@
 
 ;; magit
 (global-set-key (kbd "C-x C-z") 'magit-status)
+(require 'fullframe)
+(fullframe magit-status magit-mode-quit-window)
 
 ;; rainbow-delimiters
 (require 'rainbow-delimiters)
@@ -95,5 +97,10 @@
 (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
 (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
 (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+
+
+;;buffers
+(defalias 'list-buffers 'ibuffer)
+
 
 (provide 'init-customisations)

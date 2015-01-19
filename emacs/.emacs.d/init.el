@@ -16,11 +16,22 @@
                     (or (buffer-file-name) load-file-name)))
 (add-to-list 'load-path (concat dotfiles-dir "/elisp"))
 
+
+(if (fboundp 'with-eval-after-load)
+    (defalias 'after-load 'with-eval-after-load)
+  (defmacro after-load (feature &rest body)
+    "After FEATURE is loaded, evaluate BODY."
+    (declare (indent defun))
+    `(eval-after-load ,feature
+       '(progn ,@body))))
+
+
 (require 'init-packages)
 (require 'init-customisations)
 (require 'init-keybindings)
 (require 'init-org)
 (require 'init-haskell)
+(require 'init-ibuffer)
 
 (load-theme 'solarized-dark t)
 
