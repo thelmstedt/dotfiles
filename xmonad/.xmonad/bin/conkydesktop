@@ -38,11 +38,11 @@ $color${font Open Sans:size=12}$alignr${time %a}, ${time %d %b %Y}$font$color
 ${font Open Sans:Bold:size=10}${color dodgerblue3}SYSTEM${hr 2}$color${font}
 $sysname $kernel $alignr $machine
 Uptime $alignr $uptime
-MB Temperature $alignr ${execi 30 sensors | grep 'SYSTIN:' | cut -c17-18}°C
  
 # CPU
 ${font Open Sans:Bold:size=10}${color dodgerblue3}CPU${hr 2}
-$color${font}Intel i5 2500k $alignr ${freq_g cpu0}GHz
+$color${font}${execi 3600 cat /proc/cpuinfo | head | grep name | awk -F":" '{print $2}'| grep -o "i5.*" } $alignr ${freq_g cpu0}GHz
+#MB Temperature $alignr ${execi 30 sensors | grep 'SYSTIN:' | cut -c17-18}°C
 
 ${font}Core 0 ${color dodgerblue3}${execi 30 sensors | grep 'Core 0:' | cut -c18-19}°C${color} @ ${cpu cpu1} % $alignc ${color dodgerblue3}${cpubar cpu1}${color}
 ${font}Core 1 ${color dodgerblue3}${execi 30 sensors | grep 'Core 1:' | cut -c18-19}°C${color} @ ${cpu cpu2} % $alignc ${color dodgerblue3}${cpubar cpu2}${color}
@@ -51,8 +51,9 @@ ${font}Core 3 ${color dodgerblue3}${execi 30 sensors | grep 'Core 3:' | cut -c18
 
 #FAN
 ${font Open Sans:Bold:size=10}${color dodgerblue3}FAN${hr 2}
-$color${font}Fan 2${alignr}$font${exec sensors | grep fan2: | cut -c1-22 | grep -o "[0-9]* RPM"}
-Fan 3${alignr}${exec sensors | grep fan3: | cut -c1-22 | grep -o "[0-9]* RPM"}
+$color${font}Fan 1${alignr}$font${exec sensors | grep  "fan1" | awk -F" " '{print $2}'} RPM
+$color${font}Fan 2${alignr}$font${exec sensors | grep  "fan2" | awk -F" " '{print $2}'} RPM
+$color${font}Fan 3${alignr}$font${exec sensors | grep  "fan3" | awk -F" " '{print $2}'} RPM
  
 # TOP
 ${font Open Sans:Bold:size=10}${color dodgerblue3}TOP${hr 2}
@@ -75,12 +76,12 @@ ${fs_bar /dev/shm}
   
 # NETWORK
 ${font Open Sans:Bold:size=10}${color dodgerblue3}NETWORK${hr 2}
-$color${font Open Sans:bold:size=8.5}External IP ${font}${alignr}${execi 86400 wget -O - http://ip.tupeux.com | tail}$font
+#$color${font Open Sans:bold:size=8.5}External IP ${font}${alignr}${execi 86400 wget -O - http://ip.tupeux.com | tail}$font
  
-${font Open Sans:bold:size=8.5}wlp10s0 $font$alignr ${addr wlp10s0}
-down $alignr ${downspeedf wlp10s0} kb/s
-up $alignr ${upspeedf wlp10s0} kb/s
-down total ${totaldown wlp10s0} $alignr up total ${totalup wlp10s0}
+${font Open Sans:bold:size=8.5}enp3s0 $font$alignr ${addr enp3s0}
+down $alignr ${downspeedf enp3s0} kb/s
+up $alignr ${upspeedf enp3s0} kb/s
+down total ${totaldown enp3s0} $alignr up total ${totalup enp3s0}
 
 # HDD
 ${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}$color${font Open Sans:bold:size=8.5}

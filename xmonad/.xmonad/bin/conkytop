@@ -4,10 +4,10 @@ out_to_x no
 update_interval 1
 
 TEXT
-^fg(\#ebac54) ${if_existing /proc/net/route wlp10s0} ^i(/home/tim/.xmonad/dzen2/wifi_01.xbm)\
-^fg(\#00aa4a) ^i(/home/tim/.xmonad/dzen2/net_down_03.xbm)${downspeed wlp10s0}\
-^fg(\#ff3333) ^i(/home/tim/.xmonad/dzen2/net_up_03.xbm)${upspeed wlp10s0}$endif\
+^fg(\#ebac54) ${if_existing /proc/net/route enp3s0}\
+^fg(\#00aa4a) ^i(/home/tim/.xmonad/dzen2/net_down_03.xbm)${downspeed enp3s0}\
+^fg(\#ff3333) ^i(/home/tim/.xmonad/dzen2/net_up_03.xbm)${upspeed en3s0}$endif\
 ^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF) ${acpitemp}°C \
-^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% / ${freq}MHz (${exec grep "cpu MHz" /proc/cpuinfo | cut -c12- | sort -rn | head -n1}MHz) \
+^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% (${cpu cpu1}|${cpu cpu2}|${cpu cpu3}|${cpu cpu4}) / ${freq}MHz\
 ^fg(\#ebac54)  ^i(/home/tim/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% - ${mem} \
 ^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/clock.xbm) ^fg(\#FFFFFF) ${time %Y-%m-%d} ^fg(\#ebac54) ${time %R:%S}

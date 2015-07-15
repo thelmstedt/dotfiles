@@ -1,8 +1,13 @@
 xmodmap ~/.xmodmap
 
 xrdb -merge ~/.Xresources
-xmonad
 
 xsetroot -cursor_name left_ptr
 
-exec startxfce4
+# ghetto lockscreen
+xautolock -time 10 -locker slock &
+
+# removes cursor after period of inactivity
+unclutter &
+
+exec xmonad
