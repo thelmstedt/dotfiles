@@ -23,12 +23,15 @@ import           XMonad.Util.EZConfig            (additionalKeysP)
 import           XMonad.Util.Loggers
 import           XMonad.Util.Run                 (hPutStrLn)
 
+import           Control.Monad
+
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
 
 import XMonad.Actions.WindowGo(runOrRaise)
 
 import qualified XMonad.StackSet                 as W
+import XMonad.Hooks.ICCCMFocus
 
 main = do
   spawnToDzen "/home/tim/.xmonad/bin/startup.sh" conkyBar
@@ -42,7 +45,7 @@ main = do
     , normalBorderColor  = "#cccccc"
     , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook xfceConfig
-    , logHook            = dynamicLogWithPP $ pp' workspaceBar
+    , logHook            = takeTopFocus >> setWMName"LG3D" >> (dynamicLogWithPP (pp' workspaceBar))
     , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
 
@@ -51,7 +54,7 @@ myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.
 
 -- todo why isn't 9.im firing?
 layoutHook' =
-  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout standardLayouts
+  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
   where
     standardLayouts = spacing 0 $ Full ||| tiled ||| Mirror tiled ||| circle
     tiled   = Tall nmaster delta ratio
@@ -74,6 +77,7 @@ manageHook' =
     , moveC "Pidgin" "9.im"
     , ignoreC "vlc"
     , ignoreC "wine"
+    , ignoreC "qllauncher"
     , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
@@ -142,17 +146,19 @@ conkyBar = DzenConf {
 highlight = dzenColor "#ebac54" "#000000"
 plain = dzenColor "#e5e5e5" "#000000"
 red = dzenColor "#CD0000" "#000000"
-
+blue = dzenColor "#1874CD" "#000000"
+grey = dzenColor "#444444" "#000000"
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
-    , ppCurrent         = (wrap (highlight "[ ") (highlight " ]")  <$> plain) . clickable myWorkspaces
+    , ppCurrent         = (wrap (highlight "[ ") (highlight " ]")  <$> blue) . clickable myWorkspaces
+    , ppVisible         = (wrap (highlight "[ ") (highlight " ]")  <$> plain) . clickable myWorkspaces
     , ppHidden          = plain . clickable myWorkspaces
-    , ppHiddenNoWindows = dzenColor "#444444" "#000000" . clickable myWorkspaces
+    , ppHiddenNoWindows = grey . clickable myWorkspaces
     , ppUrgent          = (wrap (red "[ ") (red " ]") <$> plain) . clickable myWorkspaces
     , ppTitle           = plain . wrapClickable "super+Tab" . dzenEscape
     , ppExtras          = [ logNumWindows  ] -- 4th index onwards from [] arg to ppOrder
-    , ppLayout          = dzenColor "#1874CD" "#000000"
+    , ppLayout          = blue
     , ppWsSep           = " "
     , ppSep             = " | "
     , ppOrder           = \(ws:layout:title:num:_) ->

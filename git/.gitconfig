@@ -1,40 +1,31 @@
 [user]
-    name = Tim Helmstedt
-    email = tim.helmstedt@gmail.com
+	name = Tim Helmstedt
+	email = tim.helmstedt@gmail.com
 [github]
-    user = thelmstedt
+	user = thelmstedt
 [alias]
-    #git flow
-    ffs = flow feature start
-    fff = flow feature finish
-    frs = flow release start
-    frf = flow release finish
-    fhs = flow hotfix start
-    fhf = flow hotfix finish
-    ffr = flow feature rebase
- 
-    # flavours of commit
-    c = commit
-    cm = commit -m
-    cma = commit -a -m
-    ammend = commit -a --amend -C HEAD
- 
-    # shortcuts for commands
-    s = status --short
-
-    d = diff
-    a = add
-    co = checkout
-    b = branch
-    l = log
-    f = fetch
-    r = reset
-    p = pull
+	# flavours of commit
+	c = commit
+	cm = commit -m
+	cma = commit -a -m
+	ammend = commit -a --amend -C HEAD
+	
+	# shortcuts for commands
+	s = status --short
+	
+	d = diff
+	a = add
+	co = checkout
+	b = branch
+		
+	p = pull
+	pom = pull --rebase origin master
+	
 [color]
-    ui = auto
+	ui = auto
 [credential]
 	helper = cache --timeout=3600
 [core]
-    excludesfile = ~/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [push]
 	default = current
