@@ -17,6 +17,8 @@
 	a = add
 	co = checkout
 	b = branch
+
+	ri = rebase -i
 		
 	p = pull
 	pom = pull --rebase origin master

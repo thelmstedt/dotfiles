@@ -8,3 +8,4 @@ target/*
 .DS_Store
 *.ipr
 *_flymake*
+hs_err_*.log
