@@ -2,7 +2,7 @@ import           Dzen
 import           ResizableSpacing
 
 import           XMonad                          hiding ((|||))
-import           XMonad.Config.Desktop              (desktopConfig)
+import           XMonad.Config.Desktop           (desktopConfig)
 
 import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
@@ -27,10 +27,10 @@ import           XMonad.Util.Run                 (hPutStrLn)
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
 
-import XMonad.Actions.WindowGo(runOrRaise)
+import           XMonad.Actions.WindowGo         (runOrRaise)
 
+import           XMonad.Hooks.ICCCMFocus         (takeTopFocus)
 import qualified XMonad.StackSet                 as W
-import XMonad.Hooks.ICCCMFocus(takeTopFocus)
 
 main :: IO ()
 main = do
