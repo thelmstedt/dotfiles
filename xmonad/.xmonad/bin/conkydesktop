@@ -2,7 +2,7 @@ background no
 use_xft yes
 xftfont 123:size=8
 xftalpha 0.1
-update_interval 1
+update_interval 5
 total_run_times 0
 
 double_buffer yes

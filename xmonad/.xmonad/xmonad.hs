@@ -2,7 +2,7 @@ import           Dzen
 import           ResizableSpacing
 
 import           XMonad                          hiding ((|||))
-import           XMonad.Config.Xfce              (xfceConfig)
+import           XMonad.Config.Desktop              (desktopConfig)
 
 import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
@@ -20,10 +20,9 @@ import           XMonad.Hooks.UrgencyHook
 
 import           XMonad.Actions.WindowBringer    (gotoMenuArgs)
 import           XMonad.Util.EZConfig            (additionalKeysP)
-import           XMonad.Util.Loggers
+
 import           XMonad.Util.Run                 (hPutStrLn)
 
-import           Control.Monad
 
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
@@ -31,20 +30,21 @@ import           Data.Ratio                      ((%))
 import XMonad.Actions.WindowGo(runOrRaise)
 
 import qualified XMonad.StackSet                 as W
-import XMonad.Hooks.ICCCMFocus
+import XMonad.Hooks.ICCCMFocus(takeTopFocus)
 
+main :: IO ()
 main = do
   spawnToDzen "/home/tim/.xmonad/bin/startup.sh" conkyBar
 
   workspaceBar <- spawnDzen myStatusBar
-  xmonad $ withUrgencyHook NoUrgencyHook $ xfceConfig {
+  xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig {
     modMask              = mod4Mask
     , layoutHook         = layoutHook'
     , terminal           = "urxvt"
     , borderWidth        = 2
     , normalBorderColor  = "#cccccc"
     , startupHook        = setWMName "LG3D"
-    , manageHook         = manageHook' <+> manageHook xfceConfig
+    , manageHook         = manageHook' <+> manageHook desktopConfig
     , logHook            = takeTopFocus >> setWMName"LG3D" >> (dynamicLogWithPP (pp' workspaceBar))
     , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
@@ -79,6 +79,7 @@ manageHook' =
     , ignoreC "vlc"
     , ignoreC "wine"
     , ignoreC "qllauncher"
+    , ignoreC "sun-awt-X11-XDialogPeer"
     , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
@@ -118,10 +119,11 @@ keys' =
       , ("S-", windows . W.shift)]
     ]
 
+
 myStatusBar = DzenConf {
       x_position = Just 0
     , y_position = Just 0
-    , width      = Just 1000
+    , width      = Just 800
     , height     = Just 24
     , alignment  = Just LeftAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
@@ -132,9 +134,9 @@ myStatusBar = DzenConf {
 }
 
 conkyBar = DzenConf {
-      x_position = Just 1000
+      x_position = Just 800
     , y_position = Just 0
-    , width      = Just 720
+    , width      = Just 920
     , height     = Just 24
     , alignment  = Just RightAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
