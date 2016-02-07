@@ -10,3 +10,4 @@ xdotool
 dmenu
 yeganesh
 trayer
+xbanish
