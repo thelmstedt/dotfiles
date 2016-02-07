@@ -21,7 +21,7 @@
 	ri = rebase -i
 		
 	p = pull
-	pom = pull --rebase origin master
+	pr = pull --rebase 
 	
 [color]
 	ui = auto
