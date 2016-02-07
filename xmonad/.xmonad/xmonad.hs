@@ -50,7 +50,7 @@ main = do
     }  `additionalKeysP` keys'
 
 
-myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8.mail", "9.im", "0.skype" ]
+myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8", "9.im", "0" ]
 
 -- todo why isn't 9.im firing?
 layoutHook' =
