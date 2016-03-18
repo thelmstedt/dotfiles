@@ -29,7 +29,6 @@ import           Data.Ratio                      ((%))
 
 import           XMonad.Actions.WindowGo         (runOrRaise)
 
-import           XMonad.Hooks.ICCCMFocus         (takeTopFocus)
 import qualified XMonad.StackSet                 as W
 
 main :: IO ()
@@ -45,12 +44,12 @@ main = do
     , normalBorderColor  = "#cccccc"
     , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook desktopConfig
-    , logHook            = takeTopFocus >> setWMName"LG3D" >> (dynamicLogWithPP (pp' workspaceBar))
+    , logHook            = setWMName "LG3D" >> dynamicLogWithPP (pp' workspaceBar)
     , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
 
 
-myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8", "9.im", "0" ]
+myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8", "9.im", "10", "11", "12" ]
 
 -- todo why isn't 9.im firing?
 layoutHook' =
@@ -146,11 +145,6 @@ conkyBar = DzenConf {
     , addargs    = []
 }
 
-highlight = dzenColor "#ebac54" "#000000"
-plain = dzenColor "#e5e5e5" "#000000"
-red = dzenColor "#CD0000" "#000000"
-blue = dzenColor "#1874CD" "#000000"
-grey = dzenColor "#444444" "#000000"
 
 pp' h = dzenPP {
       ppOutput          = hPutStrLn h
@@ -167,24 +161,30 @@ pp' h = dzenPP {
     , ppOrder           = \(ws:layout:title:num:_) ->
                            [ws, wrapClickable "super+space" (layout ++ " " ++ num), title ]
 }
-
-logNumWindows :: X (Maybe String)
-logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
-
-numWindows :: W.Screen a b c d e -> String
-numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
-
--- Wraps a workspace name with a dzen clickable action that focuses that workspace
-clickable :: [String] -> String -> String
-clickable workspaces x =
-  case elemIndex x workspaces of
-    Nothing -> x
-    Just n -> let key = "super+" ++ show (fudge n + 1)
-              in wrapClickable key x
   where
-    fudge 10 = 0 --10th is 0 key
-    fudge n = n
+    highlight = dzenColor "#ebac54" "#000000"
+    plain = dzenColor "#e5e5e5" "#000000"
+    red = dzenColor "#CD0000" "#000000"
+    blue = dzenColor "#1874CD" "#000000"
+    grey = dzenColor "#444444" "#000000"
 
-wrapClickable :: String -> String -> String
-wrapClickable k x =
- "^ca(1, xdotool key " ++ k ++ ")" ++ x ++ "^ca()"
+    logNumWindows :: X (Maybe String)
+    logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
+
+    numWindows :: W.Screen a b c d e -> String
+    numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
+
+    -- Wraps a workspace name with a dzen clickable action that focuses that workspace
+    clickable :: [String] -> String -> String
+    clickable workspaces x =
+      case elemIndex x workspaces of
+        Nothing -> x
+        Just n -> let key = "super+" ++ show (fudge n + 1)
+                  in wrapClickable key x
+      where
+        fudge 10 = 0 --10th is 0 key
+        fudge n = n
+
+    wrapClickable :: String -> String -> String
+    wrapClickable k x =
+     "^ca(1, xdotool key " ++ k ++ ")" ++ x ++ "^ca()"
