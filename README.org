@@ -1,13 +1,15 @@
+Archlinux Configuration
+
+Boy it'd sure be nice if I could define this declaratively a la nix
 
 * Organisation
-** Stow
-** git
+ - stow
+   gnu-stow: manages symlinks to ~
 
 * Environment
 ** window manager
-*** xmonad
-    - xmonad
-    - xmonad-contrib
+   - xmonad
+   - xmonad-contrib
 
 *** supporting tools
     - xdotool
@@ -22,7 +24,8 @@
 
 *** spotlight-ish execution 
     - dmenu 
-    - yeganesh (for promoting common commands)
+    - yeganesh
+      Promotes commonly chosen commands to the top of dmenu
      
 ** shell
    - zsh
@@ -31,44 +34,42 @@
    - urxvt-perls
 
 ** fonts
-*** adobe-source-code-pro-fonts
-*** fontconfig bohomil
-    https://wiki.archlinux.org/index.php/Infinality#Installation
-    fontconfig-infinality-ultimate
-    freetype2-infinality-ultimate
+   - adobe-source-code-pro-fonts
+   - fontconfig bohomil:  https://wiki.archlinux.org/index.php/Infinality#Installation
+     - fontconfig-infinality-ultimate
+     - freetype2-infinality-ultimate
 
 ** emacs
-   - spacemacs
-   - aspell, aspell-en
-
-** tools
+   Configuration provided by https://github.com/syl20bnr/spacemacs
+   - emacs
+   - aspell
+   - aspell-en
+     
+** admin
    - iotop
    - htop
-   - sysstat (for iostat )
+   - sysstat 
+     for iostat
    - ack
    - wget
    - unzip
    - strace
    - nethogs
+
 ** file manager
    - thunar 
    - thunar-volman
    - thunar-archive-plugin
-* Services
+
+* Tools
 ** PSD / ASD
-   https://wiki.archlinux.org/index.php/profile-sync-daemon
-   https://wiki.archlinux.org/index.php/anything-sync-daemon
+   Sync browser profiles (psd) and arbitrary directories (asd) to ramdisk
+   - https://wiki.archlinux.org/index.php/profile-sync-daemon
+   - https://wiki.archlinux.org/index.php/anything-sync-daemon
+
 ** etckeeper
-   automatically tracks changes to etc by pacman installs
-   can make manual changes and persist
+   Automatically tracks changes to /etc by pacman, or track manual changes.
 
-   
-* Languages
-** java
-*** openjdk
-*** gradle
-*** intellij
-    Enable focus.follows.mouse.workarounds in Registry
-
-    [Fix described here](https://youtrack.jetbrains.com/issue/IDEA-112015#comment=27-1324403)
+** intellij
+   - Enable focus.follows.mouse.workarounds in Registry: https://youtrack.jetbrains.com/issue/IDEA-112015#comment=27-1324403
 
