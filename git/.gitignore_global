@@ -9,3 +9,4 @@ target/*
 *.ipr
 *_flymake*
 hs_err_*.log
+node_modules

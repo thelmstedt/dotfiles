@@ -1,0 +1,74 @@
+
+* Organisation
+** Stow
+** git
+
+* Environment
+** window manager
+*** xmonad
+    - xmonad
+    - xmonad-contrib
+
+*** supporting tools
+    - xdotool
+    - xautolock
+    - slock
+    - xbanish
+
+*** status bars / stats
+    - conky
+    - dzen2
+    - trayer
+
+*** spotlight-ish execution 
+    - dmenu 
+    - yeganesh (for promoting common commands)
+     
+** shell
+   - zsh
+   - zprezto
+   - urxvt
+   - urxvt-perls
+
+** fonts
+*** adobe-source-code-pro-fonts
+*** fontconfig bohomil
+    https://wiki.archlinux.org/index.php/Infinality#Installation
+    fontconfig-infinality-ultimate
+    freetype2-infinality-ultimate
+
+** emacs
+   - spacemacs
+   - aspell, aspell-en
+
+** tools
+   - iotop
+   - htop
+   - sysstat (for iostat )
+   - ack
+   - wget
+   - unzip
+   - strace
+   - nethogs
+** file manager
+   - thunar 
+   - thunar-volman
+   - thunar-archive-plugin
+* Services
+** PSD / ASD
+   https://wiki.archlinux.org/index.php/profile-sync-daemon
+   https://wiki.archlinux.org/index.php/anything-sync-daemon
+** etckeeper
+   automatically tracks changes to etc by pacman installs
+   can make manual changes and persist
+
+   
+* Languages
+** java
+*** openjdk
+*** gradle
+*** intellij
+    Enable focus.follows.mouse.workarounds in Registry
+
+    [Fix described here](https://youtrack.jetbrains.com/issue/IDEA-112015#comment=27-1324403)
+

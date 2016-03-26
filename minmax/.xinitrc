@@ -9,7 +9,7 @@ xautolock -time 10 -locker slock & # ghetto lockscreen
 xbanish & # hides mouse cursor when you start typing
 
 dropbox &
-slack &
+#slack &
 pidgin &
 
 eval $(ssh-agent)

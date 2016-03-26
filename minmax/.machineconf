@@ -8,3 +8,5 @@ alias ssh="TERM=xterm ssh"
 export EDITOR="emacs"
 export ALTERNATE_EDITOR="emacsnw"
 export GIT_EDITOR="emacsclient -t"
+
+alias b="cd /home/tim/projects/okgo"
