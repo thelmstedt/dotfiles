@@ -22,6 +22,9 @@
 		
 	p = pull
 	pr = pull --rebase 
+	recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+    pushf = push --force-with-lease
+	lastweek = shortlog --since '1 weeks ago'
 	
 [color]
 	ui = auto
@@ -29,5 +32,30 @@
 	helper = cache --timeout=3600
 [core]
 	excludesfile = ~/.gitignore_global
+	autocrlf = input
 [push]
 	default = current
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+
+[diff "bz2"]
+  binary = true
+  textconv = /bin/bzcat
+[diff "gzip"]
+  binary = true
+  textconv = /bin/zcat
+[diff "tar"]
+  binary = true
+  textconv = tar --to-stdout -xf 
+[diff "tar-bz2"]
+  binary = true
+  textconv = tar --to-stdout -xjf
+[diff "zip"]
+  binary = true
+  textconv = unzip -p
+
+[core]
+  attributesFile = ~/.gitattributes
+
