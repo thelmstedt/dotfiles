@@ -8,9 +8,11 @@ import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
 import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import           XMonad.Layout.Named             (named)
-import           XMonad.Layout.NoBorders         (smartBorders)
+import           XMonad.Layout.NoBorders         (smartBorders, noBorders)
 import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
+import           XMonad.Layout.ThreeColumns
+import           XMonad.Layout.Gaps
 
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks        (avoidStruts)
@@ -40,7 +42,8 @@ main = do
     modMask              = mod4Mask
     , layoutHook         = layoutHook'
     , terminal           = "urxvt"
-    , borderWidth        = 2
+    , borderWidth        = 1
+    , focusedBorderColor = "#cd0000"
     , normalBorderColor  = "#cccccc"
     , startupHook        = setWMName "LG3D"
     , manageHook         = manageHook' <+> manageHook desktopConfig
@@ -51,18 +54,18 @@ main = do
 
 myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8", "9.im", "10", "11", "12" ]
 
--- todo why isn't 9.im firing?
 layoutHook' =
-  avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
+  barGap $ avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
   where
-    standardLayouts = spacing 0 $ Full ||| tiled ||| Mirror tiled ||| circle
-    tiled   = Tall nmaster delta ratio
+    barGap = gaps [(U, 24)]
+    standardLayouts = (spacing 0 $ Full) ||| tiled ||| Mirror tiled ||| threeColumn ||| circle
+    tiled   = spacing 5 $ Tall nmaster delta ratio
     nmaster = 1
     ratio   = 1/2
     delta   = 3/100
+    threeColumn = named "3col" $ ThreeCol 1 (3/100) (1/3)
     circle = named "circle" $ avoidStruts circleSimpleDefaultResizable
-    imLayout =  named "im" $ avoidStruts $ reflectHoriz
-                $ withIM (1%9) pidginRoster standardLayouts
+    imLayout = named "im" $ avoidStruts $ reflectHoriz $ withIM (1%9) pidginRoster standardLayouts
     pidginRoster = ClassName "Pidgin" `And` Role "buddy_list"
 
 
@@ -70,19 +73,22 @@ manageHook' =
   composeAll
     [ moveC "jetbrains-idea" "1.code"
     , moveC "Firefox" "3.web"
+    , moveC "chromium" "3.web"
     , moveC "Emacs" "4.emacs"
     , moveC "hipchat" "7.chat"
-    , moveC "slack" "7.chat"
+    , moveC "Slack" "7.chat"
     , moveC "Thunderbird" "8.mail"
     , moveC "Pidgin" "9.im"
     , ignoreC "vlc"
+    , floatC "VirtualBox"
     , ignoreC "wine"
     , ignoreC "qllauncher"
-    , ignoreC "sun-awt-X11-XDialogPeer"
+    --, ignoreC "sun-awt-X11-XDialogPeer"
+    , floatC "insync.py"
     , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
-    , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
+    -- , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
     ]
   where
     moveC c w = (className =? c) -->  doShift w
@@ -99,30 +105,33 @@ keys' =
     , ("M-S-\\", gotoMenuArgs myDzenGoto)
 
     , ("M-S-n", spawn "thunar")
-    , ("M-S-t", runOrRaise "spacefm" (className =? "Spacefm"))
 
     , ("M-S-r", spawn "xmonad --recompile && xmonad --restart")
-
-    , ("C-M1-<Backspace>", spawn "xfce4-session-logout")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
     , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
-    , ("M-<F4>", sendMessage $ JumpToLayout "circle")
-    , ("M-<F5>", sendMessage $ IncSpacing 10)
-    , ("M-<F6>", sendMessage $ DecSpacing 10)
+    , ("M-<F4>", sendMessage $ JumpToLayout "3col")
+    , ("M-<F5>", sendMessage $ JumpToLayout "circle")
+
+    , ("M-<F11>", sendMessage $ IncSpacing 5)
+    , ("M-<F12>", sendMessage $ DecSpacing 5)
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
-      | (tag, key)  <- zip myWorkspaces (map show [1,2,3,4,5,6,7,8,9,0])
+      | (tag, key)  <- zip myWorkspaces ((map show [1,2,3,4,5,6,7,8,9,0]) ++ ["-", "="])
       , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
       , ("S-", windows . W.shift)]
+    ] ++
+    [ (mask ++ "M-" ++ [key], screenWorkspace scr >>= flip whenJust (windows . action))
+--         | (key, scr)  <- zip "qwe" [0,1,2] -- specifically work triple monitors
+         | (key, scr)  <- zip "we" [1,0] -- 2 monitors
+         , (action, mask) <- [ (W.view, "") , (W.shift, "S-")]
     ]
 
-
 myStatusBar = DzenConf {
-      x_position = Just 0
+      x_position = Just 0 -- should be 1920, but this forces bar across left hand monitor
     , y_position = Just 0
-    , width      = Just 800
+    , width      = Just 1000
     , height     = Just 24
     , alignment  = Just LeftAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
@@ -133,9 +142,9 @@ myStatusBar = DzenConf {
 }
 
 conkyBar = DzenConf {
-      x_position = Just 800
+      x_position = Just 1000
     , y_position = Just 0
-    , width      = Just 920
+    , width      = Just 710
     , height     = Just 24
     , alignment  = Just RightAlign
     , font       = Just "Bitstream Sans Vera:pixelsize=13"
