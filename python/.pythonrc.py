@@ -1,9 +1,9 @@
 # from https://gist.github.com/760273
 
 import os, sys
-
 # Coloured prompt
-if os.getenv('TERM') in ('xterm', 'vt100', 'rxvt', 'Eterm', 'putty'):
+if os.getenv('TERM') in ('xterm', 'vt100', 'rxvt', 'Eterm', 'putty', 'rxvt-unicode-256color'):
+
     try:
         import readline
     except ImportError:
