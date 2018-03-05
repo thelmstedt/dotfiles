@@ -35,7 +35,7 @@ import qualified XMonad.StackSet                 as W
 
 main :: IO ()
 main = do
-  spawnToDzen "/home/tim/.xmonad/bin/startup.sh" conkyBar
+  spawnToDzen "/home/tim/.config/conky/startup.sh" conkyBar
 
   workspaceBar <- spawnDzen myStatusBar
   xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig {
@@ -52,7 +52,7 @@ main = do
     }  `additionalKeysP` keys'
 
 
-myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6.music", "7.chat", "8", "9.im", "10", "11", "12" ]
+myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6", "7.chat", "8.music", "9.im", "10.rd", "11", "12" ]
 
 layoutHook' =
   barGap $ avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
@@ -88,7 +88,7 @@ manageHook' =
     , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
-    -- , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
+    , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
     ]
   where
     moveC c w = (className =? c) -->  doShift w
@@ -101,7 +101,7 @@ myDzenGoto = ["-p","Go to window:"] ++ myDzenColorsSolarized ++ myDzenFontLarge
 
 keys' =
     [
-      ("M-\\", spawn "exe=`/home/tim/.xmonad/bin/dmenu-with-yeganesh` && eval \"exec $exe\"")
+      ("M-\\", spawn "exe=`rofi -show combi`")
     , ("M-S-\\", gotoMenuArgs myDzenGoto)
 
     , ("M-S-n", spawn "thunar")

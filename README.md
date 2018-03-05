@@ -7,13 +7,12 @@
 * conky
 * dzen
 * xdotool
-* dmenu
-* yeganesh
 * trayer
 * xbanish
 * notify-osd 
 * volwheel
 * firefox-nightly
+* rofi
 
 # Hacks:
 
