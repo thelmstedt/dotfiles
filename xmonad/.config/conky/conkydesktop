@@ -74,10 +74,10 @@ ${top_mem name 5}${alignr}${top_mem mem_res 5}
   
 # NETWORK
 ${font Open Sans:Bold:size=10}${color dodgerblue3}NETWORK${hr 2}
-${font Open Sans:bold:size=8.5}enp3s0 $font$alignr ${addr enp3s0}
-down $alignr ${downspeed enp3s0}
-up $alignr ${upspeed enp3s0}
-down total ${totaldown enp3s0} $alignr up total ${totalup enp3s0}
+${font Open Sans:bold:size=8.5}NETWORK_INTERFACE $font$alignr ${addr NETWORK_INTERFACE}
+down $alignr ${downspeed NETWORK_INTERFACE}
+up $alignr ${upspeed NETWORK_INTERFACE}
+down total ${totaldown NETWORK_INTERFACE} $alignr up total ${totalup NETWORK_INTERFACE}
 
 # HDD
 ${font Open Sans:Bold:size=10}${color dodgerblue3}DISKS${hr 2}$color${font Open Sans:bold:size=8.5}
