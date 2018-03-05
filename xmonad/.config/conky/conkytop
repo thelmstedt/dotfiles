@@ -4,11 +4,11 @@ out_to_x no
 update_interval 1
 
 TEXT
-^fg(\#ebac54) ${if_existing /proc/net/route wlp10s0}\
-^fg(\#00aa4a) ^i(/home/tim/.xmonad/dzen2/net_down_03.xbm)${downspeed wlp10s0}\
-^fg(\#ff3333) ^i(/home/tim/.xmonad/dzen2/net_up_03.xbm)${upspeed en3s0}$endif\
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% (${cpu cpu1}|${cpu cpu2}|${cpu cpu3}|${cpu cpu4}) / ${freq}MHz \
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF) ${acpitemp}°C \
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/fs_02.xbm) ^fg(\#FFFFFF) ${execi 1 sensors | grep fan2 | grep -o "[0-9]\{2,4\}"}RPM \
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% - ${mem} \
-^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/clock.xbm) ^fg(\#FFFFFF) ${time %Y-%m-%d} ^fg(\#ebac54) ${time %R:%S}
+^fg(\#ebac54)${if_existing /proc/net/route enp3s0}\
+^fg(\#00aa4a) ^i(/home/tim/.xmonad/dzen2/net_down_03.xbm)${downspeed enp3s0}\
+^fg(\#ff3333) ^i(/home/tim/.xmonad/dzen2/net_up_03.xbm)${upspeed enp3s0}$endif\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/cpu.xbm)^fg(\#FFFFFF)${cpu}%(${cpu cpu1}|${cpu cpu2}|${cpu cpu3}|${cpu cpu4})@${freq}MHz\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/temp.xbm)^fg(\#FFFFFF)${acpitemp}°C\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/fs_02.xbm)^fg(\#FFFFFF)${execi 1 sensors | grep fan2 | grep -o "[0-9]\{2,4\}"}RPM\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/mem.xbm)^fg(\#FFFFFF)${memperc}% ${mem}\
+^fg(\#ebac54) ^i(/home/tim/.xmonad/dzen2/clock.xbm)^fg(\#FFFFFF)${time %m/%d}^fg(\#ebac54) ${time %R:%S}

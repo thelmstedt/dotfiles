@@ -10,11 +10,14 @@ xautolock -time 10 -locker slock & # ghetto lockscreen
 xbanish & # hides mouse cursor when you start typing
 
 dropbox &
-#slack &
+slack &
+hipchat &
 pidgin &
 volwheel &
 
-
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
+
+xrandr --output HDMI-0 --auto --output DVI-I-1 --right-of HDMI-0
+
 exec xmonad
