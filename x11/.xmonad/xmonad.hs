@@ -20,7 +20,7 @@ import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
 
-import           XMonad.Actions.WindowBringer    (gotoMenuArgs)
+import           XMonad.Actions.WindowBringer    (gotoMenuArgs')
 import           XMonad.Util.EZConfig            (additionalKeysP)
 
 import           XMonad.Util.Run                 (hPutStrLn)
@@ -88,21 +88,17 @@ manageHook' =
     , floatC "Steam"
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
-    , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
+--    , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
     ]
   where
     moveC c w = (className =? c) -->  doShift w
     ignoreC c = (className =? c) --> doIgnore
     floatC c = (className =? c) --> doFloat
 
-myDzenFontLarge = ["-fn", "-*-*-*-*-*-18-*-*-*-*-*-*-*"]
-myDzenColorsSolarized = ["-nb","#002b36","-nf","#839496","-sb","#586e75","-sf","#002b36"]
-myDzenGoto = ["-p","Go to window:"] ++ myDzenColorsSolarized ++ myDzenFontLarge
-
 keys' =
     [
-      ("M-\\", spawn "exe=`rofi -show combi`")
-    , ("M-S-\\", gotoMenuArgs myDzenGoto)
+      ("M-\\", spawn "rofi -show combi")
+    , ("M-S-\\", gotoMenuArgs' "rofi" ["-dmenu", "-i", "-show", "combi"])
 
     , ("M-S-n", spawn "thunar")
 
