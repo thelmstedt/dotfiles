@@ -1,1 +1,0 @@
-ghci xmonad.hs -isrc src/*.hs 

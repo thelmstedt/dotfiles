@@ -1,18 +1,16 @@
 
 # Requirements:
 
-* adobe-source-code-pro-fonts
 * xmonad
 * xmonad-contrib
-* conky
-* dzen
-* xdotool
-* trayer
 * xbanish
 * notify-osd 
 * volwheel
-* firefox-nightly
 * rofi
+* polybar
+* ttf-font-awesome
+* adobe-source-code-pro-fonts
+
 
 # Hacks:
 

@@ -18,8 +18,8 @@ volwheel &
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
 
-if [ -f /home/tim/.WORK ]; then
-   xrandr --output HDMI-0 --auto --output DVI-I-1 --right-of HDMI-0
-fi
+#if [ -f /home/tim/.WORK ]; then
+#   xrandr --output HDMI-0 --auto --output DVI-I-1 --right-of HDMI-0
+#fi
 
 exec xmonad

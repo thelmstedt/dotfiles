@@ -1,4 +1,3 @@
-import           Dzen
 import           ResizableSpacing
 
 import           XMonad                          hiding ((|||))
@@ -33,11 +32,15 @@ import           XMonad.Actions.WindowGo         (runOrRaise)
 
 import qualified XMonad.StackSet                 as W
 
+import qualified DBus as D
+import qualified DBus.Client as D
+import qualified Codec.Binary.UTF8.String as UTF8
+
 main :: IO ()
 main = do
-  spawnToDzen "/home/tim/.config/conky/startup.sh" conkyBar
-
-  workspaceBar <- spawnDzen myStatusBar
+  dbus <- D.connectSession
+  D.requestName dbus (D.busName_ "org.xmonad.Log")
+    [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
   xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig {
     modMask              = mod4Mask
     , layoutHook         = layoutHook'
@@ -45,17 +48,20 @@ main = do
     , borderWidth        = 1
     , focusedBorderColor = "#cd0000"
     , normalBorderColor  = "#cccccc"
-    , startupHook        = setWMName "LG3D"
+    , startupHook        = myStartupHook
     , manageHook         = manageHook' <+> manageHook desktopConfig
-    , logHook            = setWMName "LG3D" >> dynamicLogWithPP (pp' workspaceBar)
+    , logHook            = dynamicLogWithPP (myLogHook dbus)
     , workspaces = myWorkspaces
     }  `additionalKeysP` keys'
 
+myStartupHook = do
+  setWMName "LG3D"
+  spawn "$HOME/.config/polybar/launch.sh"
 
-myWorkspaces = [ "1.code", "2.terminal", "3.web", "4.emacs", "5", "6", "7.chat", "8.music", "9.im", "10.rd", "11", "12" ]
+myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+" ]
 
 layoutHook' =
-  barGap $ avoidStruts $ smartBorders $ onWorkspace "9.im" imLayout $ standardLayouts
+  barGap $ avoidStruts $ smartBorders $ onWorkspace "9" imLayout $ standardLayouts
   where
     barGap = gaps [(U, 24)]
     standardLayouts = (spacing 0 $ Full) ||| tiled ||| Mirror tiled ||| threeColumn ||| circle
@@ -71,14 +77,14 @@ layoutHook' =
 
 manageHook' =
   composeAll
-    [ moveC "jetbrains-idea" "1.code"
-    , moveC "Firefox" "3.web"
-    , moveC "chromium" "3.web"
-    , moveC "Emacs" "4.emacs"
-    , moveC "hipchat" "7.chat"
-    , moveC "Slack" "7.chat"
-    , moveC "Thunderbird" "8.mail"
-    , moveC "Pidgin" "9.im"
+    [ moveC "jetbrains-idea" "1"
+    , moveC "Firefox" "3"
+    , moveC "chromium" "3"
+    , moveC "Emacs" "4"
+    , moveC "hipchat" "7"
+    , moveC "Slack" "7"
+    , moveC "Thunderbird" "8"
+    , moveC "Pidgin" "9"
     , ignoreC "vlc"
     , floatC "VirtualBox"
     , ignoreC "wine"
@@ -124,72 +130,54 @@ keys' =
          , (action, mask) <- [ (W.view, "") , (W.shift, "S-")]
     ]
 
-myStatusBar = DzenConf {
-      x_position = Just 0 -- should be 1920, but this forces bar across left hand monitor
-    , y_position = Just 0
-    , width      = Just 1000
-    , height     = Just 24
-    , alignment  = Just LeftAlign
-    , font       = Just "Bitstream Sans Vera:pixelsize=13"
-    , fg_color   = Just "#ffffff"
-    , bg_color   = Just "#000000"
-    , exec       = []
-    , addargs    = []
-}
+fg        = "#ebdbb2"
+bg        = "#282828"
+gray      = "#a89984"
+bg1       = "#3c3836"
+bg2       = "#505050"
+bg3       = "#665c54"
+bg4       = "#7c6f64"
 
-conkyBar = DzenConf {
-      x_position = Just 1000
-    , y_position = Just 0
-    , width      = Just 710
-    , height     = Just 24
-    , alignment  = Just RightAlign
-    , font       = Just "Bitstream Sans Vera:pixelsize=13"
-    , fg_color   = Just "#ffffff"
-    , bg_color   = Just "#000000"
-    , exec       = []
-    , addargs    = []
-}
+green     = "#b8bb26"
+darkgreen = "#98971a"
+red       = "#fb4934"
+darkred   = "#cc241d"
+yellow    = "#fabd2f"
+blue      = "#83a598"
+purple    = "#d3869b"
+aqua      = "#8ec07c"
+white     = "#eeeeee"
+
+pur2      = "#5b51c9"
+blue2     = "#2266d0"
 
 
-pp' h = dzenPP {
-      ppOutput          = hPutStrLn h
-    , ppCurrent         = (wrap (highlight "[ ") (highlight " ]")  <$> blue) . clickable myWorkspaces
-    , ppVisible         = (wrap (highlight "[ ") (highlight " ]")  <$> plain) . clickable myWorkspaces
-    , ppHidden          = plain . clickable myWorkspaces
-    , ppHiddenNoWindows = grey . clickable myWorkspaces
-    , ppUrgent          = (wrap (red "[ ") (red " ]") <$> plain) . clickable myWorkspaces
-    , ppTitle           = plain . wrapClickable "super+Tab" . dzenEscape
-    , ppExtras          = [ logNumWindows  ] -- 4th index onwards from [] arg to ppOrder
-    , ppLayout          = blue
-    , ppWsSep           = " "
-    , ppSep             = " | "
-    , ppOrder           = \(ws:layout:title:num:_) ->
-                           [ws, wrapClickable "super+space" (layout ++ " " ++ num), title ]
+myLogHook :: D.Client -> PP
+myLogHook dbus = def
+    { ppOutput = dbusOutput dbus
+    , ppCurrent = wrap ("%{F" ++ blue2 ++ "} ") "%{F-}"
+    , ppVisible = wrap ("%{F" ++ blue ++ "} ") "%{F-}"
+    , ppUrgent = wrap ("%{F" ++ red ++ "} ") "%{F-}"
+    , ppHidden = wrap " " ""
+    , ppWsSep = ""
+    , ppSep = " | "
+    , ppTitle = myAddSpaces 80
+    , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
 }
+
+-- Emit a DBus signal on log updates
+dbusOutput :: D.Client -> String -> IO ()
+dbusOutput dbus str = do
+    let signal = (D.signal objectPath interfaceName memberName) {
+            D.signalBody = [D.toVariant $ UTF8.decodeString str]
+        }
+    D.emit dbus signal
   where
-    highlight = dzenColor "#ebac54" "#000000"
-    plain = dzenColor "#e5e5e5" "#000000"
-    red = dzenColor "#CD0000" "#000000"
-    blue = dzenColor "#1874CD" "#000000"
-    grey = dzenColor "#444444" "#000000"
+    objectPath = D.objectPath_ "/org/xmonad/Log"
+    interfaceName = D.interfaceName_ "org.xmonad.Log"
+    memberName = D.memberName_ "Update"
 
-    logNumWindows :: X (Maybe String)
-    logNumWindows = withWindowSet $ \ws -> (return . Just . numWindows) (W.current ws)
-
-    numWindows :: W.Screen a b c d e -> String
-    numWindows screen = highlight . show $ length ((W.integrate' . W.stack . W.workspace) screen)
-
-    -- Wraps a workspace name with a dzen clickable action that focuses that workspace
-    clickable :: [String] -> String -> String
-    clickable workspaces x =
-      case elemIndex x workspaces of
-        Nothing -> x
-        Just n -> let key = "super+" ++ show (fudge n + 1)
-                  in wrapClickable key x
-      where
-        fudge 10 = 0 --10th is 0 key
-        fudge n = n
-
-    wrapClickable :: String -> String -> String
-    wrapClickable k x =
-     "^ca(1, xdotool key " ++ k ++ ")" ++ x ++ "^ca()"
+myAddSpaces :: Int -> String -> String
+myAddSpaces len str = sstr ++ replicate (len - length sstr) ' '
+  where
+    sstr = shorten len str
