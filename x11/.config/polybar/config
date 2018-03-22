@@ -123,7 +123,7 @@ interval = 1
 format-connected-underline = ${colors.grey}
 format-connected-prefix =
 format-connected-prefix-foreground = ${colors.foreground}
-label-connected = %local_ip%  %downspeed:5%  %upspeed:5%
+label-connected =  %downspeed:5%  %upspeed:5%
 
 [module/date]
 type = internal/date
@@ -141,7 +141,7 @@ label = %date% %time%
 [module/spotify]
 type =                      custom/script
 format-underline =          ${colors.blue}
-exec =                      $HOME/.config/polybar/spotify.sh
+exec =                      $HOME/bin/spotify_metadata.sh
 interval =                  5
 format =                    <label>
 label =                     " %output%"
