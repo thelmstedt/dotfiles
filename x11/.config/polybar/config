@@ -132,7 +132,7 @@ label = %date% %time%
 [module/spotify]
 type =                      custom/script
 format-underline =          ${colors.blue}
-exec =                      $HOME/bin/spotify_metadata.sh
+exec =                      $HOME/.config/polybar/spotify_metadata.sh
 interval =                  5
 format =                    <label>
 label =                     " %output%"
