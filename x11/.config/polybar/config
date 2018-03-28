@@ -74,10 +74,10 @@ separator = "|"
 
 [bar/desktop]
 inherit =           bar/base
-monitor =           ${env:MONITOR:HDMI-2}
+monitor =           ${env:MONITOR:HDMI-1}
 modules-left =      xmonad
 modules-center =
-modules-right =     spotify filesystem eth temperature cpu memory date
+modules-right =     spotify eth temperature cpuinfo cpu memory date
 
 [module/xmonad]
 type = custom/script
@@ -100,13 +100,6 @@ format-prefix = "%{T2} %{T-}"
 format-prefix-foreground = ${colors.foreground}
 format-underline = ${colors.grey}
 label = %percentage%% (%percentage-cores%)
-
-
-[module/temperature]
-type = internal/temperature
-interval = 1
-hwmon-path = /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp1_input
-warn-temperature = 60
 
 [module/memory]
 type = internal/memory
@@ -132,11 +125,9 @@ date = %a %m/%d
 time = %R:%S
 label = %date% %time%
 
-
 ;;;;
 ;;;; Custom
 ;;;;
-
 
 [module/spotify]
 type =                      custom/script
@@ -145,3 +136,11 @@ exec =                      $HOME/bin/spotify_metadata.sh
 interval =                  5
 format =                    <label>
 label =                     " %output%"
+
+[module/cpuinfo]
+type =                      custom/script
+format-underline =          ${colors.blue}
+exec =                      $HOME/.config/polybar/cpuinfo.sh
+interval =                  1
+format =                    <label>
+label =                     " %output%"
