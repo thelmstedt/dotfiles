@@ -126,7 +126,7 @@ keys' =
     ] ++
     [ (mask ++ "M-" ++ [key], screenWorkspace scr >>= flip whenJust (windows . action))
 --         | (key, scr)  <- zip "qwe" [0,1,2] -- specifically work triple monitors
-         | (key, scr)  <- zip "we" [1,0] -- 2 monitors
+         | (key, scr)  <- zip "we" [0,1] -- 2 monitors
          , (action, mask) <- [ (W.view, "") , (W.shift, "S-")]
     ]
 

@@ -9,11 +9,10 @@ xset m 4/3 0 # speeding up
 xautolock -time 10 -locker slock & # ghetto lockscreen
 xbanish & # hides mouse cursor when you start typing
 
-dropbox &
-slack &
-hipchat &
-pidgin &
-volwheel &
+#dropbox &
+#slack &
+#pidgin &
+#volwheel &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
