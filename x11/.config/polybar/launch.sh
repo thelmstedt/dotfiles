@@ -9,7 +9,14 @@ while pgrep -x polybar >/dev/null; do sleep 1; done
 # launch polybar
 if [ "$(hostname)" = "AM" ]
 then
-  polybar desktop &
+    if type "xrandr"; then
+      for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+        MONITOR=${m} polybar --reload desktop &
+      done
+    else
+      polybar --reload desktop &
+    fi
+
 else
   if ! pgrep -x "nm-applet" >/dev/null
   then
