@@ -16,7 +16,15 @@ main() {
   then
     status="" #play
   fi
-  echo "$artist - $album - $title $status"
+  AAT="$artist - $album - $title $status"
+  AT="$artist - $title $status"
+  T="$title $status"
+  MAX=80
+  # Only 80 characters, eliding if necessary
+  OUT=$AAT
+  [ "${#OUT}" -gt $MAX ] && OUT=$AT
+  [ "${#OUT}" -gt $MAX ] && OUT=$T
+  [ "${#OUT}" -gt $MAX ] && echo $(echo $OUT | cut -c 1-77)... || echo $OUT
 }
 
 main "$@"
