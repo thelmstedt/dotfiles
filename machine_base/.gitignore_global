@@ -13,8 +13,6 @@ hs_err_*.log
 *.pyc
 indexinglog
 *.pem
-yarn.lock
-package-lock.json
 *.#*
 node_modules
 pip-selfcheck.json
