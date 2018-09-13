@@ -1,8 +1,10 @@
 [user]
 	name = Tim Helmstedt
 	email = tim.helmstedt@gmail.com
+
 [github]
 	user = thelmstedt
+
 [alias]
 	# flavours of commit
 	c = commit
@@ -10,9 +12,7 @@
 	cma = commit -a -m
 	ammend = commit -a --amend -C HEAD
 	
-	# shortcuts for commands
 	s = status --short
-	
 	d = diff
 	a = add
 	co = checkout
@@ -26,15 +26,20 @@
     pushf = push --force-with-lease
 	lastweek = shortlog --since '1 weeks ago'
 	
+
 [color]
 	ui = auto
+
 [credential]
 	helper = cache --timeout=3600
+
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
+
 [push]
 	default = current
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -43,15 +48,19 @@
 [diff "bz2"]
   binary = true
   textconv = /bin/bzcat
+
 [diff "gzip"]
   binary = true
   textconv = /bin/zcat
+
 [diff "tar"]
   binary = true
   textconv = tar --to-stdout -xf 
+
 [diff "tar-bz2"]
   binary = true
   textconv = tar --to-stdout -xjf
+
 [diff "zip"]
   binary = true
   textconv = unzip -p
@@ -61,8 +70,16 @@
 
 [rerere]
 	enabled = true
+
 [pull]
 	rebase = true
 
 [rebase]
     instructionFormat = %s [%an]
+
+[magithub]
+	online = false
+[magithub "status"]
+	includeStatusHeader = false
+	includePullRequestsSection = false
+	includeIssuesSection = false
