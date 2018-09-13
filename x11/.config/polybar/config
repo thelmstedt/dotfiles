@@ -79,6 +79,21 @@ modules-left =      xmonad
 modules-center =
 modules-right =     spotify eth temperature cpuinfo cpu memory date
 
+
+[bar/work_r]
+inherit =           bar/base
+monitor =           ${env:MONITOR:HDMI-1}
+modules-left =      xmonad
+modules-center =
+modules-right =     eth temperature cpuinfo cpu memory date
+
+[bar/work_l]
+inherit =           bar/base
+monitor =           ${env:MONITOR:DP-0}
+modules-left =      xmonad
+modules-center =
+modules-right =     spotify date
+
 [module/xmonad]
 type = custom/script
 exec = xmonad-log
@@ -111,7 +126,7 @@ label = %percentage_used%%
 
 [module/eth]
 type = internal/network
-interface = enp3s0
+interface = enp24s0
 interval = 1
 format-connected-underline = ${colors.grey}
 format-connected-prefix =
