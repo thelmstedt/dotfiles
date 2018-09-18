@@ -26,3 +26,10 @@ In the registry  (Ctrl+Shift+A and look for "Registry...")
 ## Alsa bullshit
 
 use `pavucontrol` to view/modify output sources
+
+# Services
+
+## ssh-agent
+
+	systemctl --user enable ssh-agent
+	systemctl --user start ssh-agent
