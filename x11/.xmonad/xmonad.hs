@@ -44,7 +44,7 @@ main = do
   xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig {
     modMask              = mod4Mask
     , layoutHook         = layoutHook'
-    , terminal           = "urxvt"
+    , terminal           = "alacritty"
     , borderWidth        = 1
     , focusedBorderColor = "#cd0000"
     , normalBorderColor  = "#cccccc"

@@ -4,13 +4,13 @@
 * xmonad
 * xmonad-contrib
 * xbanish
+* alacritty
 * notify-osd 
 * volwheel
 * rofi
 * polybar
 * ttf-font-awesome
 * adobe-source-code-pro-fonts
-
 
 # Hacks:
 
