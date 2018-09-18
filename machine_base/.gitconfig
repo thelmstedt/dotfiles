@@ -11,6 +11,9 @@
 	cm = commit -m
 	cma = commit -a -m
 	ammend = commit -a --amend -C HEAD
+	amend = commit -a --amend -C HEAD
+
+
 	
 	s = status --short
 	d = diff
