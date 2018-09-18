@@ -29,5 +29,12 @@ if [ -f /home/tim/.WORK ]; then
    xrandr --output HDMI-0 --auto --output DVI-I-1 --right-of HDMI-0
 fi
 
+# keyring
+if [ -x "$(command -v gnome-keyring-daemon)" ]; then
+  dbus-update-activation-environment --systemd DISPLAY
+  eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
+  export SSH_AUTH_SOCK
+fi
+
 ## Recompile to catch changes in ghc/haskell-*
 xmonad --recompile && exec xmonad
