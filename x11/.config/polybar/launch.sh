@@ -9,14 +9,10 @@ while pgrep -x polybar >/dev/null; do sleep 1; done
 # launch polybar
 if [ "$(hostname)" = "AM" ]
 then
-    polybar --reload work_l &
-    polybar --reload work_r &
+    NETWORK_IFACE=enp24s0 polybar --reload work_l &
+    NETWORK_IFACE=enp24s0 polybar --reload work_r &
 else
-  if ! pgrep -x "nm-applet" >/dev/null
-  then
-    nm-applet &
-  fi
-  polybar laptop &
+    NETWORK_IFACE=wlp10s0 polybar --reload home &
 fi
 
 echo "Bars launched..."

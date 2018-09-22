@@ -1,8 +1,18 @@
 
 # Requirements:
 
+## Arch
+
+* yay
+* freetype2
+* adobe-source-code-pro-fonts
+
+## X11
+
 * xmonad
 * xmonad-contrib
+* haskell-dbus
+* xmonad-log
 * xbanish
 * alacritty
 * notify-osd 
@@ -10,7 +20,6 @@
 * rofi
 * polybar
 * ttf-font-awesome
-* adobe-source-code-pro-fonts
 
 # Hacks:
 

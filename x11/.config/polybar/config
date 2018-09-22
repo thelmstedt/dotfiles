@@ -72,13 +72,12 @@ tray-background = ${root.background}
 
 separator = "|"
 
-[bar/desktop]
+[bar/home]
 inherit =           bar/base
-monitor =           ${env:MONITOR:HDMI-1}
+monitor =           ${env:MONITOR:HDMI-0}
 modules-left =      xmonad
 modules-center =
 modules-right =     spotify eth temperature cpuinfo cpu memory date
-
 
 [bar/work_r]
 inherit =           bar/base
@@ -126,7 +125,7 @@ label = %percentage_used%%
 
 [module/eth]
 type = internal/network
-interface = enp24s0
+interface = ${env:NETWORK_IFACE:fallback value}
 interval = 1
 format-connected-underline = ${colors.grey}
 format-connected-prefix =

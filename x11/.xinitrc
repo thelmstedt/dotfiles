@@ -16,6 +16,7 @@ xset m 4/3 0 # mouse acceleration
 [ -x "$(command -v volwheel)" ] && volwheel &
 [ -x "$(command -v slack)" ] && slack &
 [ -x "$(command -v pidgin)" ] && pidgin &
+[ -x "$(command -v nm-applet)" ] && nm-applet &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
