@@ -67,8 +67,10 @@ border-size = 0
 border-color = #00000000
 
 tray-position = right
-tray-padding = 2
-tray-background = ${root.background}
+tray-padding = 1
+tray-background = #d0303030
+tray-transparent = true
+
 
 separator = "|"
 
@@ -76,15 +78,15 @@ separator = "|"
 inherit =           bar/base
 monitor =           ${env:MONITOR:HDMI-0}
 modules-left =      xmonad
-modules-center =
-modules-right =     spotify eth temperature cpuinfo cpu memory date
+modules-center =    
+modules-right =     eth temperature cpuinfo memory date
 
 [bar/work_r]
 inherit =           bar/base
 monitor =           ${env:MONITOR:HDMI-1}
 modules-left =      xmonad
 modules-center =
-modules-right =     eth temperature cpuinfo cpu memory date
+modules-right =     eth temperature cpuinfo memory date
 
 [bar/work_l]
 inherit =           bar/base
@@ -97,6 +99,7 @@ modules-right =     spotify date
 type = custom/script
 exec = xmonad-log
 tail = true
+
 
 [module/filesystem]
 type = internal/fs
@@ -113,7 +116,8 @@ interval = 2
 format-prefix = "%{T2} %{T-}"
 format-prefix-foreground = ${colors.foreground}
 format-underline = ${colors.grey}
-label = %percentage%% (%percentage-cores%)
+label = %percentage%%
+;(%percentage-cores%)
 
 [module/memory]
 type = internal/memory
@@ -121,7 +125,7 @@ interval = 2
 format-prefix = "%{T2} %{T-}"
 format-prefix-foreground = ${colors.foreground}
 format-underline = ${colors.grey}
-label = %percentage_used%%
+label = %percentage_used%% %gb_used%
 
 [module/eth]
 type = internal/network
