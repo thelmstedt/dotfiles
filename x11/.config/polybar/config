@@ -67,10 +67,8 @@ border-size = 0
 border-color = #00000000
 
 tray-position = right
-tray-padding = 1
-tray-background = #d0303030
-tray-transparent = true
-
+tray-padding = 2
+tray-background = ${colors.background-alt}
 
 separator = "|"
 
