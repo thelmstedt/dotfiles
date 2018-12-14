@@ -65,7 +65,7 @@ layoutHook' =
   where
     barGap = gaps [(U, 24)]
     standardLayouts = (spacing 0 $ Full) ||| tiled ||| Mirror tiled ||| threeColumn ||| circle
-    tiled   = spacing 5 $ Tall nmaster delta ratio
+    tiled   = spacing 0 $ Tall nmaster delta ratio
     nmaster = 1
     ratio   = 1/2
     delta   = 3/100
