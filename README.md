@@ -42,3 +42,10 @@ use `pavucontrol` to view/modify output sources
 
 	systemctl --user enable ssh-agent
 	systemctl --user start ssh-agent
+
+
+# Random
+
+## Firefox
+
+https://github.com/yourduskquibbles/webannoyances
