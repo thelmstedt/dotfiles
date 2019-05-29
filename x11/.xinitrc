@@ -11,12 +11,12 @@ xset m 4/3 0 # mouse acceleration
 
 # cursor vanishes when you start typing
 [ -x "$(command -v xbanish)" ] && xbanish &
-
 [ -x "$(command -v dropbox)" ] && dropbox &
-#[ -x "$(command -v volwheel)" ] && volwheel &
-[ -x "$(command -v teams)" ] && teams &
-#[ -x "$(command -v pidgin)" ] && pidgin &
+[ -x "$(command -v pasystray)" ] && pasystray &
 [ -x "$(command -v nm-applet)" ] && nm-applet &
+
+# default apps
+[ -x "$(command -v teams)" ] && teams &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
@@ -24,10 +24,6 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # "emacs" (readline) shortcuts system wide
 if [ -f /home/tim/.config/gtk-3.0/settings.ini ]; then
   gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
-fi
-
-if [ -f /home/tim/.WORK ]; then
-   xrandr --output HDMI-0 --auto --output DVI-I-1 --right-of HDMI-0
 fi
 
 # keyring
@@ -40,5 +36,5 @@ fi
 ## Recompile to catch changes in ghc/haskell-*
 xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile)
 
-exec exmonad
+exec xmonad
 
