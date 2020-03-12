@@ -1,4 +1,4 @@
-rofi.theme: ~/.config/rofi/theme.rasi
+#rofi.theme: ~/.config/rofi/theme.rasi
 
 rofi.modi: combi
 rofi.combi-modi: window,run,drun
