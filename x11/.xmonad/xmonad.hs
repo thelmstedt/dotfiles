@@ -18,6 +18,7 @@ import           XMonad.Hooks.ManageDocks        (avoidStruts)
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
+import           XMonad.Hooks.ManageHelpers
 
 import           XMonad.Actions.WindowBringer    (gotoMenuArgs')
 import           XMonad.Util.EZConfig            (additionalKeysP)
@@ -92,6 +93,9 @@ manageHook' =
     --, ignoreC "sun-awt-X11-XDialogPeer"
     , floatC "insync.py"
     , floatC "Steam"
+    , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH"        --> doIgnore
+    , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"  --> doIgnore
+
     , (resource  =? "desktop_window")     --> doFloat
     , isFullscreen                        --> doFullFloat
 --    , (className =? "jetbrains-idea") <&&> ("win" `isPrefixOf`) <$> title --> doIgnore
