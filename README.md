@@ -63,6 +63,9 @@ TODO are we using this?
 	systemctl --user enable ssh-agent
 	systemctl --user start ssh-agent
 
+## fonts
+
+https://old.reddit.com/r/archlinux/comments/5r5ep8/make_your_arch_fonts_beautiful_easily/
 
 # App Setup
 

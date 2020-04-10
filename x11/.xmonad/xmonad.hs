@@ -78,13 +78,10 @@ layoutHook' =
 
 manageHook' =
   composeAll
-    [ moveC "jetbrains-idea" "1"
-    , moveC "Firefox" "3"
+    [ moveC "Firefox" "3"
     , moveC "chromium" "3"
     , moveC "Emacs" "4"
-    , moveC "hipchat" "7"
     , moveC "Slack" "7"
-    , moveC "Thunderbird" "8"
     , moveC "Pidgin" "9"
     , ignoreC "vlc"
     , floatC "VirtualBox"

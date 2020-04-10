@@ -72,11 +72,18 @@ tray-background = ${colors.background-alt}
 
 separator = "|"
 
-[bar/home]
+[bar/home_l]
+inherit =           bar/base
+monitor =           ${env:MONITOR:DP-0}
+modules-left =      xmonad
+modules-center =    
+modules-right =     eth temperature cpuinfo memory date
+
+[bar/home_r]
 inherit =           bar/base
 monitor =           ${env:MONITOR:HDMI-0}
 modules-left =      xmonad
-modules-center =    
+modules-center =
 modules-right =     eth temperature cpuinfo memory date
 
 [bar/work_r]
@@ -137,7 +144,7 @@ label-connected =  %downspeed:5%  %upspeed:5%
 [module/date]
 type = internal/date
 interval = 1
-date = %a %m/%d
+date = %a %b %d |
 time = %R:%S
 label = %date% %time%
 
