@@ -13,7 +13,7 @@ xset m 4/3 0 # mouse acceleration
 [ -x "$(command -v xbanish)" ] && xbanish &
 
 [ -x "$(command -v dropbox)" ] && dropbox &
-[ -x "$(command -v volwheel)" ] && volwheel &
+#[ -x "$(command -v volwheel)" ] && volwheel &
 [ -x "$(command -v teams)" ] && teams &
 #[ -x "$(command -v pidgin)" ] && pidgin &
 [ -x "$(command -v nm-applet)" ] && nm-applet &
@@ -38,4 +38,7 @@ if [ -x "$(command -v gnome-keyring-daemon)" ]; then
 fi
 
 ## Recompile to catch changes in ghc/haskell-*
-(xmonad --recompile && exec xmonad) || exec xmonad
+xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile)
+
+exec exmonad
+
