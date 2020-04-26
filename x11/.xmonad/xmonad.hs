@@ -14,7 +14,7 @@ import           XMonad.Layout.ThreeColumns
 import           XMonad.Layout.Gaps
 
 import           XMonad.Hooks.DynamicLog
-import           XMonad.Hooks.ManageDocks        (avoidStruts)
+import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
 import           XMonad.Hooks.UrgencyHook
@@ -62,9 +62,8 @@ myStartupHook = do
 myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+" ]
 
 layoutHook' =
-  barGap $ avoidStruts $ smartBorders $ onWorkspace "9" imLayout $ standardLayouts
+  avoidStruts $ smartBorders $ onWorkspace "9" imLayout $ standardLayouts
   where
-    barGap = gaps [(U, 24)]
     standardLayouts = (spacing 0 $ Full) ||| tiled ||| Mirror tiled ||| threeColumn ||| circle
     tiled   = spacing 0 $ Tall nmaster delta ratio
     nmaster = 1
@@ -108,6 +107,7 @@ keys' =
     , ("M-S-\\", gotoMenuArgs' "rofi" ["-dmenu", "-i", "-show", "combi"])
 
     , ("M-S-n", spawn "thunar")
+    , ("M-b", sendMessage ToggleStruts)
 
     , ("M-S-r", spawn "xmonad --recompile && xmonad --restart")
 
