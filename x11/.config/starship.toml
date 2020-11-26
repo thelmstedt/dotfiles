@@ -1,0 +1,75 @@
+add_newline = true
+
+format = """
+$cmd_duration\
+${username}@${hostname} | ${time} | ${directory}${git_branch}${git_commit}${git_state}${git_status}\
+${custom.sincelastcommit}${custom.lastcommit}\
+$line_break${jobs}${status}${character}\
+"""
+
+##
+## Timing
+##
+
+[cmd_duration]
+min_time = 500
+format = "took [$duration](bold yellow)\n"
+
+##
+## Main Status Line
+##
+
+[username]
+style_user = "fg:135"
+style_root = "red bold"
+format = "[$user]($style)"
+disabled = false
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[$hostname](fg:166)"
+disabled = false
+
+[time]
+disabled = false
+format = '[$time](white)'
+time_format = "%a %d %b %H:%M:%S"
+utc_time_offset = "+10"
+
+[directory]
+format = "[$path](fg:118)"
+truncate_to_repo = false
+truncation_length = 99
+
+##
+## Git Line
+## note inter-module formatting needs to be within specific modules - since we can't wrap this whole line in a conditional-on-git test
+##
+
+[git_branch]
+truncation_length = 100
+truncation_symbol = ""
+format = "| [$symbol$branch]($style) "
+
+[git_status]
+ahead = "⇡${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+behind = "⇣${count}"
+
+[custom.sincelastcommit]
+command = "since-last-commit"
+when = "git rev-parse --git-dir 2> /dev/null"
+format = "\n[$output](fg:161) ago"
+
+[custom.lastcommit]
+command = "git log -1 --pretty='%cn: %B' | head -n1"
+when = "git rev-parse --git-dir 2> /dev/null"
+format = " | [$output](white)"
+
+##
+## Prompt
+##
+
+[character]
+success_symbol = "[#](bold green)"

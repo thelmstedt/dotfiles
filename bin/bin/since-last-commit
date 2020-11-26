@@ -1,0 +1,30 @@
+#!/bin/bash 
+
+
+time_since_commit() {
+  local seconds_since_last_commit=$(($1 + 0))
+
+  # totals
+  local MINUTES=$((seconds_since_last_commit / 60))
+  local HOURS=$((seconds_since_last_commit/3600))
+
+  # sub-hours and sub-minutes
+  local DAYS=$((seconds_since_last_commit / 86400))
+  local SUB_HOURS=$((HOURS % 24))
+  local SUB_MINUTES=$((MINUTES % 60))
+
+  if [ "$HOURS" -gt 24 ]; then
+    printf "${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m"
+  elif [ "$MINUTES" -gt 60 ]; then
+    printf "${HOURS}h${SUB_MINUTES}m"
+  else
+    printf "${MINUTES}m"
+  fi
+}
+
+
+lc_time=$(git log --pretty=format:'%at' -1 2> /dev/null)
+now=$(date +%s)
+seconds_since_last_commit=$((now-lc_time))
+
+time_since_commit ${seconds_since_last_commit}
