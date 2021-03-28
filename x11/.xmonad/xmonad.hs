@@ -110,6 +110,7 @@ keys' =
     , ("M-b", sendMessage ToggleStruts)
 
     , ("M-S-r", spawn "xmonad --recompile && xmonad --restart")
+    , ("C-M-S-l", spawn "slock")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
@@ -119,6 +120,15 @@ keys' =
 
     , ("M-<F11>", sendMessage $ IncSpacing 5)
     , ("M-<F12>", sendMessage $ DecSpacing 5)
+
+    , ("M-<Pause>", spawn "pps")
+    , ("<Pause>", spawn "pps")
+
+    , ("M-<Print>", spawn "sps")
+    , ("<Print>", spawn "sps")
+
+    , ("M-<Scroll_lock>", spawn "sps")
+    , ("<Scroll_lock>", spawn "sps")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
       | (tag, key)  <- zip myWorkspaces ((map show [1,2,3,4,5,6,7,8,9,0]) ++ ["-", "="])
