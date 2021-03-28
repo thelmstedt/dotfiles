@@ -22,7 +22,7 @@ xset m 4/3 0 # mouse acceleration
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # "emacs" (readline) shortcuts system wide
-if [ -f /home/tim/.config/gtk-3.0/settings.ini ]; then
+if [ -f "$HOME/.config/gtk-3.0/settings.ini" ]; then
   gsettings set org.gnome.desktop.interface gtk-key-theme "Emacs"
 fi
 
@@ -32,6 +32,9 @@ if [ -x "$(command -v gnome-keyring-daemon)" ]; then
   eval $(/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh)
   export SSH_AUTH_SOCK
 fi
+
+## machine specific
+[[ -s "$HOME/.machineconf" ]] && source "$HOME/.machineconf"
 
 ## Recompile to catch changes in ghc/haskell-*
 xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile)
