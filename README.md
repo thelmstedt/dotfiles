@@ -11,7 +11,7 @@ Manage machine setup with `aconfmgr` and user setup with `stow`
 
 `stow` what you want into your $HOME
 
-    stow bin machine_base x11 prime
+    stow zsh bin machine_base x11 prime
 
 Provided we've stowed `~/.config/aconfmgr` in the previous step - we can restore our machine config
 

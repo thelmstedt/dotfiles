@@ -45,6 +45,8 @@ AddPackage youtube-dl # A command-line program to download videos from YouTube.c
 AddPackage z # Tracks your most used directories, based on 'frecency'
 AddPackage zip # Compressor/archiver for creating and modifying zipfiles
 AddPackage zsh # A very advanced and programmable command interpreter (shell) for UNIX
+AddPackage zsh-completions # Additional completion definitions for Zsh
+AddPackage zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
 
 # AUR
 
