@@ -9,6 +9,7 @@ AddPackage exa # ls replacement
 AddPackage fd # Simple, fast and user-friendly alternative to find
 AddPackage file # File type identification utility
 AddPackage findutils # GNU utilities to locate files
+AddPackage fzf # Command-line fuzzy finder
 AddPackage gawk # GNU version of awk
 AddPackage grep # A string search utility
 AddPackage gzip # GNU compression utility

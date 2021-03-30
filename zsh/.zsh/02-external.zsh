@@ -9,18 +9,6 @@
 [[ -r "/usr/bin/starship" ]] && eval "$(starship init zsh)"
 
 ##
-## manpages
-##
-
-export LESS_TERMCAP_mb=$'\E[01;31m'
-export LESS_TERMCAP_md=$'\E[01;38;5;74m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[38;33;246m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[04;38;5;146m'
-
-##
 ## zsh-syntax-highlighting
 ##
 
@@ -55,6 +43,16 @@ if [[ -r "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting
   ZSH_HIGHLIGHT_STYLES[assign]='none'
 fi
 
+##
+## fzf
+##
+
+if [[ -r "/usr/share/fzf/key-bindings.zsh" ]] ; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
+
+fi
+
 
 ##
 ## zsh-completions
@@ -84,3 +82,4 @@ if [[ -d "/usr/share/zsh/site-functions" ]] ; then
   zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 fi
+

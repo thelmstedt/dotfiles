@@ -12,16 +12,25 @@ export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH
 
 
 ##
-## preferred text editor
+## edit / view
 ##
 export EDITOR=nano
 export GIT_EDITOR=nano
 export PAGER=less
+export LESS='-F -g -i -M -R -S -w -z-4'
 
-# less defaul options
-#export LESS='-F -X -g -i -M -R -S -w -z-4'
-# with mouse scroll
-export LESS='-g -i -M -R -S -w -z-4'
+
+##
+## manpages
+##
+
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;38;5;74m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[38;33;246m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[04;38;5;146m'
 
 ##
 ## language
@@ -36,6 +45,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export LESSCHARSET=utf-8
+
 
 # Python
 [[ -s "$HOME/.pythonrc.py" ]] && export PYTHONSTARTUP="$HOME/.pythonrc.py"

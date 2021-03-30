@@ -61,3 +61,12 @@ function awk_column() {
 
 }
 alias ac=awk_column
+
+
+function fzf-git-branch() {
+  git branch --sort=-committerdate |
+    cut -c 3- |
+    fzf --multi --preview="git log {}" |
+    xargs --no-run-if-empty git checkout
+}
+alias gb=fzf-git-branch
