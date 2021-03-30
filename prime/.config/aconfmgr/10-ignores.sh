@@ -19,6 +19,7 @@ IgnorePath /boot/EFI/
 IgnorePath '/etc/*.cache'
 IgnorePath '/etc/*.gen'
 IgnorePath '/etc/*shadow*'
+IgnorePath '/etc/fonts/conf.d/*'
 IgnorePath /etc/.pwd.lock
 IgnorePath /etc/.updated
 IgnorePath '/etc/NetworkManager/system-connections/*'

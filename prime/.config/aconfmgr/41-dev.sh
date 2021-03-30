@@ -1,7 +1,9 @@
 # Packages
 AddPackage ansible # Radically simple IT automation platform
 AddPackage aws-cli # Universal Command Line Interface for Amazon Web Services
+AddPackage dbus-python # Python bindings for DBUS
 AddPackage docker # Pack, ship and run any application as a lightweight container
+AddPackage docker-compose # Fast, isolated development environments using Docker
 AddPackage flameshot # Powerful yet simple to use screenshot software
 AddPackage gcc # The GNU Compiler Collection - C and C++ frontends
 AddPackage git # the fast distributed version control system
@@ -21,7 +23,6 @@ AddPackage packer # tool for creating identical machine images for multiple plat
 AddPackage patch # A utility to apply patch files to original sources
 AddPackage perf # Linux kernel performance auditing tool
 AddPackage postgresql # Sophisticated object-relational DBMS
-AddPackage python-dbus # Python bindings for DBUS
 AddPackage python-virtualenvwrapper # Extensions to Ian Bicking's virtualenv tool
 AddPackage python2-pip # The PyPA recommended tool for installing Python packages
 AddPackage python2-virtualenv # Virtual Python Environment builder
@@ -34,7 +35,6 @@ AddPackage tig # Text-mode interface for Git.
 AddPackage tomcat-native # Optional component for Tomcat to use certain native resources for performance, compatibility
 AddPackage virtualbox # Powerful x86 virtualization for enterprise as well as home use
 AddPackage visualvm # Visual tool integrating several commandline JDK tools and lightweight profiling capabilities
-AddPackage yarn # Fast, reliable, and secure dependency management
 
 # AUR
 
