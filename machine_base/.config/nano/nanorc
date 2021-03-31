@@ -1,0 +1,28 @@
+
+##
+## syntax highlighters
+##
+
+include "/usr/share/nano/*.nanorc"
+
+##
+## editing
+##
+
+set autoindent
+set wordchars "_-"
+set tabsize 2
+
+##
+## display
+##
+
+set linenumbers
+set showcursor
+set positionlog
+set linenumbers
+set constantshow
+set autoindent
+set mouse
+set zap
+
