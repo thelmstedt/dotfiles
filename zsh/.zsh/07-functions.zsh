@@ -62,7 +62,6 @@ function awk_column() {
 }
 alias ac=awk_column
 
-
 function fzf-git-branch() {
   git branch --sort=-committerdate |
     cut -c 3- |
@@ -70,3 +69,25 @@ function fzf-git-branch() {
     xargs --no-run-if-empty git checkout
 }
 alias gb=fzf-git-branch
+
+function fnano() {
+  F="$(fzf)"
+  if [ -z "$F" ]
+  then
+      #nothing
+      echo "Cancelled"
+    else
+      nano $F
+  fi
+}
+
+function fless() {
+  F="$(fzf)"
+  if [ -z "$F" ]
+  then
+      #nothing
+      echo "Cancelled"
+    else
+      less $F
+  fi
+}

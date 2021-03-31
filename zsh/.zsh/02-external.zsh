@@ -51,6 +51,8 @@ if [[ -r "/usr/share/fzf/key-bindings.zsh" ]] ; then
   source /usr/share/fzf/key-bindings.zsh
   source /usr/share/fzf/completion.zsh
 
+  # uses `fd` for easy .gitignore integration (faster too!)
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 fi
 
 
