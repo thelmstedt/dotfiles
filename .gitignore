@@ -1,6 +1,7 @@
 xmonad-x86_64-linux
 xmonad.errors
 xmonad.state
-ssh/.ssh/*
-!ssh/.ssh/config
-!ssh/.ssh/config.d
+machine_base/ssh/.ssh/*
+!machine_base/ssh/.ssh/config
+!machine_base/ssh/.ssh/config.d
+id_rsa*
