@@ -18,3 +18,6 @@ setopt HIST_IGNORE_SPACE         # Do not record an event starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Do not write a duplicate event to the history file.
 setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing non-existent history.
+setopt AUTOPUSHD                 # make `cd` act like pushd
+setopt PUSHDSILENT               # pushd/popd dont print
+setopt PUSHDTOHOME               # `pushd` with no args == `pushd ~`
