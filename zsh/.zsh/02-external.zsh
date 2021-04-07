@@ -85,3 +85,10 @@ if [[ -d "/usr/share/zsh/site-functions" ]] ; then
 
 fi
 
+##
+## aws cli completion
+##
+if [[ -r "/usr/bin/aws_completer" ]] ; then
+  autoload bashcompinit && bashcompinit
+  complete -C '/usr/bin/aws_completer' aws
+fi

@@ -1,6 +1,5 @@
 # Packages
 AddPackage ansible # Radically simple IT automation platform
-AddPackage aws-cli # Universal Command Line Interface for Amazon Web Services
 AddPackage dbus-python # Python bindings for DBUS
 AddPackage docker # Pack, ship and run any application as a lightweight container
 AddPackage docker-compose # Fast, isolated development environments using Docker
@@ -38,6 +37,7 @@ AddPackage visualvm # Visual tool integrating several commandline JDK tools and 
 
 # AUR
 
+AddPackage --foreign aws-cli-v2-bin # Universal Command Line Interface for Amazon Web Services version 2
 AddPackage --foreign wkhtmltopdf-static # Shell utility to convert HTML to PDF using Webkit and Qt (upstream static build)
 AddPackage --foreign yourkit # Java CPU and memory profiler.
 
