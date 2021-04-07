@@ -13,6 +13,7 @@ AddPackage realtime-privileges # Realtime privileges for users
 AddPackage --foreign vcvrack-bin # Open-source virtual modular synthesizer
 
 # Files
+CopyFile /etc/pulse/daemon.conf
 CopyFile /etc/pulse/default.pa
 
 # Services
