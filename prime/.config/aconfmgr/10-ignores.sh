@@ -32,3 +32,8 @@ IgnorePath /etc/docker/key.json
 IgnorePath /etc/ld.so.cache
 IgnorePath /etc/pacman.d/gnupg/*
 IgnorePath /etc/ssl/certs/*
+
+IgnorePackage sweethome3d # Password manager and secure wallet
+
+IgnorePath /boot/4646dd9c24e240099ec850caf49803ca
+IgnorePath /boot/EFI/Linux

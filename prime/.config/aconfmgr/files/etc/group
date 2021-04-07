@@ -63,3 +63,4 @@ nm-openconnect:x:966:
 realtime:x:965:tim
 named:x:40:
 brltty:x:964:
+onepassword:x:1001:

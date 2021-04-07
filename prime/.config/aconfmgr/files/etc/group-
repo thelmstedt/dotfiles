@@ -1,4 +1,4 @@
-root:x:0:root
+root:x:0:brltty,root
 sys:x:3:bin
 mem:x:8:
 ftp:x:11:
@@ -15,17 +15,17 @@ power:x:98:tim
 adm:x:999:daemon
 wheel:x:998:tim
 kmem:x:997:
-tty:x:5:
+tty:x:5:brltty
 utmp:x:996:
-audio:x:995:tim
+audio:x:995:brltty,tim
 disk:x:994:
-input:x:993:tim
+input:x:993:brltty,tim
 kvm:x:992:tim
 lp:x:991:
 optical:x:990:
 render:x:989:
 storage:x:988:tim
-uucp:x:987:
+uucp:x:987:brltty
 video:x:986:
 users:x:985:
 systemd-journal:x:984:
@@ -46,7 +46,7 @@ avahi:x:976:
 colord:x:975:
 polkitd:x:102:
 rtkit:x:133:
-brlapi:x:974:
+brlapi:x:974:brltty
 vboxusers:x:108:
 tim:x:1000:
 postgres:x:973:
@@ -62,3 +62,4 @@ dhcpcd:x:967:
 nm-openconnect:x:966:
 realtime:x:965:tim
 named:x:40:
+brltty:x:964:

@@ -6,6 +6,7 @@ AddPackage libreoffice-fresh # LibreOffice branch which contains new features an
 AddPackage webkit2gtk # GTK+ Web content engine library ## NOTE - for icaclient
 
 # AUR
+AddPackage --foreign 1password # Password manager and secure wallet
 AddPackage --foreign dropbox # A free service that lets you bring your photos, docs, and videos anywhere and share them easily.
 AddPackage --foreign icaclient # Citrix Workspace App for x86_64 (64bit) Linux (ICAClient, Citrix Receiver)
 AddPackage --foreign postman-bin # Build, test, and document your APIs faster

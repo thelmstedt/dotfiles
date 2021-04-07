@@ -87,9 +87,6 @@ AddPackage --foreign xmonad-log # DBus monitor for xmonad log events
 
 # Files
 CopyFile /etc/X11/xorg.conf
-CreateLink /etc/fonts/conf.d/10-sub-pixel-rgb.conf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf
-CreateLink /etc/fonts/conf.d/11-lcdfilter-default.conf /etc/fonts/conf.avail/11-lcdfilter-default.conf
-CreateLink /etc/fonts/conf.d/70-no-bitmaps.conf /etc/fonts/conf.avail/70-no-bitmaps.conf
 
 # Services
 CreateLink /etc/systemd/system/multi-user.target.wants/NetworkManager.service /usr/lib/systemd/system/NetworkManager.service
