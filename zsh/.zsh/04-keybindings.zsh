@@ -4,6 +4,13 @@
 
 bindkey -e # emacs
 
+##
+## delete forward/backward treating 'words' as alphanumeric + $WORDCHARS
+##
+export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>\'
+autoload -Uz select-word-style
+select-word-style normal
+
 typeset -A key
 
 key[Home]=${terminfo[khome]}
