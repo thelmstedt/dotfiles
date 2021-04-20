@@ -17,8 +17,12 @@ export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH
 export EDITOR=nano
 export GIT_EDITOR=nano
 export PAGER=less
-export LESS='-F -g -i -M -R -S -w -z-4'
 
+##
+## tool flags
+##
+
+export LESS='-F -g -i -M -R -S -w -z-4 -j5'
 
 ##
 ## manpages
