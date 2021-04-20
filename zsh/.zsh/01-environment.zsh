@@ -23,6 +23,7 @@ export PAGER=less
 ##
 
 export LESS='-F -g -i -M -R -S -w -z-4 -j5'
+alias grep="grep --color=auto"
 
 ##
 ## manpages
