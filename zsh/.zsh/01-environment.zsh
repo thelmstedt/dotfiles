@@ -51,6 +51,19 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export LESSCHARSET=utf-8
 
+##
+## terminal
+##
+case $TERM in
+  xterm*)
+    # `WORKNG_DIR` in title
+    precmd () { print -Pn "\e]0;%~\a" }
+    # `WORKING_DIR $ COMMAND` in title
+    preexec() { print -Pn "\e]0;%~ $ $1\a" }
+    ;;
+esac
+precmd # correct title on open
+
 
 # Python
 [[ -s "$HOME/.pythonrc.py" ]] && export PYTHONSTARTUP="$HOME/.pythonrc.py"
