@@ -9,8 +9,8 @@ do
   echo .
   for x in `xdotool search -class Wfica`
   do
-     echo xdotool key --window $x ctrl+alt+shift+F12
-     xdotool key --window $x ctrl+alt+shift+F12 #ideally this does nothing, it just needs to send something
+     echo xdotool key --window $x ctrl+alt+shift
+     xdotool key --window $x ctrl+alt+shift #ideally this does nothing, it just needs to send something
   done
   sleep 60
 done
