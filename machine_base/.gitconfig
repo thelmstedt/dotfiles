@@ -39,6 +39,7 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
+	pager = delta
 
 [push]
 	default = current
@@ -86,3 +87,14 @@
 	includeStatusHeader = false
 	includePullRequestsSection = false
 	includeIssuesSection = false
+
+
+[delta]
+    plus-style = "syntax #012800"
+    minus-style = "syntax #340001"
+    syntax-theme = Monokai Extended
+    navigate = true
+    features = side-by-side linenumbers decorations
+
+[interactive]
+    diffFilter = delta --color-only
