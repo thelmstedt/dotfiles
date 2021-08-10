@@ -11,12 +11,14 @@ xset m 4/3 0 # mouse acceleration
 
 # cursor vanishes when you start typing
 [ -x "$(command -v xbanish)" ] && xbanish &
-[ -x "$(command -v dropbox)" ] && dropbox &
+# audio
 [ -x "$(command -v pasystray)" ] && pasystray &
+# networking
 [ -x "$(command -v nm-applet)" ] && nm-applet &
 
 # default apps
 [ -x "$(command -v teams)" ] && teams &
+[ -x "$(command -v dropbox)" ] && dropbox &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1

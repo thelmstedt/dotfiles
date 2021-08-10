@@ -7,13 +7,14 @@ import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
 import           XMonad.Layout.IM                (Property (..), withIM)
 import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
 import           XMonad.Layout.Named             (named)
-import           XMonad.Layout.NoBorders         (smartBorders, noBorders)
+import           XMonad.Layout.NoBorders
 import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
 import           XMonad.Layout.ThreeColumns
 import           XMonad.Layout.Gaps
 
 import           XMonad.Hooks.DynamicLog
+import           XMonad.Hooks.FadeInactive
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName
@@ -42,18 +43,24 @@ main = do
   dbus <- D.connectSession
   D.requestName dbus (D.busName_ "org.xmonad.Log")
     [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-  xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig {
-    modMask              = mod4Mask
-    , layoutHook         = layoutHook'
-    , terminal           = "alacritty"
-    , borderWidth        = 1
-    , focusedBorderColor = "#cd0000"
-    , normalBorderColor  = "#cccccc"
-    , startupHook        = myStartupHook
-    , manageHook         = manageHook' <+> manageHook desktopConfig
-    , logHook            = dynamicLogWithPP (myLogHook dbus)
-    , workspaces = myWorkspaces
-    }  `additionalKeysP` keys'
+  let config = desktopConfig {
+       modMask              = mod4Mask
+       , layoutHook         = layoutHook'
+       , terminal           = "alacritty"
+       , borderWidth        = 1
+       , focusedBorderColor = "#cd0000"
+       , normalBorderColor  = "#cccccc"
+       , startupHook        = myStartupHook
+       , manageHook         = manageHook' <+> manageHook desktopConfig
+       , logHook            = fadeHook <+> dynamicLogWithPP (myLogHook dbus)
+       , workspaces = myWorkspaces
+       }  `additionalKeysP` keys'
+    in xmonad $ withUrgencyHook NoUrgencyHook $ config
+
+-- unused for now
+fadeHook :: X ()
+fadeHook = fadeInactiveLogHook fadeAmount
+    where fadeAmount = 0.95
 
 myStartupHook = do
   setWMName "LG3D"
@@ -62,32 +69,27 @@ myStartupHook = do
 myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+" ]
 
 layoutHook' =
-  avoidStruts $ smartBorders $ onWorkspace "9" imLayout $ standardLayouts
+  avoidStruts $ myBorders $ standardLayouts
   where
-    standardLayouts = (spacing 0 $ Full) ||| tiled ||| Mirror tiled ||| threeColumn ||| circle
+    -- todo is this doing more than smartborders?
+    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
+--    myBorders = smartBorders
+    standardLayouts = full ||| tiled ||| Mirror tiled ||| threeColumn
+    full = smartBorders $ spacing 0 $ Full
     tiled   = spacing 0 $ Tall nmaster delta ratio
+    threeColumn = spacing 0 $ named "3col" $ ThreeCol 1 (3/100) (1/3)
     nmaster = 1
-    ratio   = 1/2
     delta   = 3/100
-    threeColumn = named "3col" $ ThreeCol 1 (3/100) (1/3)
-    circle = named "circle" $ avoidStruts circleSimpleDefaultResizable
-    imLayout = named "im" $ avoidStruts $ reflectHoriz $ withIM (1%9) pidginRoster standardLayouts
-    pidginRoster = ClassName "Pidgin" `And` Role "buddy_list"
-
+    ratio   = 1/2
 
 manageHook' =
   composeAll
     [ moveC "Firefox" "3"
     , moveC "chromium" "3"
     , moveC "Emacs" "4"
-    , moveC "Slack" "7"
-    , moveC "Pidgin" "9"
-    , ignoreC "vlc"
-    , floatC "VirtualBox"
+    , floatC "Gnome-calculator"
     , ignoreC "wine"
     , ignoreC "qllauncher"
-    --, ignoreC "sun-awt-X11-XDialogPeer"
-    , floatC "insync.py"
     , floatC "Steam"
     , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_SPLASH"        --> doIgnore
     , isInProperty "_NET_WM_WINDOW_TYPE" "_NET_WM_WINDOW_TYPE_NOTIFICATION"  --> doIgnore
@@ -109,7 +111,7 @@ keys' =
     , ("M-S-n", spawn "thunar")
     , ("M-b", sendMessage ToggleStruts)
 
-    , ("M-S-r", spawn "xmonad --recompile && xmonad --restart")
+    , ("M-S-r", spawn "xmonad --recompile && xmonad --restart && . /home/tim/.machineconf")
     , ("C-M-S-l", spawn "slock")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
@@ -118,8 +120,8 @@ keys' =
     , ("M-<F4>", sendMessage $ JumpToLayout "3col")
     , ("M-<F5>", sendMessage $ JumpToLayout "circle")
 
-    , ("M-<F11>", sendMessage $ IncSpacing 5)
-    , ("M-<F12>", sendMessage $ DecSpacing 5)
+    , ("M-<F11>", sendMessage $ IncSpacing 15)
+    , ("M-<F12>", sendMessage $ DecSpacing 15)
 
     , ("M-<Pause>", spawn "pps")
     , ("<Pause>", spawn "pps")
