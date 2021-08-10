@@ -1,0 +1,19 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit vagrant-libvirt
+or other application using the libvirt API.
+-->
+
+<network ipv6='yes'>
+  <name>vagrant-libvirt</name>
+  <uuid>bb589c23-2c66-41cb-9397-5b60fdf4cf22</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr1' stp='on' delay='0'/>
+  <mac address='52:54:00:eb:f2:bc'/>
+  <ip address='192.168.121.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.121.1' end='192.168.121.254'/>
+    </dhcp>
+  </ip>
+</network>

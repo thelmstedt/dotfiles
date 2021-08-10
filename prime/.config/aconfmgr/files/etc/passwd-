@@ -28,3 +28,6 @@ lightdm:x:968:968:Light Display Manager:/var/lib/lightdm:/usr/bin/nologin
 dhcpcd:x:967:967:dhcpcd privilege separation:/var/lib/dhcpcd:/usr/bin/nologin
 nm-openconnect:x:966:966:NetworkManager OpenConnect:/:/usr/bin/nologin
 named:x:40:40:BIND DNS Server:/:/usr/bin/nologin
+brltty:x:964:964:Braille Device Daemon:/var/lib/brltty:/usr/bin/nologin
+systemd-oom:x:962:962:systemd Userspace OOM Killer:/:/usr/bin/nologin
+pgbouncer:x:961:961:PGBouncer user:/etc/pgbouncer:/bin/bash

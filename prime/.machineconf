@@ -1,6 +1,14 @@
+
+echo "setting mode to correct screen size"
+
+xrandr -s 2560x1440
+
+echo "setting monitors to correct mode"
+
 xrandr \
  --dpi 108 \
  --output DVI-D-0 --off \
  --output HDMI-0 --mode 2560x1440 --rate 120 --pos 0x0 --primary \
  --output DP-0 --mode 2560x1440 --rate 60 --pos 2560x0 --right-of HDMI-0 \
  --output DP-1 --off
+

@@ -27,6 +27,7 @@ AddPackage thunar-volman # Automatic management of removeable devices in Thunar
 AddPackage ttf-dejavu # Font family based on the Bitstream Vera Fonts with a wider range of characters
 AddPackage ttf-font-awesome # Iconic font designed for Bootstrap
 AddPackage xdo # Utility for performing actions on windows in X
+AddPackage xdotool # Command-line X11 automation tool
 AddPackage xf86-video-vesa # X.org vesa video driver
 AddPackage xmonad # Lightweight X11 tiled window manager written in Haskell
 AddPackage xmonad-contrib # Add-ons for xmonad

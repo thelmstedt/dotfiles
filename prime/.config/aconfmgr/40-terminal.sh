@@ -4,7 +4,6 @@ AddPackage awesome-terminal-fonts # fonts/icons for powerlines
 AddPackage bc # An arbitrary precision calculator language
 AddPackage dmidecode # Desktop Management Interface table related utilities
 AddPackage dos2unix # Text file format converter
-AddPackage emacs # The extensible, customizable, self-documenting real-time display editor
 AddPackage exa # ls replacement
 AddPackage fd # Simple, fast and user-friendly alternative to find
 AddPackage file # File type identification utility
@@ -30,6 +29,7 @@ AddPackage sed # GNU stream editor
 AddPackage sloccount # Tools for counting physical source lines of code
 AddPackage smem # Generate reports on memory usage.
 AddPackage speedtest-cli # Command line interface for testing internet bandwidth using speedtest.net
+AddPackage starship # The cross-shell prompt for astronauts
 AddPackage stow # Manage installation of multiple softwares in the same directory tree
 AddPackage sysstat # a collection of performance monitoring tools (iostat,isag,mpstat,pidstat,sadf,sar)
 AddPackage time # Utility for monitoring a program's use of system resources
@@ -50,8 +50,7 @@ AddPackage zsh-completions # Additional completion definitions for Zsh
 AddPackage zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
 
 # AUR
-
-AddPackage --foreign starship-bin # The cross-shell prompt for astronauts
+AddPackage --foreign emacs-pgtk-native-comp-git # GNU Emacs. Unofficial pgtk-nativecomp branch.
 
 # Files
 

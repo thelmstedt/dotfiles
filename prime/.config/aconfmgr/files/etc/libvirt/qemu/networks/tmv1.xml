@@ -1,0 +1,19 @@
+<!--
+WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
+OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
+  virsh net-edit tmv1
+or other application using the libvirt API.
+-->
+
+<network ipv6='yes'>
+  <name>tmv1</name>
+  <uuid>40305a61-e84e-4887-8745-6f501a516432</uuid>
+  <forward mode='nat'/>
+  <bridge name='virbr3' stp='on' delay='0'/>
+  <mac address='52:54:00:a7:9b:05'/>
+  <ip address='192.168.115.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.115.1' end='192.168.115.254'/>
+    </dhcp>
+  </ip>
+</network>

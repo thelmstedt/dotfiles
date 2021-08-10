@@ -49,7 +49,7 @@ rtkit:x:133:
 brlapi:x:974:brltty
 vboxusers:x:108:
 tim:x:1000:
-postgres:x:973:
+postgres:x:973:pgbouncer
 nvidia-persistenced:x:143:
 minio:x:103:
 docker:x:972:tim
@@ -64,3 +64,8 @@ realtime:x:965:tim
 named:x:40:
 brltty:x:964:
 onepassword:x:1001:
+sgx:x:963:
+systemd-oom:x:962:
+vboxsf:x:109:tim
+pgbouncer:x:961:
+memcached:x:960:

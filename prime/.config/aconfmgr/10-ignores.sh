@@ -28,9 +28,11 @@ IgnorePath /etc/X11/xorg.conf.nvidia-xconfig-original
 IgnorePath /etc/brlapi.key
 IgnorePath /etc/ca-certificates/*
 IgnorePath /etc/cni
+IgnorePath /etc/dconf/db/*
 IgnorePath /etc/docker/key.json
 IgnorePath /etc/ld.so.cache
 IgnorePath /etc/pacman.d/gnupg/*
+IgnorePath /etc/resolv.conf
 IgnorePath /etc/ssl/certs/*
 
 IgnorePackage sweethome3d # Password manager and secure wallet
