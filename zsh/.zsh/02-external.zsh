@@ -92,3 +92,10 @@ if [[ -r "/usr/bin/aws_completer" ]] ; then
   autoload bashcompinit && bashcompinit
   complete -C '/usr/bin/aws_completer' aws
 fi
+
+##
+## pyenv for multiple python versions
+##
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init --path)"
+fi

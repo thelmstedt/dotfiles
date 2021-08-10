@@ -58,12 +58,11 @@ case $TERM in
   xterm*)
     # `WORKNG_DIR` in title
     precmd () { print -Pn "\e]0;%~\a" }
+    precmd # correct title on open
     # `WORKING_DIR $ COMMAND` in title
     preexec() { print -Pn "\e]0;%~ $ $1\a" }
     ;;
 esac
-precmd # correct title on open
-
 
 # Python
 [[ -s "$HOME/.pythonrc.py" ]] && export PYTHONSTARTUP="$HOME/.pythonrc.py"

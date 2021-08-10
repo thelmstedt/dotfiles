@@ -1,7 +1,6 @@
 # Project aliases
 alias w="cd $HOME/work"
-alias b="cd $HOME/work/ipa-monorepo"
-alias c="cd $HOME/work/fetch-admin"
+alias b="cd $HOME/work/tmv"
 
 alias ls='ls --color=auto'
 
