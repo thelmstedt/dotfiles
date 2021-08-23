@@ -48,17 +48,34 @@ function upto() {
 alias u=upto
 
 ##
-## awk_column - for ease of use in pipes e.g. `ps aux | grep foo | ac 2 | xargs kill -9`
+## awk_column - provide 1-or-many integers to select columns
+## -F arg will pass to awk as normal field-separator
+##
+## good for ease of use in pipes e.g. `ps aux | grep foo | ac 2 | xargs kill -9`
+##
+## ac -F~ 3 2 1 -> awk -F~ {print $3" "$2" "$1}
+##
 ##
 function awk_column() {
-  local cmd="{print \$$1}"
-  if [ -z "$2" ]
+  if [ -z "$1" ]
   then
-    awk ${cmd}
-  else
-    awk -F"$2" ${cmd}
+    echo "Requires at least 1 positional arg eg: 'ac N' for Nth arg"
+    return 1
   fi
+  zparseopts -D -E -- F+:=separator
+  separator=("${(@)separator:#-F}")
 
+  cmd="\$$1" #required arg
+  if [ ! -z "$2" ]
+  then
+    cmd="$cmd$(printf '" "$%s' "${@:2}")" #optionally additional args separated by space
+  fi
+  if [ ! -z $separator ]
+  then
+    awk -F "$separator" "{print $cmd}" #-F separator
+  else
+    awk "{print $cmd}"
+  fi
 }
 alias ac=awk_column
 
@@ -91,3 +108,4 @@ function fless() {
       less $F
   fi
 }
+
