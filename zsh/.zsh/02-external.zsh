@@ -63,8 +63,12 @@ fi
 if [[ -d "/usr/share/zsh/site-functions" ]] ; then
 
   fpath=(/usr/share/zsh/site-functions/ $fpath)
-  autoload -Uz compinit
-  compinit -u
+  if ! command -v compinit > /dev/null; then
+    autoload -Uz compinit
+    compinit -u
+  else
+    compinit
+  fi
 
   #autoload -U /usr/share/zsh/site-functions/*(:t)
   zstyle ':completion:*' auto-description 'specify: %d'
