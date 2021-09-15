@@ -2,8 +2,8 @@ add_newline = true
 
 format = """
 $cmd_duration\
-${username}@${hostname} | ${time} | ${directory}${git_branch}${git_commit}${git_state}${git_status}\
-${custom.sincelastcommit}${custom.lastcommit}\
+${username}@${hostname} | ${time} | ${directory} ${python}\
+${git_branch}${git_commit}${git_state}${git_status}${custom.sincelastcommit}${custom.lastcommit}\
 $line_break${jobs}${status}${character}\
 """
 
@@ -43,6 +43,13 @@ truncate_to_repo = false
 truncation_length = 99
 
 ##
+## langs
+##
+
+[python]
+format="[$symbol($version )]($style)"
+
+##
 ## Git Line
 ## note inter-module formatting needs to be within specific modules - since we can't wrap this whole line in a conditional-on-git test
 ##
@@ -50,7 +57,7 @@ truncation_length = 99
 [git_branch]
 truncation_length = 100
 truncation_symbol = ""
-format = "| [$symbol$branch]($style) "
+format = "\n[$symbol$branch]($style) "
 
 [git_status]
 ahead = "⇡${count}"
@@ -60,7 +67,7 @@ behind = "⇣${count}"
 [custom.sincelastcommit]
 command = "since-last-commit"
 when = "git rev-parse --git-dir 2> /dev/null"
-format = "\n[$output](fg:161) ago"
+format = "| [$output](fg:161) ago"
 
 [custom.lastcommit]
 command = "git log -1 --pretty='%cn: %B' | head -n1"
