@@ -10,16 +10,15 @@ import           XMonad.Layout.Named             (named)
 import           XMonad.Layout.NoBorders
 import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
-import           XMonad.Layout.ThreeColumns
-import           XMonad.Layout.Gaps
+import           XMonad.Layout.ThreeColumns      (ThreeCol(..))
 
-import           XMonad.Hooks.DynamicLog
-import           XMonad.Hooks.FadeInactive
-import           XMonad.Hooks.ManageDocks
+import           XMonad.Hooks.DynamicLog         (shorten, PP(..), wrap, dynamicLogWithPP)
+import           XMonad.Hooks.FadeInactive       (fadeInactiveLogHook)
+import           XMonad.Hooks.ManageDocks        (avoidStruts, ToggleStruts(..))
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
-import           XMonad.Hooks.SetWMName
-import           XMonad.Hooks.UrgencyHook
-import           XMonad.Hooks.ManageHelpers
+import           XMonad.Hooks.SetWMName          (setWMName)
+import           XMonad.Hooks.UrgencyHook        (NoUrgencyHook(..), withUrgencyHook)
+import           XMonad.Hooks.ManageHelpers      (isInProperty)
 
 import           XMonad.Actions.WindowBringer    (gotoMenuArgs')
 import           XMonad.Util.EZConfig            (additionalKeysP)
@@ -174,7 +173,7 @@ myLogHook dbus = def
     , ppHidden = wrap " " ""
     , ppWsSep = ""
     , ppSep = " | "
-    , ppTitle = id -- myAddSpaces 80 -- just let it be
+    , ppTitle = shorten 100
     , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
 }
 
@@ -190,7 +189,3 @@ dbusOutput dbus str = do
     interfaceName = D.interfaceName_ "org.xmonad.Log"
     memberName = D.memberName_ "Update"
 
-myAddSpaces :: Int -> String -> String
-myAddSpaces len str = sstr ++ replicate (len - length sstr) ' '
-  where
-    sstr = shorten len str
