@@ -15,7 +15,7 @@ export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH
 ## edit / view
 ##
 export EDITOR=nano
-export GIT_EDITOR=nano
+export GIT_EDITOR="emacs -nw"
 export PAGER=less
 
 ##
@@ -66,6 +66,8 @@ esac
 
 # Python
 [[ -s "$HOME/.pythonrc.py" ]] && export PYTHONSTARTUP="$HOME/.pythonrc.py"
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
+export PYTHONIOENCODING=UTF-8
 
 ##
 ## java fixes
