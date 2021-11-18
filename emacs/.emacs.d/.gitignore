@@ -11,3 +11,6 @@ swank/
 session.*
 tramp
 .emacs-backups
+elpa
+transient
+smex-items

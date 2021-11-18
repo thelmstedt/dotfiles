@@ -1,16 +1,9 @@
-(defun ammend-path (p)
+(defvar prelude-dir (file-name-directory load-file-name))
+
+(defun amend-path (p)
   (progn
     (setenv "PATH" (concat p ":" (getenv "PATH")))
     (push p exec-path)))
-
-;;osx path shenanigans
-(when (equal system-type 'darwin)
-  (ammend-path "/usr/local/bin")
-  (ammend-path "/Applications/ghc-7.8.3.app/Contents/bin")
-  (ammend-path "/Users/tim/.cabal/bin"))
-
-
-(ammend-path "~/.emacs-haskell/.cabal-sandbox/bin")
 
 (setq dotfiles-dir (file-name-directory
                     (or (buffer-file-name) load-file-name)))
@@ -30,15 +23,13 @@
 (require 'init-customisations)
 (require 'init-keybindings)
 (require 'init-org)
-(require 'init-haskell)
 (require 'init-ibuffer)
 
-(load-theme 'solarized-dark t)
+(load-theme 'zenburn t)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default ispell-program-name "aspell")
 
-;; backup/autosave settings
 (defvar --backup-directory (concat user-emacs-directory ".emacs-backups"))
 (if (not (file-exists-p --backup-directory))
         (make-directory --backup-directory t))
@@ -86,8 +77,3 @@
 
 (load "server")
 (unless (server-running-p) (server-start))
-
-;; :( osx
-(when (equal system-type 'darwin)
-  (require 'maxframe)
-  (add-hook 'window-setup-hook 'maximize-frame t))

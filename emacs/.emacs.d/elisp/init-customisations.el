@@ -57,7 +57,9 @@
 
 ; ido-mode
 (ido-mode t)
-(ido-ubiquitous t)
+(ido-everywhere 1)
+(require 'ido-completing-read+)
+(ido-ubiquitous-mode 1)
 (setq ido-enable-prefix nil
       ido-enable-flex-matching t
       ido-auto-merge-work-directories-length nil
@@ -73,18 +75,6 @@
   (unless (and buffer-file-name
                (file-writable-p buffer-file-name))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
-
-;; octave mode
-;(autoload 'octave-mode "octave-mode" nil t)
-(setq auto-mode-alist
-      (cons '("\\.m$" . octave-mode) auto-mode-alist))
-(add-hook 'octave-mode-hook
-          (lambda ()
-            (abbrev-mode 1)
-            (auto-fill-mode 1)
-            (if (eq window-system 'x)
-                (font-lock-mode 1))))
-
 
 (setq auto-mode-alist
       (cons '("\\.zsh$" . sh-mode) auto-mode-alist))

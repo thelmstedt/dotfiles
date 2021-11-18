@@ -19,17 +19,6 @@
       org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
       org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
 
-;; habits
-(require 'org)
-(require 'org-install)
-(require 'org-habit)
-(add-to-list 'org-modules "org-habit")
-(setq org-habit-preceding-days 14
-      org-habit-following-days 1
-      org-habit-graph-column 40
-      org-habit-show-habits-only-for-today t
-      org-habit-show-all-today t)
-
 ;; agenda
 (setq org-agenda-files '("~/Dropbox/deft")
       org-agenda-include-diary t
@@ -39,7 +28,6 @@
 ;; export
 ;; (setq org-export-with-toc 4
 ;;       org-export-headline-levels 4)
-
 
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
@@ -76,25 +64,6 @@
                         (equal (match-string 2) "0"))
                    (org-todo "TODO"))
                   (t (org-todo "STARTED"))))))))
-
-;; babel
-(require 'ob)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sh . t)
-   (haskell . t)))
-
-(setq org-src-fontify-natively t
-      org-confirm-babel-evaluate nil)
-
-(add-hook 'org-babel-after-execute-hook
-          (lambda ()
-            (condition-case nil
-                (org-display-inline-images)
-              (error nil)))
-          'append)
-
 
 
 (provide 'init-org)
