@@ -3,10 +3,17 @@ alias w="cd $HOME/work"
 alias b="cd $HOME/work/tmv"
 
 alias ls='ls --color=auto'
+if [[ -r "/usr/bin/exa" ]] ; then
+  alias l="exa"
+  alias ll="exa -l --git"
+else
+  alias l="ls"
+  alias ll="ls -l"
+fi
 
-alias l="exa"
-alias ll="exa -l --git"
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
+alias lower="tr '[:upper:]' '[:lower:]'"
+alias upper="tr '[:lower:]' '[:upper:]'"
 
 # git
 alias g="git"
