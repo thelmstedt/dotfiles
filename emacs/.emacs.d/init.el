@@ -26,6 +26,7 @@
 (require 'init-ibuffer)
 
 (load-theme 'zenburn t)
+(setq initial-major-mode 'org-mode)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq-default ispell-program-name "aspell")
