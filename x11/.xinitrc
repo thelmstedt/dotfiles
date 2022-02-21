@@ -9,6 +9,9 @@ xset m 4/3 0 # mouse acceleration
 # lockscreen
 [ -x "$(command -v xautolock)" ] && xautolock -time 10 -locker slock &
 
+# notification daemon
+[ -x "$(command -v dunst)" ] && dunst &
+
 # cursor vanishes when you start typing
 [ -x "$(command -v xbanish)" ] && xbanish &
 # audio
@@ -17,7 +20,6 @@ xset m 4/3 0 # mouse acceleration
 [ -x "$(command -v nm-applet)" ] && nm-applet &
 
 # default apps
-[ -x "$(command -v teams)" ] && teams &
 [ -x "$(command -v dropbox)" ] && dropbox &
 
 # cargo culting xmonad/java fixes
