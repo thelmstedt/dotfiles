@@ -1,7 +1,3 @@
-# Project aliases
-alias w="cd $HOME/work"
-alias b="cd $HOME/work/tmv"
-
 alias ls='ls --color=auto'
 if [[ -r "/usr/bin/exa" ]] ; then
   alias l="exa"
@@ -14,11 +10,15 @@ fi
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
 alias lower="tr '[:upper:]' '[:lower:]'"
 alias upper="tr '[:lower:]' '[:upper:]'"
+alias sumints="tr '\n' '+' | sed 's/+$/\n/' | bc"
 
 # git
 alias g="git"
 alias gs="git status --short"
 alias e="emacsclient -t"
+
+# tf
+alias tf="terraform"
 
 # Maven
 alias -g md='MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n $MAVEN_OPTS " '
@@ -32,6 +32,3 @@ alias -g gd='GRADLE_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:trans
 alias -g gbd='GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 $GRADLE_OPTS"'
 alias -g nt="-xcheck -xtest"
 alias r='gradle'
-alias rbr='gradle bootRun'
-
-

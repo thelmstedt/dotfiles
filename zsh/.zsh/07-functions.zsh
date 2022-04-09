@@ -2,7 +2,9 @@
 ##
 ## go_temp - make a temp dir and cd
 ##
-function go_temp() { cd $(mktemp -d) }
+function go_temp() {
+  cd "$(mktemp -d)" || (echo "cd to mktemp failed?" && exit)
+}
 alias gt=go_temp
 
 ##
@@ -20,7 +22,6 @@ function upto() {
 
 	  if [[ $mode == "GIT" ]] ; then
       while [ "$running" = true ]; do
-        IGNORE_HOME=$(echo "$current" | sed "s|$HOME||") # we never want to go back to home
         if [[ -e "$current/.git" ]] ; then
           running=false
           matched_dir="$current"
@@ -39,7 +40,7 @@ function upto() {
     fi
 
 	  if [ -n "$matched_dir" ]; then
-		    cd ${matched_dir}
+		    cd "${matched_dir}" || (echo "cd to ${matched_dir} failed?" && exit)
 	  else
 		    echo "No Match." >&2
 		    return 1
@@ -70,7 +71,8 @@ function awk_column() {
   then
     cmd="$cmd$(printf '" "$%s' "${@:2}")" #optionally additional args separated by space
   fi
-  if [ ! -z $separator ]
+  # shellcheck disable=SC2128
+  if [ -n "$separator" ]
   then
     awk -F "$separator" "{print $cmd}" #-F separator
   else

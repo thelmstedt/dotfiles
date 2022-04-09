@@ -57,17 +57,17 @@ export LESSCHARSET=utf-8
 case $TERM in
   xterm*)
     # `WORKNG_DIR` in title
-    precmd () { print -Pn "\e]0;%~\a" }
+    precmd () {
+      print -Pn "\e]0;%~\a"
+    }
     precmd # correct title on open
     # `WORKING_DIR $ COMMAND` in title
-    preexec() { print -Pn "\e]0;%~ $ $1\a" }
+    preexec() {
+      print -Pn "\e]0;%~ $ $1\a"
+    }
     ;;
 esac
 
-# Python
-[[ -s "$HOME/.pythonrc.py" ]] && export PYTHONSTARTUP="$HOME/.pythonrc.py"
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
-export PYTHONIOENCODING=UTF-8
 
 ##
 ## java fixes
