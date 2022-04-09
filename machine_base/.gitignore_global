@@ -22,3 +22,11 @@ infer-out
 venv
 out
 .gradle
+testingdumps
+.vagrant
+allprodmappings
+.terraform
+
+/logomatch/tests/es/dumps/
+full_sync_debug_cache.json
+system/local_media
