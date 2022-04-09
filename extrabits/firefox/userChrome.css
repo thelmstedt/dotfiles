@@ -3,11 +3,12 @@
     margin-bottom: 21px !important;
 }
 
-#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
-    visibility: collapse !important;
-}
 
-.sidebar-splitter {
-    border: 0 !important;
-    background-color: #1c1b22 !important;
+#TabsToolbar { visibility: collapse !important; } /* Hide Firefox's default tab bar. */
+
+#sidebar-header {
+    display: none;
+}
+#sidebar-splitter {
+    width: 0 !important;
 }
