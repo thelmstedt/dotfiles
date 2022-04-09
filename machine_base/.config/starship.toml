@@ -2,7 +2,7 @@ add_newline = true
 
 format = """
 $cmd_duration\
-${username}@${hostname} | ${time} | ${directory} ${python}\
+${username}@${hostname}$aws | ${time} | ${directory} ${python}\
 ${git_branch}${git_commit}${git_state}${git_status}${custom.sincelastcommit}${custom.lastcommit}\
 $line_break${jobs}${status}${character}\
 """
@@ -33,14 +33,14 @@ disabled = false
 
 [time]
 disabled = false
-format = '[$time](white)'
+format = '[$time](grey)'
 time_format = "%a %d %b %H:%M:%S"
 utc_time_offset = "+10"
 
 [directory]
-format = "[$path](fg:118)"
 truncate_to_repo = false
 truncation_length = 99
+style = "bold blue"
 
 ##
 ## langs
@@ -48,6 +48,7 @@ truncation_length = 99
 
 [python]
 format="[$symbol($version )]($style)"
+style="grey"
 
 ##
 ## Git Line
@@ -72,7 +73,7 @@ format = "| [$output](fg:161) ago"
 [custom.lastcommit]
 command = "git log -1 --pretty='%cn: %B' | head -n1"
 when = "git rev-parse --git-dir 2> /dev/null"
-format = " | [$output](white)"
+format = " | [$output](grey)"
 
 ##
 ## Prompt
@@ -80,3 +81,12 @@ format = " | [$output](white)"
 
 [character]
 success_symbol = "[#](bold green)"
+
+##
+## aws
+##
+
+[aws]
+format = "( on [$symbol$profile]($style) )"
+style = "bold blue"
+symbol = "🅰 "
