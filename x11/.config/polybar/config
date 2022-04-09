@@ -69,7 +69,7 @@ line-size = 3
 line-color = #f00
 
 border-size = 0
-border-color = #00000000
+border-color = #00000000N
 
 tray-position = right
 tray-padding = 2
@@ -82,14 +82,14 @@ inherit =           bar/base
 monitor =           ${env:MONITOR:DP-0}
 modules-left =      xmonad
 modules-center =    
-modules-right =     spotify eth temperature cpuinfo memory date
+modules-right =     spotify pulse_sink eth cpuinfo memory date
 
 [bar/home_r]
 inherit =           bar/base
 monitor =           ${env:MONITOR:HDMI-0}
 modules-left =      xmonad
 modules-center =
-modules-right =     spotify eth temperature cpuinfo memory date
+modules-right =     spotify pulse_sink eth cpuinfo memory date
 
 [bar/work_r]
 inherit =           bar/base
@@ -103,7 +103,7 @@ inherit =           bar/base
 monitor =           ${env:MONITOR:DP-0}
 modules-left =      xmonad
 modules-center =
-modules-right =     spotify date
+modules-right =     spotify pulse_sink date
 
 [module/xmonad]
 type = custom/script
@@ -161,9 +161,17 @@ label = %date% %time%
 type =                      custom/script
 format-underline =          ${colors.blue}
 exec =                      $HOME/.config/polybar/spotify_metadata.sh
-interval =                  5
+interval =                  1
 format =                    <label>
 label =                     " %output%"
+
+[module/pulse_sink]
+type =                      custom/script
+format-underline =          ${colors.blue}
+exec =                      $HOME/.config/polybar/pulse_sink.sh
+interval =                  1
+format =                    <label>
+label =                     "%output%"
 
 [module/cpuinfo]
 type =                      custom/script
@@ -172,3 +180,23 @@ exec =                      $HOME/.config/polybar/cpuinfo.sh
 interval =                  1
 format =                    <label>
 label =                     " %output%"
+
+[module/temperature]
+type = internal/temperature
+
+interval = 1
+
+; Full path of temperature sysfs path
+; Use `sensors` to find preferred temperature source, then run
+; $ for i in /sys/class/hwmon/hwmon*/temp*_input; do echo "$(<$(dirname $i)/name): $(cat ${i%_*}_label 2>/dev/null || echo $(basename ${i%_*})) $(readlink -f $i)"; done
+; to find path to desired file
+; Default reverts to thermal zone setting
+hwmon-path = /sys/devices/platform/nct6775.656/hwmon/hwmon2/temp2_input
+
+; Base temperature for where to start the ramp (in degrees celsius)
+; Default: 0
+base-temperature = 25
+
+; Threshold temperature to display warning label (in degrees celsius)
+; Default: 80
+warn-temperature = 60
