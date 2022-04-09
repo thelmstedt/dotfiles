@@ -1,16 +1,18 @@
 # Packages
+AddPackage dunst # Customizable and lightweight notification-daemon
 AddPackage eog # Eye of Gnome
 AddPackage evince # Document viewer (PDF, Postscript, djvu, tiff, dvi, XPS, SyncTex support with gedit, comics books (cbr,cbz,cb7 and cbt))
+AddPackage feh # Fast and light imlib2-based image viewer
 AddPackage file-roller # Create and modify archives
 AddPackage gnome-calculator # GNOME Scientific calculator
 AddPackage gnome-keyring # Stores passwords and encryption keys
+AddPackage gucharmap # Gnome Unicode Charmap
 AddPackage hardinfo # A system information and benchmark tool.
 AddPackage haskell-dbus # A client library for the D-Bus IPC system
 AddPackage luit # Filter that can be run between an arbitrary application and a UTF-8 terminal emulator
 AddPackage mplayer # Media player for Linux
 AddPackage network-manager-applet # Applet for managing network connections
 AddPackage networkmanager-openconnect # NetworkManager VPN plugin for OpenConnect
-AddPackage notify-osd # Canonical's on-screen-display notification agent, implementing the freedesktop.org Desktop Notifications Specification with semi-transparent click-through bubbles
 AddPackage noto-fonts # Google Noto TTF fonts
 AddPackage noto-fonts-cjk # Google Noto CJK fonts
 AddPackage noto-fonts-emoji # Google Noto emoji fonts
@@ -26,6 +28,9 @@ AddPackage thunar-media-tags-plugin # Adds special features for media files to t
 AddPackage thunar-volman # Automatic management of removeable devices in Thunar
 AddPackage ttf-dejavu # Font family based on the Bitstream Vera Fonts with a wider range of characters
 AddPackage ttf-font-awesome # Iconic font designed for Bootstrap
+AddPackage wmctrl # Control your EWMH compliant window manager from command line
+AddPackage xclip # Command line interface to the X11 clipboard
+AddPackage xcompmgr # Composite Window-effects manager for X.org
 AddPackage xdo # Utility for performing actions on windows in X
 AddPackage xdotool # Command-line X11 automation tool
 AddPackage xf86-video-vesa # X.org vesa video driver
@@ -78,7 +83,6 @@ AddPackage xorg-xvinfo # Prints out the capabilities of any video adaptors assoc
 AddPackage xorg-xwd # X Window System image dumping utility
 AddPackage xorg-xwininfo # Command-line utility to print information about windows on an X server
 AddPackage xorg-xwud # X Window System image undumping utility
-
 
 # AUR
 AddPackage --foreign polybar # A fast and easy-to-use status bar

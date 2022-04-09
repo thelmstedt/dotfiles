@@ -1,7 +1,7 @@
 # Packages
 AddPackage dnsmasq # Lightweight, easy to configure DNS forwarder and DHCP server
-AddPackage ebtables # Ethernet bridge filtering utilities
 AddPackage edk2-ovmf # Open Virtual Machine Firmware to support firmware for Virtual Machines
+AddPackage iptables-nft # Linux kernel packet control tool (using nft interface)
 AddPackage libvirt # API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)
 AddPackage qemu # A generic and open source machine emulator and virtualizer
 AddPackage virt-manager # Desktop user interface for managing virtual machines
@@ -10,6 +10,7 @@ AddPackage virt-manager # Desktop user interface for managing virtual machines
 
 # Files
 
+CopyFile /etc/libvirt/libvirtd.conf
 CopyFile /etc/libvirt/nwfilter/allow-arp.xml
 CopyFile /etc/libvirt/nwfilter/allow-dhcp-server.xml
 CopyFile /etc/libvirt/nwfilter/allow-dhcp.xml
@@ -67,5 +68,4 @@ CreateLink /etc/systemd/system/sockets.target.wants/virtlogd.socket /usr/lib/sys
 
 # vms
 CopyFile /etc/libvirt/qemu/win10.xml 600
-CreateLink /etc/libvirt/qemu/autostart/win10.xml /etc/libvirt/qemu/win10.xml
 

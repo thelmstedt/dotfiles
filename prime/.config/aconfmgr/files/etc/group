@@ -20,7 +20,7 @@ utmp:x:996:
 audio:x:995:brltty,tim
 disk:x:994:
 input:x:993:brltty,tim
-kvm:x:992:tim
+kvm:x:992:libvirt-qemu,tim
 lp:x:991:
 optical:x:990:
 render:x:989:
@@ -69,3 +69,7 @@ systemd-oom:x:962:
 vboxsf:x:109:tim
 pgbouncer:x:961:
 memcached:x:960:
+redis:x:959:
+adbusers:x:958:
+tss:x:957:
+libvirt-qemu:x:956:

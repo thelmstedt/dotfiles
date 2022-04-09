@@ -1,6 +1,7 @@
 IgnorePath '*.pacnew'
 IgnorePath '*.pacsave'
 
+IgnorePath '/data'
 IgnorePath '/lost+found'
 IgnorePath '/lost+found/*'
 IgnorePath '/opt/*'
@@ -30,6 +31,8 @@ IgnorePath /etc/ca-certificates/*
 IgnorePath /etc/cni
 IgnorePath /etc/dconf/db/*
 IgnorePath /etc/docker/key.json
+IgnorePath /etc/letsencrypt
+IgnorePath /etc/docker/daemon.json
 IgnorePath /etc/ld.so.cache
 IgnorePath /etc/pacman.d/gnupg/*
 IgnorePath /etc/resolv.conf

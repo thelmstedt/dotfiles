@@ -2,5 +2,5 @@
 # See hosts(5) for details.
 127.0.0.1 	localhost
 ::1		localhost
-127.0.0.1       prime.localdomain prime
+127.0.0.1       prime.localdomain prime local.tmv.io local.servers.tmv.cloud
 127.0.0.1	local.tmv.io

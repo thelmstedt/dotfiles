@@ -68,3 +68,7 @@ sgx:x:963:
 systemd-oom:x:962:
 vboxsf:x:109:tim
 pgbouncer:x:961:
+memcached:x:960:
+redis:x:959:
+adbusers:x:958:
+tss:x:957:

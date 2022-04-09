@@ -1,5 +1,6 @@
 # Packages
 AddPackage amd-ucode # Microcode update files for AMD CPUs
+AddPackage archlinux-keyring # Arch Linux PGP keyring
 AddPackage autoconf # A GNU tool for automatically configuring source code
 AddPackage automake # A GNU tool for automatically creating Makefiles
 AddPackage base # Minimal package set to define a basic Arch Linux installation
@@ -26,22 +27,27 @@ AddPackage net-tools # Configuration tools for Linux networking
 AddPackage nvidia # NVIDIA drivers for linux
 AddPackage nvidia-lts # NVIDIA drivers for linux-lts
 AddPackage nvidia-settings # Tool for configuring the NVIDIA graphics driver
+AddPackage nvme-cli # NVM-Express user space tooling for Linux
 AddPackage openssh # Premier connectivity tool for remote login with the SSH protocol
 AddPackage pacman # A library-based package manager with dependency support
+AddPackage pacutils # Helper tools for libalpm
 AddPackage pkgconf # Package compiler and linker metadata toolkit
 AddPackage smartmontools # Control and monitor S.M.A.R.T. enabled ATA and SCSI Hard Drives
 AddPackage sudo # Give certain users the ability to run some commands as root
 AddPackage texinfo # GNU documentation system for on-line information and printed output
 AddPackage usbutils # A collection of USB tools to query connected USB devices
+AddPackage words # A collection of International 'words' files for /usr/share/dict.
 
 # AUR
 AddPackage --foreign aconfmgr-git # A configuration manager for Arch Linux
 AddPackage --foreign systemd-boot-pacman-hook # Pacman hook to upgrade systemd-boot after systemd upgrade.
 AddPackage --foreign yay-bin # Yet another yogurt. Pacman wrapper and AUR helper written in go. Pre-compiled.
-AddPackage --foreign zenmonitor # Zen monitor is monitoring software for AMD Zen-based CPUs
 
 # Files
 
+CopyFile /.BUILDINFO
+CopyFile /.MTREE
+CopyFile /.PKGINFO
 CopyFile /boot/loader/entries/arch-lts.conf 755
 CopyFile /boot/loader/entries/arch.conf 755
 CopyFile /boot/loader/loader.conf 755
@@ -59,7 +65,10 @@ CopyFile /etc/makepkg.conf
 CopyFile /etc/mkinitcpio.conf
 CopyFile /etc/mkinitcpio.d/linux-lts.preset
 CopyFile /etc/mkinitcpio.d/linux.preset
-CopyFile /etc/modprobe.d/blacklist.conf
+CopyFile /etc/modules-load.d/nct6775.conf
+CopyFile /etc/nvme/hostid
+CopyFile /etc/nvme/hostnqn
+CopyFile /etc/pacman.conf
 CopyFile /etc/pacman.d/mirrorlist
 CopyFile /etc/passwd
 CopyFile /etc/passwd-
@@ -86,3 +95,4 @@ CreateLink /etc/systemd/system/multi-user.target.wants/systemd-resolved.service 
 CreateLink /etc/systemd/system/sysinit.target.wants/systemd-timesyncd.service /usr/lib/systemd/system/systemd-timesyncd.service
 CreateLink /etc/systemd/system/timers.target.wants/fstrim.timer /usr/lib/systemd/system/fstrim.timer
 CreateLink /etc/systemd/user/sockets.target.wants/dirmngr.socket /usr/lib/systemd/user/dirmngr.socket
+CreateLink /etc/systemd/user/sockets.target.wants/gcr-ssh-agent.socket /usr/lib/systemd/user/gcr-ssh-agent.socket

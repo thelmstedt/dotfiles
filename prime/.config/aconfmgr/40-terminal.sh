@@ -1,18 +1,27 @@
 # Packages
+AddPackage ack # A Perl-based grep replacement, aimed at programmers with large trees of heterogeneous source code
 AddPackage alacritty # A cross-platform, GPU-accelerated terminal emulator
 AddPackage awesome-terminal-fonts # fonts/icons for powerlines
+AddPackage bat # Cat clone with syntax highlighting and git integration
 AddPackage bc # An arbitrary precision calculator language
+AddPackage bcc-tools # BPF Compiler Collection - Tools
+AddPackage bottom # A graphical process/system monitor
 AddPackage dmidecode # Desktop Management Interface table related utilities
 AddPackage dos2unix # Text file format converter
 AddPackage exa # ls replacement
 AddPackage fd # Simple, fast and user-friendly alternative to find
 AddPackage file # File type identification utility
+AddPackage fio # Scriptable I/O tool for storage benchmarks and drive testing
 AddPackage findutils # GNU utilities to locate files
 AddPackage fzf # Command-line fuzzy finder
 AddPackage gawk # GNU version of awk
+AddPackage gnuplot # Plotting package which outputs to X11, PostScript, PNG, GIF, and others
 AddPackage grep # A string search utility
 AddPackage gzip # GNU compression utility
+AddPackage hdparm # A shell utility for manipulating Linux IDE drive/driver parameters
 AddPackage htop # Interactive process viewer
+AddPackage iftop # Display bandwidth usage on an interface
+AddPackage inetutils # A collection of common network programs
 AddPackage iotop # View I/O usage of processes
 AddPackage jq # Command-line JSON processor
 AddPackage lshw # A small tool to provide detailed information on the hardware configuration of the machine.
@@ -50,7 +59,8 @@ AddPackage zsh-completions # Additional completion definitions for Zsh
 AddPackage zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
 
 # AUR
-AddPackage --foreign emacs-pgtk-native-comp-git # GNU Emacs. Unofficial pgtk-nativecomp branch.
+AddPackage --foreign emacs-git # GNU Emacs. Development master branch.
+
 
 # Files
 

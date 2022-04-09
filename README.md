@@ -70,6 +70,8 @@ Create `/etc/modprobe.d/vfio.conf` with
 
 ## Evdev
 
+Software toggle for passing inputs between host/guest. Toggle with `ctrl-scrolllock`
+
 Keyboard: `/dev/input/by-id/usb-04d9_USB_Keyboard-event-kbd`
 
 Mouse: `/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse`
@@ -81,6 +83,12 @@ Mouse: `/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse`
         <qemu:arg value='-object'/>
         <qemu:arg value='input-linux,id=kbd1,evdev=/dev/input/by-id/usb-04d9_USB_Keyboard-event-kbd,grab_all=on,repeat=on'/>
     </qemu:commandline>
+
+## Controller
+
+Pass through the USB device explicitly, since we don't use controller on host.
+
+Note: for this to work we need to blacklist the `xpad` kernel module
 
 
 ## Pulseaudio
