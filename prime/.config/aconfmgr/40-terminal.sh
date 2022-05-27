@@ -8,6 +8,7 @@ AddPackage bcc-tools # BPF Compiler Collection - Tools
 AddPackage bottom # A graphical process/system monitor
 AddPackage dmidecode # Desktop Management Interface table related utilities
 AddPackage dos2unix # Text file format converter
+AddPackage emacs-nativecomp # The extensible, customizable, self-documenting real-time display editor with native compilation enabled
 AddPackage exa # ls replacement
 AddPackage fd # Simple, fast and user-friendly alternative to find
 AddPackage file # File type identification utility
@@ -59,7 +60,6 @@ AddPackage zsh-completions # Additional completion definitions for Zsh
 AddPackage zsh-syntax-highlighting # Fish shell like syntax highlighting for Zsh
 
 # AUR
-AddPackage --foreign emacs-git # GNU Emacs. Development master branch.
 
 
 # Files
