@@ -10,15 +10,34 @@ fi
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
 alias lower="tr '[:upper:]' '[:lower:]'"
 alias upper="tr '[:lower:]' '[:upper:]'"
-alias sumints="tr '\n' '+' | sed 's/+$/\n/' | bc"
+# shellcheck disable=SC2154
+alias sumcolumn="sed '\$a\' | tr '\n' '+' | sed 's/+$/\n/' | bc"
 
 # git
 alias g="git"
 alias gs="git status --short"
 alias e="emacsclient -t"
 
-# tf
+# terraform
 alias tf="terraform"
+
+# k8s
+alias k="kubectl"
+function ke() {
+    echo kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
+    kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
+}
+# for TmvTail
+function ktt() {
+    echo ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
+    ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
+}
+
+function de() {
+  echo docker exec -it "$1" "$2"
+  docker exec -it "$1" "$2"
+}
+
 
 # Maven
 alias -g md='MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n $MAVEN_OPTS " '
