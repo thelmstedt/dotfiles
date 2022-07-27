@@ -12,19 +12,19 @@ import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
 import           XMonad.Layout.ThreeColumns      (ThreeCol(..))
 
-import           XMonad.Hooks.DynamicLog         (shorten, PP(..), wrap, dynamicLogWithPP)
 import           XMonad.Hooks.FadeInactive       (fadeInactiveLogHook)
 import           XMonad.Hooks.ManageDocks        (avoidStruts, ToggleStruts(..))
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName          (setWMName)
+import           XMonad.Hooks.StatusBar         -- add status bar such as xmobar
+import           XMonad.Hooks.StatusBar.PP      -- configure status bar printing printing
 import           XMonad.Hooks.UrgencyHook        (NoUrgencyHook(..), withUrgencyHook)
 import           XMonad.Hooks.ManageHelpers      (isInProperty)
 
 import           XMonad.Actions.WindowBringer    (gotoMenuArgs')
+
 import           XMonad.Util.EZConfig            (additionalKeysP)
-
 import           XMonad.Util.Run                 (hPutStrLn)
-
 
 import           Data.List                       (elemIndex, isPrefixOf)
 import           Data.Ratio                      ((%))
@@ -32,16 +32,17 @@ import           Data.Ratio                      ((%))
 import           XMonad.Actions.WindowGo         (runOrRaise)
 
 import qualified XMonad.StackSet                 as W
+import qualified DBus.Client                     as DC
+import qualified XMonad.DBus                     as D
 
-import qualified DBus as D
-import qualified DBus.Client as D
-import qualified Codec.Binary.UTF8.String as UTF8
+--import qualified DBus as D
+--import qualified DBus.Client as D
+--import qualified Codec.Binary.UTF8.String as UTF8
 
 main :: IO ()
 main = do
-  dbus <- D.connectSession
-  D.requestName dbus (D.busName_ "org.xmonad.Log")
-    [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+  dbus <- D.connect
+  D.requestAccess dbus
   let config = desktopConfig {
        modMask              = mod4Mask
        , layoutHook         = layoutHook'
@@ -51,19 +52,16 @@ main = do
        , normalBorderColor  = "#cccccc"
        , startupHook        = myStartupHook
        , manageHook         = manageHook' <+> manageHook desktopConfig
-       , logHook            = fadeHook <+> dynamicLogWithPP (myLogHook dbus)
        , workspaces = myWorkspaces
        }  `additionalKeysP` keys'
-    in xmonad $ withUrgencyHook NoUrgencyHook $ config
-
--- unused for now
-fadeHook :: X ()
-fadeHook = fadeInactiveLogHook fadeAmount
-    where fadeAmount = 0.95
+    in xmonad . withEasySB(polybarSB dbus) defToggleStrutsKey $ config
 
 myStartupHook = do
   setWMName "LG3D"
   spawn "$HOME/.config/polybar/launch.sh"
+
+polybarSB dbusConnection = statusBarGeneric "polybar -r" lh
+  where lh = dynamicLogWithPP $ myLogHook dbusConnection
 
 myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+" ]
 
@@ -71,8 +69,8 @@ layoutHook' =
   avoidStruts $ myBorders $ standardLayouts
   where
     -- todo is this doing more than smartborders?
-    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
---    myBorders = smartBorders
+--    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
+    myBorders = smartBorders
     standardLayouts = full ||| tiled ||| Mirror tiled ||| threeColumn
     full = smartBorders $ spacing 0 $ Full
     tiled   = spacing 0 $ Tall nmaster delta ratio
@@ -164,28 +162,15 @@ pur2      = "#5b51c9"
 blue2     = "#2266d0"
 
 
-myLogHook :: D.Client -> PP
+myLogHook :: DC.Client -> PP
 myLogHook dbus = def
-    { ppOutput = dbusOutput dbus
+    { ppOutput = D.send dbus
     , ppCurrent = wrap ("%{F" ++ blue2 ++ "} ") "%{F-}"
     , ppVisible = wrap ("%{F" ++ blue ++ "} ") "%{F-}"
     , ppUrgent = wrap ("%{F" ++ red ++ "} ") "%{F-}"
     , ppHidden = wrap " " ""
     , ppWsSep = ""
     , ppSep = " | "
-    , ppTitle = shorten 100
+    , ppTitle = shorten 200
     , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
 }
-
--- Emit a DBus signal on log updates
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-    let signal = (D.signal objectPath interfaceName memberName) {
-            D.signalBody = [D.toVariant $ UTF8.decodeString str]
-        }
-    D.emit dbus signal
-  where
-    objectPath = D.objectPath_ "/org/xmonad/Log"
-    interfaceName = D.interfaceName_ "org.xmonad.Log"
-    memberName = D.memberName_ "Update"
-

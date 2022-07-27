@@ -7,7 +7,6 @@ AddPackage file-roller # Create and modify archives
 AddPackage gnome-calculator # GNOME Scientific calculator
 AddPackage gnome-keyring # Stores passwords and encryption keys
 AddPackage gucharmap # Gnome Unicode Charmap
-AddPackage hardinfo # A system information and benchmark tool.
 AddPackage haskell-dbus # A client library for the D-Bus IPC system
 AddPackage luit # Filter that can be run between an arbitrary application and a UTF-8 terminal emulator
 AddPackage mplayer # Media player for Linux
@@ -18,6 +17,7 @@ AddPackage noto-fonts-cjk # Google Noto CJK fonts
 AddPackage noto-fonts-emoji # Google Noto emoji fonts
 AddPackage noto-fonts-extra # Google Noto TTF fonts - additional variants
 AddPackage openconnect # Open client for Cisco AnyConnect VPN
+AddPackage polybar # A fast and easy-to-use status bar
 AddPackage psensor # A graphical hardware temperature monitor for Linux
 AddPackage rofi # A window switcher, application launcher and dmenu replacement
 AddPackage seahorse # GNOME application for managing PGP keys.
@@ -85,18 +85,19 @@ AddPackage xorg-xwininfo # Command-line utility to print information about windo
 AddPackage xorg-xwud # X Window System image undumping utility
 
 # AUR
-AddPackage --foreign polybar # A fast and easy-to-use status bar
+AddPackage --foreign hardinfo # A system information and benchmark tool.
 AddPackage --foreign xbanish # Hide the mouse cursor when typing
 AddPackage --foreign xlayoutdisplay # Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement.
-AddPackage --foreign xmonad-log # DBus monitor for xmonad log events
+AddPackage --foreign xmonad-dbus-git # DBus monitor for xmonad log events
 
 # Files
 CopyFile /etc/X11/xorg.conf
 
 # Services
-CreateLink /etc/systemd/system/multi-user.target.wants/NetworkManager.service /usr/lib/systemd/system/NetworkManager.service
 CreateLink /etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service /usr/lib/systemd/system/NetworkManager-dispatcher.service
+CreateLink /etc/systemd/system/multi-user.target.wants/NetworkManager.service /usr/lib/systemd/system/NetworkManager.service
 CreateLink /etc/systemd/system/network-online.target.wants/NetworkManager-wait-online.service /usr/lib/systemd/system/NetworkManager-wait-online.service
+CreateLink /etc/systemd/user/sockets.target.wants/gnome-keyring-daemon.socket /usr/lib/systemd/user/gnome-keyring-daemon.socket
 CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-browser.socket /usr/lib/systemd/user/gpg-agent-browser.socket
 CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-extra.socket /usr/lib/systemd/user/gpg-agent-extra.socket
 CreateLink /etc/systemd/user/sockets.target.wants/gpg-agent-ssh.socket /usr/lib/systemd/user/gpg-agent-ssh.socket

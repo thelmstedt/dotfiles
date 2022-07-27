@@ -107,7 +107,7 @@ modules-right =     spotify pulse_sink date
 
 [module/xmonad]
 type = custom/script
-exec = xmonad-log
+exec = xmonad-dbus
 tail = true
 
 
