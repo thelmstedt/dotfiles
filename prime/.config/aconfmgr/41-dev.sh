@@ -6,6 +6,7 @@ AddPackage dbus-python # Python bindings for DBUS
 AddPackage cargo-watch # Utility for Cargo to compile projects when sources change
 AddPackage crictl # A CLI for CRI-compatible container runtimes
 AddPackage critest # A benchmarking CLI for CRI-compatible container runtimes
+AddPackage difftastic # An experimental diff tool that compares files based on their syntax
 AddPackage docker # Pack, ship and run any application as a lightweight container
 AddPackage docker-compose # Fast, isolated development environments using Docker
 AddPackage flameshot # Powerful yet simple to use screenshot software
@@ -37,6 +38,7 @@ AddPackage packer # tool for creating identical machine images for multiple plat
 AddPackage patch # A utility to apply patch files to original sources
 AddPackage perf # Linux kernel performance auditing tool
 AddPackage postgresql # Sophisticated object-relational DBMS
+AddPackage postgresql-old-upgrade # PostgreSQL build for migrating between major versions with pg_upgrade
 AddPackage pyenv # Easily switch between multiple versions of Python
 AddPackage python-pip # The PyPA recommended tool for installing Python packages
 AddPackage python-pipenv # Sacred Marriage of Pipfile, Pip, & Virtualenv.

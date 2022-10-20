@@ -20,7 +20,7 @@ utmp:x:996:
 audio:x:995:brltty,tim
 disk:x:994:
 input:x:993:brltty,tim
-kvm:x:992:libvirt-qemu,tim
+kvm:x:992:libvirt-qemu,qemu,tim
 lp:x:991:
 optical:x:990:
 render:x:989:
@@ -73,3 +73,5 @@ redis:x:959:
 adbusers:x:958:
 tss:x:957:
 libvirt-qemu:x:956:
+qemu:x:955:
+rabbitmq:x:197:

@@ -4,11 +4,10 @@
 }
 
 
-#TabsToolbar { visibility: collapse !important; } /* Hide Firefox's default tab bar. */
 
-#sidebar-header {
-    display: none;
-}
-#sidebar-splitter {
-    width: 0 !important;
-}
+/*#sidebar-header {*/
+/*    display: none;*/
+/*}*/
+/*#sidebar-splitter {*/
+/*    width: 0 !important;*/
+/*}*/

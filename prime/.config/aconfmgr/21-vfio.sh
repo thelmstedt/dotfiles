@@ -3,7 +3,7 @@ AddPackage dnsmasq # Lightweight, easy to configure DNS forwarder and DHCP serve
 AddPackage edk2-ovmf # Open Virtual Machine Firmware to support firmware for Virtual Machines
 AddPackage iptables-nft # Linux kernel packet control tool (using nft interface)
 AddPackage libvirt # API for controlling virtualization engines (openvz,kvm,qemu,virtualbox,xen,etc)
-AddPackage qemu # A generic and open source machine emulator and virtualizer
+AddPackage qemu-desktop # A QEMU setup for desktop environments
 AddPackage virt-manager # Desktop user interface for managing virtual machines
 
 # AUR

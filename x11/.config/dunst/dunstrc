@@ -207,7 +207,7 @@
     # Maximum amount of notifications kept in history
     history_length = 20
 
-    history = super+grave
+    # history = super+grave
 
     ### Misc/Advanced ###
 

@@ -7,6 +7,7 @@ IgnorePath '/lost+found/*'
 IgnorePath '/opt/*'
 IgnorePath '/run/*'
 IgnorePath '/srv/*'
+IgnorePath '/tmv/*'
 IgnorePath '/usr/*'
 IgnorePath '/var/*'
 

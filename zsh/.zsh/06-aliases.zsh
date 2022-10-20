@@ -12,6 +12,8 @@ alias lower="tr '[:upper:]' '[:lower:]'"
 alias upper="tr '[:lower:]' '[:upper:]'"
 # shellcheck disable=SC2154
 alias sumcolumn="sed '\$a\' | tr '\n' '+' | sed 's/+$/\n/' | bc"
+alias pipesize="wc -c |  numfmt --to iec --format '%8.4f'"
+
 
 # git
 alias g="git"
@@ -24,13 +26,13 @@ alias tf="terraform"
 # k8s
 alias k="kubectl"
 function ke() {
-    echo kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
-    kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
+    echo kubectl exec --stdin --tty -n "$1" "$2" -- "${@:3}"
+    kubectl exec --stdin --tty -n "$1" "$2" -- "${@:3}"
 }
 # for TmvTail
 function ktt() {
-    echo ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
-    ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
+    echo ke "$1" "$2" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
+    ke "$1" "$2" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
 }
 
 function de() {

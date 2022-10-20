@@ -30,3 +30,4 @@ allprodmappings
 /logomatch/tests/es/dumps/
 full_sync_debug_cache.json
 system/local_media
+profile.pstats

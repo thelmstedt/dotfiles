@@ -47,6 +47,14 @@
       auto-save-interval 300            ; number of keystrokes between auto-saves (default: 300)
       )
 
+(setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+
+(windmove-default-keybindings 's)
+
+
+
+
 (add-hook 'before-save-hook
           (lambda ()
             (unless (eq major-mode 'org-mode)
@@ -63,12 +71,15 @@
  '(global-visual-line-mode t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
+ '(initial-scratch-message "")
  '(menu-bar-mode nil)
  '(mouse-autoselect-window t)
+ '(windmove-default-keybindings 's)
+ '(package-selected-packages
+   ;; ace-window
+   '(haskell-mode yaml-mode json-mode zop-to-char zenburn-theme which-key volatile-highlights undo-tree super-save smex smartrep smartparens rainbow-delimiters projectile popup paredit operate-on-number nlinum neotree move-text markdown-mode magit imenu-anywhere ido-completing-read+ ibuffer-vc hl-todo guru-mode git-timemachine git-modes gist fuzzy fullframe flycheck find-file-in-project expand-region editorconfig easy-kill discover-my-major diminish diff-hl deft crux browse-kill-ring anzu ag))
  '(tool-bar-mode nil)
- '(visible-bell nil)
- '(initial-scratch-message "")
-)
+ '(visible-bell nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

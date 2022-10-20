@@ -98,3 +98,6 @@
 
 [interactive]
     diffFilter = delta --color-only
+
+[diff]
+	external = difft

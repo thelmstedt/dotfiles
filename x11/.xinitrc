@@ -20,7 +20,7 @@ xset m 4/3 0 # mouse acceleration
 [ -x "$(command -v nm-applet)" ] && nm-applet &
 
 # default apps
-[ -x "$(command -v dropbox)" ] && dropbox &
+#[ -x "$(command -v dropbox)" ] && dropbox &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
@@ -41,7 +41,7 @@ fi
 [[ -s "$HOME/.machineconf" ]] && source "$HOME/.machineconf"
 
 ## Recompile to catch changes in ghc/haskell-*
-xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile)
+xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile) || true
 
 exec xmonad
 

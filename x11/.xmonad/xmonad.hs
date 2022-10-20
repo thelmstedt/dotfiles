@@ -171,6 +171,6 @@ myLogHook dbus = def
     , ppHidden = wrap " " ""
     , ppWsSep = ""
     , ppSep = " | "
-    , ppTitle = shorten 200
+    , ppTitle = shorten 100
     , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
 }
