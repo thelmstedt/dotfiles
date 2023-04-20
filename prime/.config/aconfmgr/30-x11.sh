@@ -7,7 +7,6 @@ AddPackage file-roller # Create and modify archives
 AddPackage gnome-calculator # GNOME Scientific calculator
 AddPackage gnome-keyring # Stores passwords and encryption keys
 AddPackage gucharmap # Gnome Unicode Charmap
-AddPackage haskell-dbus # A client library for the D-Bus IPC system
 AddPackage luit # Filter that can be run between an arbitrary application and a UTF-8 terminal emulator
 AddPackage mplayer # Media player for Linux
 AddPackage network-manager-applet # Applet for managing network connections
@@ -34,8 +33,6 @@ AddPackage xcompmgr # Composite Window-effects manager for X.org
 AddPackage xdo # Utility for performing actions on windows in X
 AddPackage xdotool # Command-line X11 automation tool
 AddPackage xf86-video-vesa # X.org vesa video driver
-AddPackage xmonad # Lightweight X11 tiled window manager written in Haskell
-AddPackage xmonad-contrib # Add-ons for xmonad
 AddPackage xorg-bdftopcf # Convert X font from Bitmap Distribution Format to Portable Compiled Format
 AddPackage xorg-docs # X.org documentations
 AddPackage xorg-font-util # X.Org font utilities
@@ -88,7 +85,6 @@ AddPackage xorg-xwud # X Window System image undumping utility
 AddPackage --foreign hardinfo # A system information and benchmark tool.
 AddPackage --foreign xbanish # Hide the mouse cursor when typing
 AddPackage --foreign xlayoutdisplay # Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement.
-AddPackage --foreign xmonad-dbus-git # DBus monitor for xmonad log events
 
 # Files
 CopyFile /etc/X11/xorg.conf

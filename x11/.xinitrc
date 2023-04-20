@@ -40,8 +40,5 @@ fi
 ## machine specific
 [[ -s "$HOME/.machineconf" ]] && source "$HOME/.machineconf"
 
-## Recompile to catch changes in ghc/haskell-*
-xmonad --recompile || (sudo ghc-pkg recache && xmonad --recompile)
-
-exec xmonad
+exec xmonad-testing
 

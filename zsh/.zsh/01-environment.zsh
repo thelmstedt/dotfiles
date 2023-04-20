@@ -6,7 +6,8 @@
 ##
 ## paths
 ##
-export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$PATH
+export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH
+[[ -s "$HOME/.bin" ]] && PATH=$PATH:$HOME/.bin
 [[ -s "$HOME/bin" ]] && PATH=$PATH:$HOME/bin
 [[ -s "$HOME/.local/bin" ]] && PATH=$PATH:$HOME/.local/bin
 

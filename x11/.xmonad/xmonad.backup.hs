@@ -1,4 +1,7 @@
-import           ResizableSpacing
+--
+-- a pre-cabalized xmonad, with no dbus - just in case things crap out and we need quick fix
+-- we would just remove ./build, and copy this to xmonad.hs
+--
 
 import           XMonad                          hiding ((|||))
 import           XMonad.Config.Desktop           (desktopConfig)
@@ -32,29 +35,21 @@ import           Data.Ratio                      ((%))
 import           XMonad.Actions.WindowGo         (runOrRaise)
 
 import qualified XMonad.StackSet                 as W
-import qualified DBus.Client                     as DC
-import qualified XMonad.DBus                     as D
-
---import qualified DBus as D
---import qualified DBus.Client as D
---import qualified Codec.Binary.UTF8.String as UTF8
 
 main :: IO ()
 main = do
-  dbus <- D.connect
-  D.requestAccess dbus
   let config = desktopConfig {
        modMask              = mod4Mask
        , layoutHook         = layoutHook'
        , terminal           = "alacritty"
        , borderWidth        = 1
        , focusedBorderColor = "#cd0000"
-       , normalBorderColor  = "#cccccc"
+       , normalBorderColor  = "#000000"
        , startupHook        = myStartupHook
        , manageHook         = manageHook' <+> manageHook desktopConfig
        , workspaces = myWorkspaces
        }  `additionalKeysP` keys'
-    in xmonad . withEasySB(polybarSB dbus) defToggleStrutsKey $ config
+      in xmonad $ config
 
 myStartupHook = do
   setWMName "LG3D"
@@ -71,9 +66,10 @@ layoutHook' =
     -- todo is this doing more than smartborders?
 --    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
     myBorders = smartBorders
-    standardLayouts = full ||| tiled ||| Mirror tiled ||| threeColumn
+    standardLayouts = full ||| tiled ||| reflectTiled ||| Mirror tiled ||| threeColumn
     full = smartBorders $ spacing 0 $ Full
     tiled   = spacing 0 $ Tall nmaster delta ratio
+    reflectTiled = named "Reflect Tall" $ reflectHoriz $ tiled
     threeColumn = spacing 0 $ named "3col" $ ThreeCol 1 (3/100) (1/3)
     nmaster = 1
     delta   = 3/100
@@ -108,17 +104,15 @@ keys' =
     , ("M-S-n", spawn "thunar")
     , ("M-b", sendMessage ToggleStruts)
 
-    , ("M-S-r", spawn "xmonad --recompile && xmonad --restart && . /home/tim/.machineconf")
+    , ("M-S-r", spawn "xmonad-testing --recompile && xmonad-testing --restart && . /home/tim/.machineconf")
     , ("C-M-S-l", spawn "slock")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
     , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
-    , ("M-<F4>", sendMessage $ JumpToLayout "3col")
-    , ("M-<F5>", sendMessage $ JumpToLayout "circle")
-
-    , ("M-<F11>", sendMessage $ IncSpacing 15)
-    , ("M-<F12>", sendMessage $ DecSpacing 15)
+    , ("M-<F4>", sendMessage $ JumpToLayout "Reflect Tall")
+    , ("M-<F5>", sendMessage $ JumpToLayout "3col")
+    , ("M-<F6>", sendMessage $ JumpToLayout "circle")
 
     , ("M-<Pause>", spawn "pps")
     , ("<Pause>", spawn "pps")
@@ -162,15 +156,15 @@ pur2      = "#5b51c9"
 blue2     = "#2266d0"
 
 
-myLogHook :: DC.Client -> PP
+-- myLogHook :: DC.Client -> PP
 myLogHook dbus = def
-    { ppOutput = D.send dbus
-    , ppCurrent = wrap ("%{F" ++ blue2 ++ "} ") "%{F-}"
+    {
+    ppCurrent = wrap ("%{F" ++ blue2 ++ "} ") "%{F-}"
     , ppVisible = wrap ("%{F" ++ blue ++ "} ") "%{F-}"
     , ppUrgent = wrap ("%{F" ++ red ++ "} ") "%{F-}"
     , ppHidden = wrap " " ""
     , ppWsSep = ""
     , ppSep = " | "
-    , ppTitle = shorten 200
+    , ppTitle = shorten 100
     , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
 }
