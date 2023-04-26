@@ -4,45 +4,31 @@ import           XMonad                          hiding ((|||))
 import           XMonad.Config.Desktop           (desktopConfig)
 
 import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
-import           XMonad.Layout.IM                (Property (..), withIM)
-import           XMonad.Layout.LayoutCombinators (JumpToLayout (..), (|||))
+import           XMonad.Layout.LayoutCombinators ((|||))
 import           XMonad.Layout.Named             (named)
 import           XMonad.Layout.NoBorders
-import           XMonad.Layout.PerWorkspace      (onWorkspace)
 import           XMonad.Layout.Reflect           (reflectHoriz)
 import           XMonad.Layout.ThreeColumns      (ThreeCol(..))
 
-import           XMonad.Hooks.FadeInactive       (fadeInactiveLogHook)
 import           XMonad.Hooks.ManageDocks        (avoidStruts, ToggleStruts(..))
 import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
 import           XMonad.Hooks.SetWMName          (setWMName)
 import           XMonad.Hooks.StatusBar         -- add status bar such as xmobar
 import           XMonad.Hooks.StatusBar.PP      -- configure status bar printing printing
-import           XMonad.Hooks.UrgencyHook        (NoUrgencyHook(..), withUrgencyHook)
 import           XMonad.Hooks.ManageHelpers      (isInProperty)
 
 import           XMonad.Actions.WindowBringer    (gotoMenuArgs')
 
 import           XMonad.Util.EZConfig            (additionalKeysP)
-import           XMonad.Util.Run                 (hPutStrLn)
-
-import           Data.List                       (elemIndex, isPrefixOf)
-import           Data.Ratio                      ((%))
-
-import           XMonad.Actions.WindowGo         (runOrRaise)
 
 import qualified XMonad.StackSet                 as W
-import qualified DBus.Client                     as DC
 import qualified XMonad.DBus                     as D
---import qualified DBus as D
---import qualified DBus.Client as D
---import qualified Codec.Binary.UTF8.String as UTF8
 
 main :: IO ()
 main = do
   dbus <- D.connect
-  D.requestAccess dbus
-  let config = desktopConfig {
+  _ <- D.requestAccess dbus
+  let myConfig = desktopConfig {
        modMask              = mod4Mask
        , layoutHook         = layoutHook'
        , terminal           = "alacritty"
@@ -53,8 +39,7 @@ main = do
        , manageHook         = manageHook' <+> manageHook desktopConfig
        , workspaces = myWorkspaces
        }  `additionalKeysP` keys'
-    in xmonad . withEasySB(polybarSB dbus) defToggleStrutsKey $ config
---      in xmonad $ config
+    in xmonad . withEasySB(polybarSB dbus) defToggleStrutsKey $ myConfig
 
 myStartupHook = do
   setWMName "LG3D"
@@ -71,11 +56,12 @@ layoutHook' =
     -- todo is this doing more than smartborders?
 --    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
     myBorders = smartBorders
-    standardLayouts = full ||| tiled ||| reflectTiled ||| Mirror tiled ||| threeColumn
+    standardLayouts = full ||| tiled ||| reflectTiled ||| Mirror tiled ||| threeColumn ||| circle
     full = smartBorders $ spacing 0 $ Full
     tiled   = spacing 0 $ Tall nmaster delta ratio
     reflectTiled = named "Reflect Tall" $ reflectHoriz $ tiled
     threeColumn = spacing 0 $ named "3col" $ ThreeCol 1 (3/100) (1/3)
+    circle = named "circle" $ circleSimpleDefaultResizable
     nmaster = 1
     delta   = 3/100
     ratio   = 1/2
@@ -109,7 +95,7 @@ keys' =
     , ("M-S-n", spawn "thunar")
     , ("M-b", sendMessage ToggleStruts)
 
-    , ("M-S-r", spawn "xmonad --recompile && xmonad --restart && . /home/tim/.machineconf")
+    , ("M-S-r", spawn "xmonad-x86_64-linux --recompile && xmonad-x86_64-linux --restart && . /home/tim/.machineconf")
     , ("C-M-S-l", spawn "slock")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
@@ -132,39 +118,15 @@ keys' =
     , ("<Scroll_lock>", spawn "sps")
     ] ++
     [ (otherModMasks ++ "M-" ++ key, action tag)
-      | (tag, key)  <- zip myWorkspaces ((map show [1,2,3,4,5,6,7,8,9,0]) ++ ["-", "="])
+      | (tag, key)  <- zip myWorkspaces ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=" ]
       , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
       , ("S-", windows . W.shift)]
     ] ++
     [ (mask ++ "M-" ++ [key], screenWorkspace scr >>= flip whenJust (windows . action))
---         | (key, scr)  <- zip "qwe" [0,1,2] -- specifically work triple monitors
          | (key, scr)  <- zip "we" [0,1] -- 2 monitors
          , (action, mask) <- [ (W.view, "") , (W.shift, "S-")]
     ]
 
-fg        = "#ebdbb2"
-bg        = "#282828"
-gray      = "#a89984"
-bg1       = "#3c3836"
-bg2       = "#505050"
-bg3       = "#665c54"
-bg4       = "#7c6f64"
-
-green     = "#b8bb26"
-darkgreen = "#98971a"
-red       = "#fb4934"
-darkred   = "#cc241d"
-yellow    = "#fabd2f"
-blue      = "#83a598"
-purple    = "#d3869b"
-aqua      = "#8ec07c"
-white     = "#eeeeee"
-
-pur2      = "#5b51c9"
-blue2     = "#2266d0"
-
-
--- myLogHook :: DC.Client -> PP
 myLogHook dbus = def
     {
     ppOutput = D.send dbus
@@ -174,6 +136,11 @@ myLogHook dbus = def
     , ppHidden = wrap " " ""
     , ppWsSep = ""
     , ppSep = " | "
-    , ppTitle = shorten 200
+    , ppTitle = shorten 100
     , ppLayout = wrap ("%{F" ++ blue2 ++ "}") "%{F-}"
-}
+} where
+  red       = "#fb4934"
+  blue      = "#83a598"
+  blue2     = "#2266d0"
+
+

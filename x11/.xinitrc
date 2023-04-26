@@ -40,5 +40,5 @@ fi
 ## machine specific
 [[ -s "$HOME/.machineconf" ]] && source "$HOME/.machineconf"
 
-exec xmonad-testing
+exec xmonad-x86_64-linux
 
