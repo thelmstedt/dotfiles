@@ -3,4 +3,6 @@
 127.0.0.1 	localhost
 ::1		localhost
 127.0.0.1       prime.localdomain prime local.tmv.io local.servers.tmv.cloud
-127.0.0.1	local.tmv.io
+127.0.0.1	local.tmv.io grpc.local.tmv.io host.docker.internal
+
+127.0.0.1 vpc-ipa-plat-es-xwedbagaq4yvrt6oiscx5x72s4.ap-southeast-2.es.amazonaws.com

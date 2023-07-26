@@ -13,8 +13,8 @@ or other application using the libvirt API.
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit='KiB'>8388608</memory>
-  <currentMemory unit='KiB'>8388608</currentMemory>
+  <memory unit='KiB'>16777216</memory>
+  <currentMemory unit='KiB'>16777216</currentMemory>
   <vcpu placement='static'>8</vcpu>
   <iothreads>1</iothreads>
   <cputune>
@@ -177,20 +177,29 @@ or other application using the libvirt API.
     <input type='tablet' bus='usb'>
       <address type='usb' bus='0' port='1'/>
     </input>
-    <input type='mouse' bus='virtio'>
-      <address type='pci' domain='0x0000' bus='0x0c' slot='0x00' function='0x0'/>
+    <input type='evdev'>
+      <source dev='/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse'/>
     </input>
-    <input type='keyboard' bus='virtio'>
-      <address type='pci' domain='0x0000' bus='0x0b' slot='0x00' function='0x0'/>
+    <input type='evdev'>
+      <source dev='/dev/input/by-id/usb-04d9_USB_Keyboard-event-kbd' grab='all' repeat='on' grabToggle='ctrl-scrolllock'/>
     </input>
-    <input type='keyboard' bus='ps2'/>
-    <input type='mouse' bus='ps2'/>
+    <input type='mouse' bus='virtio'/>
+    V
+    <graphics type='spice'>
+      <listen type='none'/>
+      <image compression='off'/>
+      <gl enable='no'/>
+    </graphics>
     <sound model='ich9'>
       <codec type='micro'/>
       <audio id='1'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x1b' function='0x0'/>
     </sound>
     <audio id='1' type='pulseaudio' serverName='/run/user/1000/pulse/native'/>
+    <video>
+      <model type='cirrus' vram='16384' heads='1' primary='yes'/>
+      <address type='pci' domain='0x0000' bus='0x08' slot='0x02' function='0x0'/>
+    </video>
     <hostdev mode='subsystem' type='pci' managed='yes'>
       <source>
         <address domain='0x0000' bus='0x09' slot='0x00' function='0x0'/>
@@ -203,28 +212,24 @@ or other application using the libvirt API.
       </source>
       <address type='pci' domain='0x0000' bus='0x0a' slot='0x00' function='0x0'/>
     </hostdev>
-    <hostdev mode='subsystem' type='usb' managed='yes'>
-      <source>
-        <vendor id='0x046d'/>
-        <product id='0xc21f'/>
-      </source>
-      <address type='usb' bus='0' port='4'/>
-    </hostdev>
     <redirdev bus='usb' type='spicevmc'>
       <address type='usb' bus='0' port='2'/>
     </redirdev>
     <redirdev bus='usb' type='spicevmc'>
       <address type='usb' bus='0' port='3'/>
     </redirdev>
+    <watchdog model='itco' action='reset'/>
     <memballoon model='virtio'>
       <address type='pci' domain='0x0000' bus='0x05' slot='0x00' function='0x0'/>
     </memballoon>
   </devices>
   <qemu:commandline>
+<!--
     <qemu:arg value='-object'/>
     <qemu:arg value='input-linux,id=mouse1,evdev=/dev/input/by-id/usb-Logitech_USB_Receiver-if02-event-mouse'/>
     <qemu:arg value='-object'/>
     <qemu:arg value='input-linux,id=kbd1,evdev=/dev/input/by-id/usb-04d9_USB_Keyboard-event-kbd,grab_all=on,repeat=on,grab-toggle=ctrl-scrolllock'/>
+-->
     <qemu:env name='QEMU_AUDIO_DRV' value='pa'/>
     <qemu:env name='QEMU_PA_SAMPLES' value='8192'/>
     <qemu:env name='QEMU_AUDIO_TIMER_PERIOD' value='99'/>
