@@ -95,13 +95,13 @@ keys' =
     , ("M-S-n", spawn "thunar")
     , ("M-b", sendMessage ToggleStruts)
 
-    , ("M-S-r", spawn "xmonad-x86_64-linux --recompile && xmonad-x86_64-linux --restart && . /home/tim/.machineconf")
+    , ("M-S-r", spawn "xmonad-x86_64-linux --restart && . /home/tim/.machineconf")
     , ("C-M-S-l", spawn "slock")
 
     , ("M-<F1>", sendMessage $ JumpToLayout "Full")
     , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
     , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
-    , ("M-<F4>", sendMessage $ JumpToLayout "Reflect Tall")
+    , ("M-<F4>", sendMessage $ JumpToLayout "Reflect Tall")``
     , ("M-<F5>", sendMessage $ JumpToLayout "3col")
     , ("M-<F6>", sendMessage $ JumpToLayout "circle")
 
