@@ -16,7 +16,7 @@
 (global-set-key (kbd "C-c x") 'execute-extended-command)
 (global-set-key (kbd "C-h a") 'apropos)  ;; Help should search more than just commands
 (global-set-key (kbd "C-c e") 'esk-eval-and-replace)  ;; Should be able to eval-and-replace anywhere.
-(global-set-key "\C-w" 'backward-kill-word)
+(global-set-key "\C-w" 'backward-delete-word)
 (global-set-key "\C-c\C-j" 'join-line)
 (global-set-key "\M- " 'just-one-space) ;; useful after joinline
 (global-set-key [f5] 'call-last-kbd-macro)
@@ -25,13 +25,30 @@
 (global-set-key (kbd "s-S") 'save-some-buffers) ;; save all
 
 
+(let ((map minibuffer-local-map))
+  (define-key map "\C-w"   'backward-delete-word)
+)
+
+
+(defun delete-word (arg)
+"Delete characters forward until encountering the end of a word.
+With argument, do this that many times."
+(interactive "p")
+(delete-region (point) (progn (forward-word arg) (point))))
+
+(defun backward-delete-word (arg)
+"Delete characters backward until encountering the end of a word.
+With argument, do this that many times."
+(interactive "p")
+(delete-word (- arg)))
+
 (defun comment-sexp ()
   "Comment out the sexp at point."
   (interactive)
   (save-excursion
     (mark-sexp)
     (paredit-comment-dwim)))
-(global-set-key "\M-/" 'comment-sexp) 
+(global-set-key "\M-/" 'comment-sexp)
 
 (defalias 'qrr 'query-replace-regexp)
 

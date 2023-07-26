@@ -4,6 +4,12 @@
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 
+;(add-hook 'org-shiftup-final-hook 'windmove-up)
+;(add-hook 'org-shiftleft-final-hook 'windmove-left)
+;(add-hook 'org-shiftdown-final-hook 'windmove-down)
+;(add-hook 'org-shiftright-final-hook 'windmove-right)
+;(setq org-support-shift-select 'always)
+;(setq org-replace-disputed-keys t)
 
 ;; general
 (setq org-hide-leading-stars t
@@ -28,6 +34,14 @@
 ;; export
 ;; (setq org-export-with-toc 4
 ;;       org-export-headline-levels 4)
+
+(defun org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
+   "/DONE" 'tree))
 
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
