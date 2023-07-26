@@ -1,3 +1,5 @@
+#!/bin/bash
+
 xmodmap ~/.xmodmap
 
 xrdb -merge ~/.Xresources
@@ -21,6 +23,7 @@ xset m 4/3 0 # mouse acceleration
 
 # default apps
 [ -x "$(command -v dropbox)" ] && dropbox &
+[ -x "$(command -v 1password)" ] && 1password &
 
 # cargo culting xmonad/java fixes
 export _JAVA_AWT_WM_NONREPARENTING=1
