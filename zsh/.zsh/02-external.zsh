@@ -2,6 +2,9 @@
 ## z - jump around
 ##
 [[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+if [[ -r "$HOME/.zsh/lib/fz.sh" ]] ; then
+  source $HOME/.zsh/lib/fz.sh
+fi
 
 ##
 ## starship - prompt
