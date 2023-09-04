@@ -7,7 +7,7 @@ bindkey -e # emacs
 ##
 ## delete forward/backward treating 'words' as alphanumeric + $WORDCHARS
 ##
-export WORDCHARS='*?_-.[]~=&;!#$%^(){}<>\|'
+export WORDCHARS='*?_-.[]~&;!#$%^(){}<>\|'
 autoload -Uz select-word-style
 select-word-style normal
 
