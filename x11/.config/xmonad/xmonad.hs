@@ -1,30 +1,32 @@
-import           ResizableSpacing
-
 import           XMonad                          hiding ((|||))
-import           XMonad.Config.Desktop           (desktopConfig)
-
-import           XMonad.Layout.DecorationMadness (circleSimpleDefaultResizable)
-import           XMonad.Layout.LayoutCombinators ((|||))
-import           XMonad.Layout.Named             (named)
-import           XMonad.Layout.NoBorders
-import           XMonad.Layout.Reflect           (reflectHoriz)
-import           XMonad.Layout.ThreeColumns      (ThreeCol(..))
-import           XMonad.Layout.TrackFloating
-import           XMonad.Hooks.ManageDocks        (avoidStruts, ToggleStruts(..))
-import           XMonad.Hooks.ManageHelpers      (doFullFloat, isFullscreen)
-import           XMonad.Hooks.RefocusLast        (refocusLastLayoutHook)
-import           XMonad.Hooks.SetWMName          (setWMName)
-import           XMonad.Hooks.StatusBar         -- add status bar such as xmobar
-import           XMonad.Hooks.StatusBar.PP      -- configure status bar printing printing
-import           XMonad.Hooks.ManageHelpers      (isInProperty)
-
 import           XMonad.Actions.CopyWindow
-import           XMonad.Actions.WindowBringer    (gotoMenuArgs', bringMenuArgs')
+import           XMonad.Actions.WindowBringer           (gotoMenuArgs', bringMenuArgs')
+import           XMonad.Config.Desktop                  (desktopConfig)
+import           XMonad.Hooks.ManageDocks               (avoidStruts, ToggleStruts(..))
+import           XMonad.Hooks.ManageHelpers             (doFullFloat, isFullscreen)
+import           XMonad.Hooks.ManageHelpers             (isInProperty)
+import           XMonad.Hooks.RefocusLast               (refocusLastLayoutHook)
+import           XMonad.Hooks.SetWMName                 (setWMName)
+import           XMonad.Hooks.StatusBar
+import           XMonad.Hooks.StatusBar.PP
+import           XMonad.Layout.DecorationMadness        (circleSimpleDefaultResizable)
+import           XMonad.Layout.LayoutCombinators        ((|||))
+import           XMonad.Layout.NoBorders
+import           XMonad.Layout.ThreeColumns             (ThreeCol(..))
+import           XMonad.Layout.TrackFloating
+import           XMonad.Util.EZConfig                   (additionalKeysP)
+import           XMonad.Layout.MultiToggle              (mkToggle, single, EOT(EOT), (??))
+import           XMonad.Layout.MultiToggle.Instances    (StdTransformers(NBFULL, MIRROR, NOBORDERS))
+import           XMonad.Layout.Named
+import           XMonad.Layout.Reflect
+import           XMonad.Layout.Renamed
+import           XMonad.Layout.Tabbed
 
-import           XMonad.Util.EZConfig            (additionalKeysP)
-
-import qualified XMonad.StackSet                 as W
 import qualified XMonad.DBus                     as D
+import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
+import qualified XMonad.StackSet                 as W
+
+import           ResizableSpacing
 
 main :: IO ()
 main = do
@@ -52,21 +54,29 @@ polybarSB dbusConnection = statusBarGeneric "polybar -r" lh
 
 myWorkspaces = [ "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "+" ]
 
+myLayouts =
+        tabbed
+    ||| vertical
+    ||| horizontal
+    ||| threeColumn
+    ||| circle
+    where
+        tabbed = named "tabbed" $ simpleTabbed
+        vertical   = named "vertical" $ spacing 0 $ Tall 1 (3/100) (1/2)
+        horizontal = named "horizontal" $ Mirror vertical
+--        full = named "full" $ smartBorders $ spacing 0 $ Full
+        threeColumn = named "3col" $ spacing 0 $ ThreeCol 1 (3/100) (1/3)
+        circle = named "circle" $ circleSimpleDefaultResizable
+
 layoutHook' =
-  refocusLastLayoutHook . trackFloating $ avoidStruts $ myBorders $ standardLayouts
-  where
-    -- todo is this doing more than smartborders?
---    myBorders = lessBorders (Combine Difference Screen OnlyScreenFloat)
-    myBorders = smartBorders
-    standardLayouts = full ||| tiled ||| reflectTiled ||| Mirror tiled ||| threeColumn ||| circle
-    full = smartBorders $ spacing 0 $ Full
-    tiled   = spacing 0 $ Tall nmaster delta ratio
-    reflectTiled = named "Reflect Tall" $ reflectHoriz $ tiled
-    threeColumn = spacing 0 $ named "3col" $ ThreeCol 1 (3/100) (1/3)
-    circle = named "circle" $ circleSimpleDefaultResizable
-    nmaster = 1
-    delta   = 3/100
-    ratio   = 1/2
+  refocusLastLayoutHook . trackFloating -- floating window focus fix (e.g. intellij find window)
+    $ avoidStruts
+    $ smartBorders
+    $ mkToggle (single NOBORDERS)
+    $ mkToggle (single REFLECTX)
+    $ mkToggle (single REFLECTY)
+    $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myLayouts
+
 
 manageHook' =
   composeAll
@@ -96,36 +106,38 @@ keys' =
     , ("M-C-S-\\", bringMenuArgs' "rofi" ["-dmenu", "-i", "-show", "combi"])
 
     , ("M-S-n", spawn "thunar")
+
     , ("M-b", sendMessage ToggleStruts)
+    , ("M-S-b", sendMessage (MT.Toggle NOBORDERS)) --Toggle borders on/off
+    , ("M-r", sendMessage (MT.Toggle REFLECTX)) --Invert master side in vertical layouts
+    , ("M-S-r", sendMessage (MT.Toggle REFLECTY)) --Invert master side in horizontal layouts
+    , ("M-f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
 
-    , ("M-S-r", spawn "xmonad-x86_64-linux --restart && . /home/tim/.machineconf")
-    , ("C-M-S-l", spawn "slock")
+    , ("M-S-r", spawn "xmonad --restart && . /home/tim/.machineconf")
+    , ("M-C-S-l", spawn "slock")
 
-    , ("M-<F1>", sendMessage $ JumpToLayout "Full")
-    , ("M-<F2>", sendMessage $ JumpToLayout "Tall")
-    , ("M-<F3>", sendMessage $ JumpToLayout "Mirror Tall")
-    , ("M-<F4>", sendMessage $ JumpToLayout "Reflect Tall")
-    , ("M-<F5>", sendMessage $ JumpToLayout "3col")
-    , ("M-<F6>", sendMessage $ JumpToLayout "circle")
+    , ("M-<F1>", sendMessage $ JumpToLayout "tabbed")
+    , ("M-<F2>", sendMessage $ JumpToLayout "vertical")
+    , ("M-<F3>", sendMessage $ JumpToLayout "horizontal")
+    , ("M-<F4>", sendMessage $ JumpToLayout "3col")
+    , ("M-<F5>", sendMessage $ JumpToLayout "circle")
 
-    , ("M-<F12>", sendMessage $ IncSpacing 15)
-    , ("M-S-<F12>", sendMessage $ DecSpacing 15)
     , ("M-<F10>", windows copyToAll)
+    , ("M-<F12>", sendMessage $ IncSpacing 5)
+    , ("M-<F11>", sendMessage $ DecSpacing 5)
     , ("M-S-<F10>", killAllOtherCopies)    -- remove from all but current
-    , ("M-<Pause>", spawn "playerctl play-pause")
-    , ("<Pause>", spawn "playerctl play-pause")
 
-    , ("M-<Print>", spawn "sps")
-    , ("<Print>", spawn "sps")
-
-    , ("M-<Scroll_lock>", spawn "sps")
     , ("<Scroll_lock>", spawn "sps")
+    , ("<Pause>", spawn "playerctl play-pause")
     ] ++
+    -- move to workspace
     [ (otherModMasks ++ "M-" ++ key, action tag)
       | (tag, key)  <- zip myWorkspaces ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=" ]
       , (otherModMasks, action) <- [ ("", windows . W.greedyView) -- or W.view
       , ("S-", windows . W.shift)]
     ] ++
+
+    -- switch to workspace
     [ (mask ++ "M-" ++ [key], screenWorkspace scr >>= flip whenJust (windows . action))
          | (key, scr)  <- zip "we" [0,1] -- 2 monitors
          , (action, mask) <- [ (W.view, "") , (W.shift, "S-")]
