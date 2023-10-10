@@ -42,7 +42,7 @@ offset-x = 0
 offset-y = 0
 
 override-redirect = true
-wm-restack = bspwm
+wm-restack = generic
 
 background = ${colors.background-alt}
 foreground = ${colors.foreground}
