@@ -1,11 +1,7 @@
 {-# LANGUAGE FlexibleInstances, MultiParamTypeClasses, DeriveDataTypeable #-}
 
 
-module ResizableSpacing (
-                               -- * Usage
-                               -- $usage
-                               spacing, Spacing, SpacingMessage(..)
-                             ) where
+module ResizableSpacing ( spacing, Spacing, SpacingMessage(..) ) where
 
 import XMonad.Core
 

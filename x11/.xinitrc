@@ -16,8 +16,10 @@ xset m 4/3 0 # mouse acceleration
 
 # cursor vanishes when you start typing
 [ -x "$(command -v xbanish)" ] && xbanish &
-# audio
+# audio tray icon
 [ -x "$(command -v pasystray)" ] && pasystray &
+# tracks the last played "media player" which can be controlled with `playerctl` eg `playerctl play-pause`
+[ -x "$(command -v playerctld)" ] && playerctld daemon
 # networking
 [ -x "$(command -v nm-applet)" ] && nm-applet &
 
@@ -43,5 +45,5 @@ fi
 ## machine specific
 [[ -s "$HOME/.machineconf" ]] && source "$HOME/.machineconf"
 
-exec xmonad-x86_64-linux
+exec xmonad
 
