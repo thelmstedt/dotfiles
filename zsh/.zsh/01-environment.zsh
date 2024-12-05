@@ -3,14 +3,32 @@
 ##
 #HIST_STAMPS=yyyy/mm/dd
 
+#OS
+
+export OS="linux"
+if [[ $(uname) == "Darwin" ]]; then
+    export OS="mac"
+fi
+
 ##
 ## paths
 ##
-export PATH=/usr/local/bin:$HOME/bin:$HOME/.local/bin:$HOME/.cabal/bin:$HOME/.ghcup/bin:/var/lib/snapd/snap/bin:$PATH
+if [[ "$OS" == "linux" ]]; then
+  export PATH=/usr/local/bin:/var/lib/snapd/snap/bin:$PATH
+fi
+if [[ "$OS" == "mac" ]]; then
+  export PATH=/opt/homebrew/bin/:$PATH
+  export MAGICK_HOME=/opt/homebrew/opt/imagemagick/
+fi
 [[ -s "$HOME/.bin" ]] && PATH=$PATH:$HOME/.bin
 [[ -s "$HOME/bin" ]] && PATH=$PATH:$HOME/bin
 [[ -s "$HOME/.local/bin" ]] && PATH=$PATH:$HOME/.local/bin
+[[ -s "$HOME/.cabal/bin" ]] && PATH=$PATH:$HOME/.cabal/bin
+[[ -s "$HOME/.ghcup/bin" ]] && PATH=$PATH:$HOME/.ghcup/bin
 
+# Machine Specific
+[[ -s "$HOME/.private" ]] && source "$HOME/.private"
+[[ -s "$HOME/.private_env" ]] && source "$HOME/.private_env"
 
 ##
 ## edit / view
@@ -84,6 +102,4 @@ export GRADLE_USER_HOME="$HOME/.gradle"
 ##
 export MOSH_TITLE_NOPREFIX=1
 
-# Machine Specific
-[[ -s "$HOME/.private" ]] && source "$HOME/.private"
-[[ -s "$HOME/.private_env" ]] && source "$HOME/.private_env"
+

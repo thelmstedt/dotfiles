@@ -1,7 +1,29 @@
 ##
 ## z - jump around
 ##
-[[ -r "/usr/share/z/z.sh" ]] && source /usr/share/z/z.sh
+
+PATH_Z="/usr/share/z/z.sh"
+PATH_STARSHIP="/usr/bin/starship"
+PATH_SYNTAX_HIGHLIGHTING="/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+PATH_FZF_KEY="/usr/share/fzf/key-bindings.zsh"
+PATH_FZF_COMP="/usr/share/fzf/completion.zsh"
+PATH_ZSH_SITE_FUNCTIONS="/usr/share/zsh/site-functions"
+
+if [[ "$OS" == "mac" ]]; then
+  PATH_Z="/opt/homebrew/etc/profile.d/z.sh"
+  PATH_STARSHIP="/opt/homebrew/bin/starship"
+  PATH_SYNTAX_HIGHLIGHTING="/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  PATH_FZF_KEY="/opt/homebrew/opt/fzf/shell/completion.zsh"
+  PATH_FZF_COMP="/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+
+   if type brew &>/dev/null; then
+      PATH_ZSH_SITE_FUNCTIONS=$(brew --prefix)/share/zsh-completions
+    fi
+fi
+
+[[ -r "$PATH_Z" ]] && source "$PATH_Z"
+
+# vendored
 if [[ -r "$HOME/.zsh/lib/fz.sh" ]] ; then
   source $HOME/.zsh/lib/fz.sh
 fi
@@ -9,14 +31,14 @@ fi
 ##
 ## starship - prompt
 ##
-[[ -r "/usr/bin/starship" ]] && eval "$(starship init zsh)"
+[[ -r "$PATH_STARSHIP" ]] && eval "$(starship init zsh)"
 
 ##
 ## zsh-syntax-highlighting
 ##
 
-if [[ -r "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] ; then
-  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -r "$PATH_SYNTAX_HIGHLIGHTING" ]] ; then
+  source "$PATH_SYNTAX_HIGHLIGHTING"
 
   ##
 ## color overrides
@@ -50,9 +72,9 @@ fi
 ## fzf
 ##
 
-if [[ -r "/usr/share/fzf/key-bindings.zsh" ]] ; then
-  source /usr/share/fzf/key-bindings.zsh
-  source /usr/share/fzf/completion.zsh
+if [[ -r "$PATH_FZF_KEY" ]] ; then
+  source "$PATH_FZF_KEY"
+  source "$PATH_FZF_COMP"
 
   # uses `fd` for easy .gitignore integration (faster too!)
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
@@ -63,9 +85,9 @@ fi
 ## zsh-completions
 ##
 
-if [[ -d "/usr/share/zsh/site-functions" ]] ; then
+if [[ -d "$PATH_ZSH_SITE_FUNCTIONS" ]] ; then
 
-  fpath=(/usr/share/zsh/site-functions/ $fpath)
+  FPATH="$PATH_ZSH_SITE_FUNCTIONS:$FPATH"
   if ! command -v compinit > /dev/null; then
     autoload -Uz compinit
     compinit -u
@@ -78,7 +100,7 @@ if [[ -d "/usr/share/zsh/site-functions" ]] ; then
   zstyle ':completion:*' completer _expand _complete _correct _approximate
   zstyle ':completion:*' format 'Completing %d'
   zstyle ':completion:*' group-name ''
-  zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
+#  zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
   zstyle ':completion:*' list-colors ''
   zstyle ':completion:*' list-prompt %SAt %p: hit TAB for more, or the character to insert%s
@@ -100,9 +122,3 @@ if [[ -r "/usr/bin/aws_completer" ]] ; then
   complete -C '/usr/bin/aws_completer' aws
 fi
 
-##
-## pyenv for multiple python versions
-##
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init --path)"
-fi

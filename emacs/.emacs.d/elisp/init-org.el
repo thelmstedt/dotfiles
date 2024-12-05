@@ -35,14 +35,6 @@
 ;; (setq org-export-with-toc 4
 ;;       org-export-headline-levels 4)
 
-(defun org-archive-done-tasks ()
-  (interactive)
-  (org-map-entries
-   (lambda ()
-     (org-archive-subtree)
-     (setq org-map-continue-from (org-element-property :begin (org-element-at-point))))
-   "/DONE" 'tree))
-
 
 (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 (defun org-summary-todo (n-done n-not-done)

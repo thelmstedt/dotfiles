@@ -111,3 +111,16 @@ function fless() {
   fi
 }
 
+function __newvenv() {
+  echo "Creating new virtualenv at ./.venv"
+  deactivate
+  uv venv --allow-existing .venv
+  echo "Activating venv"
+  source ./.venv/bin/activate
+  [ -f requirements.txt ] && echo "Installing deps from requirements.txt" && uv pip install -r requirements.txt
+  [ -f requirements_tmv.txt ] && echo "Installing deps from requirements_tmv.txt" && uv pip install -r requirements_tmv.txt
+  [ -f pyproject.toml ] && echo "Installing deps from pyproject.toml" && uv pip install -r pyproject.toml
+}
+
+alias vv=__newvenv
+
