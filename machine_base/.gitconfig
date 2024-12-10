@@ -6,6 +6,8 @@
 	user = thelmstedt
 
 [alias]
+
+
 	# flavours of commit
 	c = commit
 	cm = commit -m
@@ -25,8 +27,12 @@
 		
 	p = pull
 	pr = pull --rebase 
-	recent = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+	recentl = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
+
+    recent = "!git-recent.sh"
+    r = recent
     pushf = push --force-with-lease
+        
 	lastweek = shortlog --since '1 weeks ago'
 	
 
