@@ -38,6 +38,14 @@ function de() {
   docker exec -it "$1" "$2"
 }
 
+alias -g apcd='AWS_PROFILE=clarivate'
+alias -g apcp='AWS_PROFILE=clarivate-prod'
+alias -g apatms='AWS_PROFILE=atms'
+
+# in ~/bin
+alias aws-display="aws-display.py"
+
+
 
 # Maven
 alias -g md='MAVEN_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n $MAVEN_OPTS " '
