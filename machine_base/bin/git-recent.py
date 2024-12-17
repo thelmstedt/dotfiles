@@ -1,18 +1,8 @@
-#!/usr/bin/env -S uv run
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "click", "rich", "dateparser", "pyinstrument"
-# ]
-# ///
-#!/usr/bin/env python3
-
-import subprocess
-from datetime import datetime, timezone
-
 import click
-from dateparser import parse
 from rich.console import Console
+from datetime import datetime, timezone
+from dateparser import parse
+import subprocess
 
 console = Console()
 
@@ -46,14 +36,8 @@ def parse_since(since: str) -> datetime:
     return parsed_date.astimezone(timezone.utc)
 
 @click.command()
-@click.option('--since', default='6 months ago', help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
-@click.option('--profile', is_flag=True, help='Enable profiling')
-def main(since: str, profile: bool):
-    if profile:
-        from pyinstrument import Profiler
-        from pyinstrument.renderers import ConsoleRenderer
-        profiler = Profiler()
-        profiler.start()
+@click.option('--since', default='2 months ago', help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
+def main(since: str):
     """Show git branch status"""
     since_date = parse_since(since)
     default_branch = get_default_branch()
@@ -61,18 +45,23 @@ def main(since: str, profile: bool):
     branches = run_git_command([
         'git', 'for-each-ref',
         '--sort=-committerdate',
-        f'--format=%(committerdate:iso)|%(refname:short)|%(refname)|%(authorname)|%(subject)',
+        f'--format=%(committerdate:iso)|%(refname:short)|%(refname)|%(authorname)|%(subject)|%(committerdate:relative)',
         'refs/remotes/', 'refs/heads/'
     ])
+
+    skipped_branches = 0
+    last_skipped = None
 
     for line in branches.split('\n'):
         if not line:
             continue
 
-        date_str, branch, fullref, author, message = line.split('|')
+        date_str, branch, fullref, author, message, relative_date = line.split('|')
         commit_date = datetime.fromisoformat(date_str.strip()).astimezone(timezone.utc)
 
         if commit_date < since_date:
+            last_skipped = relative_date
+            skipped_branches += 1
             continue
 
         is_remote = fullref.startswith('refs/remotes/')
@@ -84,8 +73,6 @@ def main(since: str, profile: bool):
         else:
             status = "[bright_blue](default)[/bright_blue]"
 
-        relative_date = run_git_command(['git', 'log', '-1', '--format=%cr', branch])
-
         console.print(
             f"[bright_red]{relative_date}[/bright_red] | "
             f"[{branch_style}]{branch}[/{branch_style}] | "
@@ -93,9 +80,10 @@ def main(since: str, profile: bool):
             f"{message} | "
             f"{status}"
         )
-    if profile:
-        profiler.stop()
-        print(profiler.output(renderer=ConsoleRenderer()))
+
+    if skipped_branches > 0:
+        console.print(f"\nNote: [red]{skipped_branches}[/red] hidden branches older than [red]{since}[/red]. Oldest branch [red]{last_skipped}[/red].")
+        console.print("Use --since with a longer time period to see them.")
 
 if __name__ == '__main__':
     main()

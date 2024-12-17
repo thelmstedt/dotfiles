@@ -34,17 +34,15 @@ function ktt() {
 }
 
 function de() {
-  echo docker exec -it "$1" "$2"
-  docker exec -it "$1" "$2"
+ docker exec -it $(docker ps | grep $1 | awk '{print $1}') $2
 }
 
+# aws
 alias -g apcd='AWS_PROFILE=clarivate'
 alias -g apcp='AWS_PROFILE=clarivate-prod'
 alias -g apatms='AWS_PROFILE=atms'
-
-# in ~/bin
-alias aws-display="aws-display.py"
-
+alias aws-display="~/bin/.venv/bin/python ~/bin/aws-display.py"
+alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
 
 
 # Maven

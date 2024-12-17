@@ -1,11 +1,3 @@
-#!/usr/bin/env -S uv run
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "boto3", "click", "rich"
-# ]
-# ///
-
 import boto3
 import click
 import time
@@ -192,10 +184,11 @@ def format_duration(start_time):
         return wrap_colour(f"{minutes}m", "purple")
 
 
-def print_table(headers, data, show_lines=False, filter: Optional[List[str]] = None, expanded=False):
+def print_table(headers, data, show_lines=False, filter: Optional[List[str]] = None, expanded=False, watch=False):
     if not expanded:
         console = Console()
-        console.clear()
+        if watch:
+            console.clear()
         table = Table(show_lines=show_lines)
         for header in headers:
             table.add_column(header)
@@ -215,10 +208,9 @@ def print_table(headers, data, show_lines=False, filter: Optional[List[str]] = N
             table.add_row(*row)
         console.print(table)
     else:
-        console = Console(theme=Theme({
-            "key": "blue bold"
-        }))
-        console.clear()
+        console = Console(theme=Theme({"key": "blue bold"}))
+        if watch:
+            console.clear()
         for i, d in enumerate(data):
             matched = match_filters(d, filter, headers)
             if matched:
@@ -276,7 +268,7 @@ def get_data(command):
 def main(command, watch, interval, filter, expanded):
     while True:
         data, headers, show_lines = get_data(command)
-        print_table(headers, data, show_lines=show_lines, filter=list(filter), expanded=expanded)
+        print_table(headers, data, show_lines=show_lines, filter=list(filter), expanded=expanded, watch=watch)
 
         if not watch:
             break

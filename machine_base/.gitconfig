@@ -27,9 +27,8 @@
 		
 	p = pull
 	pr = pull --rebase 
-	recentl = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
 
-    recent = "!git-recent.sh"
+    recent = "!~/bin/.venv/bin/python ~/bin/git-recent.py"
     r = recent
     pushf = push --force-with-lease
         
