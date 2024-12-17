@@ -2,17 +2,17 @@
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
-#     "click", "rich", "dateparser"
+#     "click", "rich", "dateparser", "pyinstrument"
 # ]
 # ///
 #!/usr/bin/env python3
 
-import click
-from rich.console import Console
-from datetime import datetime, timezone
-from dateparser import parse
 import subprocess
-from typing import Optional
+from datetime import datetime, timezone
+
+import click
+from dateparser import parse
+from rich.console import Console
 
 console = Console()
 
@@ -47,7 +47,13 @@ def parse_since(since: str) -> datetime:
 
 @click.command()
 @click.option('--since', default='6 months ago', help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
-def main(since: str):
+@click.option('--profile', is_flag=True, help='Enable profiling')
+def main(since: str, profile: bool):
+    if profile:
+        from pyinstrument import Profiler
+        from pyinstrument.renderers import ConsoleRenderer
+        profiler = Profiler()
+        profiler.start()
     """Show git branch status"""
     since_date = parse_since(since)
     default_branch = get_default_branch()
@@ -87,6 +93,9 @@ def main(since: str):
             f"{message} | "
             f"{status}"
         )
+    if profile:
+        profiler.stop()
+        print(profiler.output(renderer=ConsoleRenderer()))
 
 if __name__ == '__main__':
     main()
