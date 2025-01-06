@@ -132,6 +132,52 @@ def get_eks():
 
     return ['name', 'version', 'status', 'created', 'vpc', 'endpoint', 'role', 'sg'], sorted(clusters, key=lambda x: x['name'])
 
+def get_rds():
+    rds = boto3.client('rds')
+    instances = []
+
+    for db in rds.describe_db_instances()['DBInstances']:
+        instances.append({
+            'id': db['DBInstanceIdentifier'],
+            'engine': f"{db['Engine']} {db['EngineVersion']}",
+            'class': db['DBInstanceClass'],
+            'status': format_status(db['DBInstanceStatus']),
+            'storage': f"{db['AllocatedStorage']} GB",
+            'endpoint': db.get('Endpoint', {}).get('Address', ''),
+            'port': str(db.get('Endpoint', {}).get('Port', '')),
+            'multi_az': 'Yes' if db.get('MultiAZ', False) else 'No',
+            'created': db['InstanceCreateTime'].strftime(fmt),
+            'vpc': db.get('DBSubnetGroup', {}).get('VpcId', ''),
+        })
+
+    return ['id', 'engine', 'class', 'status', 'storage', 'endpoint', 'port', 'multi_az', 'vpc', 'created'], sorted(instances, key=lambda x: x['id'])
+
+def get_lambda():
+    lam = boto3.client('lambda')
+    functions = []
+    paginator = lam.get_paginator('list_functions')
+
+    for page in paginator.paginate():
+        for func in page['Functions']:
+            last_modified = func['LastModified'].replace('T', ' ').replace('Z', '')
+            runtime = func.get('Runtime', 'custom')
+            memory = func.get('MemorySize', 0)
+            timeout = func.get('Timeout', 0)
+
+            functions.append({
+                'name': func['FunctionName'],
+                'runtime': runtime,
+                'memory': f"{memory} MB",
+                'timeout': f"{timeout}s",
+                'handler': func.get('Handler', 'n/a'),
+                'size': f"{func.get('CodeSize', 0) // (1024*1024)} MB",
+                'modified': last_modified,
+                'state': format_status(func.get('State', 'Unknown')),
+                'description': func.get('Description', '')
+            })
+
+    return ['name', 'runtime', 'memory', 'timeout', 'handler', 'size', 'modified', 'state', 'description'], sorted(functions, key=lambda x: x['name'])
+
 ##
 ## Formatting
 ##
@@ -241,26 +287,26 @@ def match_filters(d, filter, headers):
 def get_data(command):
     if command == "ecs":
         headers, data = get_ecs_details()
-        show_lines = False
     elif command == "ssm":
         headers, data = get_ssm_params()
-        show_lines = True
     elif command == "secrets":
         headers, data = get_secrets()
-        show_lines = True
     elif command == "ec2":
         headers, data = get_ec2()
-        show_lines = False
     elif command == "eks":
         headers, data = get_eks()
-        show_lines = False
+    elif command == "rds":
+        headers, data = get_rds()
+    elif command == "lambda":
+        headers, data = get_lambda()
     else:
         raise Exception("impossible")
+    show_lines = command in ["secrets", "ssm"]
     return data, headers, show_lines
 
 
 @click.command()
-@click.argument('command', type=click.Choice(['ecs', 'ssm', 'secrets', 'ec2', 'eks']))
+@click.argument('command', type=click.Choice(['ecs', 'ssm', 'secrets', 'ec2', 'eks', 'rds', "lambda"]))
 @click.option('--watch', is_flag=True, help='Watch mode with continuous updates')
 @click.option('--interval', default=5, help='Refresh interval in seconds')
 @click.option('--filter', multiple=True, help='Filter rows where any column contains values')
