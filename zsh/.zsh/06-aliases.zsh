@@ -57,3 +57,4 @@ alias -g gd='GRADLE_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:trans
 alias -g gbd='GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005 $GRADLE_OPTS"'
 alias -g nt="-xcheck -xtest"
 alias r='gradle'
+alias gw='$(git rev-parse --show-toplevel)/gradlew'
