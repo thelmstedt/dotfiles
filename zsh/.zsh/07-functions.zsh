@@ -7,6 +7,8 @@ function go_temp() {
 }
 alias gt=go_temp
 
+
+
 ##
 ## upto - navigate up to a directory by prefix, or to the .git root
 ##
@@ -16,35 +18,24 @@ function upto() {
 	  if [ -z "$target" ]; then
 		    mode="GIT"
 	  fi
-	  local current="$(pwd)"
 	  local matched_dir=""
-	  local running=true
 
 	  if [[ $mode == "GIT" ]] ; then
-      while [ "$running" = true ]; do
-        if [[ -e "$current/.git" ]] ; then
-          running=false
-          matched_dir="$current"
-        elif [[ "$current" == "$HOME" ]] ; then # stop at home
-          running=false
-        else
-          matched_dir="$current"
-          current="$(dirname ${current})"
-        fi
-      done
+      cd $(git rev-parse --show-toplevel)
+      return 1
     elif [[ $mode == "FOLDER" ]]; then
       # NOTE, remove ^ from pattern to match anywhere..
       local awk_script="{a=0; for (i = NF-1; i > 0; i--) { if (\$i ~ /^$target/) { a=1; }; if (a == 1) { print \$i } }}"
       # reversed fields until it starts with $target | reverse back to normal | join with "/" to make a path
       matched_dir=$(pwd | awk -F'/' $awk_script  | tac | tr '\n' '/')
+      if [ -n "$matched_dir" ]; then
+          cd "${matched_dir}" || (echo "cd to ${matched_dir} failed?" && exit)
+      else
+          echo "No Match." >&2
+          return 1
+      fi
     fi
 
-	  if [ -n "$matched_dir" ]; then
-		    cd "${matched_dir}" || (echo "cd to ${matched_dir} failed?" && exit)
-	  else
-		    echo "No Match." >&2
-		    return 1
-	  fi
 }
 alias u=upto
 
@@ -111,7 +102,7 @@ function fless() {
   fi
 }
 
-function __newvenv() {
+function vv() {
   echo "Creating new virtualenv at ./.venv"
   deactivate
   uv venv --allow-existing .venv
@@ -121,6 +112,4 @@ function __newvenv() {
   [ -f requirements_tmv.txt ] && echo "Installing deps from requirements_tmv.txt" && uv pip install -r requirements_tmv.txt
   [ -f pyproject.toml ] && echo "Installing deps from pyproject.toml" && uv pip install -r pyproject.toml
 }
-
-alias vv=__newvenv
 

@@ -1,3 +1,8 @@
+if [[ "$OS" == "mac" ]]; then
+  # missing commands in osx
+  alias tac="tail -r"
+fi
+
 alias ls='ls --color=auto'
 if [[ -r "/usr/bin/exa" ]] ; then
   alias l="exa"
@@ -6,6 +11,7 @@ else
   alias l="ls"
   alias ll="ls -l"
 fi
+
 
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
 alias lower="tr '[:upper:]' '[:lower:]'"
