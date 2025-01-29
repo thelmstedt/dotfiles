@@ -88,12 +88,14 @@ fi
 if [[ -d "$PATH_ZSH_SITE_FUNCTIONS" ]] ; then
 
   FPATH="$PATH_ZSH_SITE_FUNCTIONS:$FPATH"
-  if ! command -v compinit > /dev/null; then
-    autoload -Uz compinit
-    compinit -u
-  else
-    compinit
-  fi
+
+  autoload -Uz compinit
+  compinit -C -d ~/.zcompdump
+
+  # Compile zcompdump in background
+  {
+    zcompile ~/.zcompdump
+  } &!
 
   #autoload -U /usr/share/zsh/site-functions/*(:t)
   zstyle ':completion:*' auto-description 'specify: %d'
