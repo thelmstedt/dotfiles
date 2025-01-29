@@ -49,16 +49,31 @@
 
 (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
 
+;; don't ask when editing root files
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t))
+      enable-local-variables :safe)
+
+(defadvice find-file (around my-find-file activate)
+  (if (and buffer-file-name
+           (not (file-writable-p buffer-file-name))
+           (file-exists-p buffer-file-name)
+           (= 0 (nth 2 (file-attributes buffer-file-name))))
+      (let ((file buffer-file-name))
+        (kill-buffer)
+        (find-file (concat "/sudo::" file)))
+    ad-do-it))
+
 
 (windmove-default-keybindings 's)
-
-
-
 
 (add-hook 'before-save-hook
           (lambda ()
             (unless (eq major-mode 'org-mode)
               (delete-trailing-whitespace))))
+
+
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
