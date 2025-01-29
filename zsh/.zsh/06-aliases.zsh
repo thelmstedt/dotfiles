@@ -50,7 +50,8 @@ alias -g apcp='AWS_PROFILE=clarivate-prod'
 alias -g apatms='AWS_PROFILE=atms'
 
 # corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
-alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"nc -x localhost:1080 %h %p\""'
+alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat --proxy-type socks5 --proxy localhost:1080 %h %p\""'
+alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat -x localhost:1080 %h %p\""'
 alias -g pph="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"
 alias -g pp="ppg pph"
 
