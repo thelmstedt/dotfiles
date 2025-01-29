@@ -48,6 +48,7 @@ alias -g apcd='AWS_PROFILE=clarivate'
 alias -g apcp='AWS_PROFILE=clarivate-prod'
 alias -g apatms='AWS_PROFILE=atms'
 alias aws-display="~/bin/.venv/bin/python ~/bin/aws-display.py"
+alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
 
 
