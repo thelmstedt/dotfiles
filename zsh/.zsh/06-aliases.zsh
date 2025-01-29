@@ -48,6 +48,13 @@ alias -g apcd='AWS_PROFILE=clarivate'
 alias -g apcp='AWS_PROFILE=clarivate-prod'
 alias -g apatms='AWS_PROFILE=atms'
 alias aws-display="~/bin/.venv/bin/python ~/bin/aws-display.py"
+
+# corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
+alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"nc -x localhost:1080 %h %p\""'
+alias -g pph="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"
+alias -g pp="ppg pph"
+
+
 alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
 
