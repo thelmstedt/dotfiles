@@ -43,11 +43,11 @@ function de() {
  docker exec -it $(docker ps | grep $1 | awk '{print $1}') $2
 }
 
-# aws
+# aws profiles
 alias -g apcd='AWS_PROFILE=clarivate'
+alias -g apwa='AWS_PROFILE=wa-dev'
 alias -g apcp='AWS_PROFILE=clarivate-prod'
 alias -g apatms='AWS_PROFILE=atms'
-alias aws-display="~/bin/.venv/bin/python ~/bin/aws-display.py"
 
 # corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
 alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"nc -x localhost:1080 %h %p\""'

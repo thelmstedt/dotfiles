@@ -19,14 +19,23 @@ fi
 if [[ "$OS" == "mac" ]]; then
   export PATH=/opt/homebrew/bin/:$PATH
   export MAGICK_HOME=/opt/homebrew/opt/imagemagick/
+  export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 fi
+
 [[ -s "$HOME/.bin" ]] && PATH=$PATH:$HOME/.bin
 [[ -s "$HOME/bin" ]] && PATH=$PATH:$HOME/bin
 [[ -s "$HOME/.local/bin" ]] && PATH=$PATH:$HOME/.local/bin
 [[ -s "$HOME/.cabal/bin" ]] && PATH=$PATH:$HOME/.cabal/bin
 [[ -s "$HOME/.ghcup/bin" ]] && PATH=$PATH:$HOME/.ghcup/bin
+[[ -s "/opt/homebrew/opt/rustup/bin" ]] && PATH="/opt/homebrew/opt/rustup/bin:$PATH"
 
-# Machine Specific
+
+# bun
+[[ -s "$HOME/.bun/bin" ]] && PATH=$PATH:$HOME/.bun/bin
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"
+
+
+# Private environment, wont be committed
 [[ -s "$HOME/.private" ]] && source "$HOME/.private"
 [[ -s "$HOME/.private_env" ]] && source "$HOME/.private_env"
 
