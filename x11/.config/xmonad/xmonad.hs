@@ -127,7 +127,7 @@ keys' =
     , ("M-<F11>", sendMessage $ DecSpacing 5)
     , ("M-S-<F10>", killAllOtherCopies)    -- remove from all but current
 
-    , ("<Scroll_lock>", spawn "sps")
+    , ("<Scroll_lock>", spawn "switch_pulse_sinks")
     , ("<Pause>", spawn "playerctl play-pause")
     ] ++
     -- move to workspace
