@@ -1,10 +1,21 @@
-import click
-from rich.console import Console
-from datetime import datetime, timezone
-from dateparser import parse
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+# "click",
+# "dateparser",
+# "rich",
+# ]
+# ///
+
 import subprocess
+from datetime import datetime, timezone
+
+import click
+from dateparser import parse
+from rich.console import Console
 
 console = Console()
+
 
 def run_git_command(cmd: list[str]) -> str:
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -14,12 +25,14 @@ def run_git_command(cmd: list[str]) -> str:
         exit(1)
     return result.stdout.strip()
 
+
 def get_default_branch() -> str:
     for branch in ['main', 'master']:
         result = subprocess.run(['git', 'show-ref', '--verify', '--quiet', f'refs/remotes/origin/{branch}'])
         if result.returncode == 0:
             return f"origin/{branch}"
     return "origin/main"
+
 
 def get_branch_counts(branch: str, default_branch: str) -> tuple[int, int]:
     try:
@@ -29,14 +42,17 @@ def get_branch_counts(branch: str, default_branch: str) -> tuple[int, int]:
     except:
         return 0, 0
 
+
 def parse_since(since: str) -> datetime:
     parsed_date = parse(since, settings={'RELATIVE_BASE': datetime.now(timezone.utc)})
     if parsed_date is None:
         raise click.BadParameter(f"Could not parse date: {since}")
     return parsed_date.astimezone(timezone.utc)
 
+
 @click.command()
-@click.option('--since', default='2 months ago', help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
+@click.option('--since', default='2 months ago',
+              help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
 def main(since: str):
     """Show git branch status"""
     since_date = parse_since(since)
@@ -50,7 +66,9 @@ def main(since: str):
     ])
 
     skipped_branches = 0
+    processed_branches = 0
     last_skipped = None
+    last_processed = None
 
     for line in branches.split('\n'):
         if not line:
@@ -59,7 +77,7 @@ def main(since: str):
         date_str, branch, fullref, author, message, relative_date = line.split('|')
         commit_date = datetime.fromisoformat(date_str.strip()).astimezone(timezone.utc)
 
-        if commit_date < since_date:
+        if commit_date < since_date and processed_branches > 10:
             last_skipped = relative_date
             skipped_branches += 1
             continue
@@ -80,10 +98,14 @@ def main(since: str):
             f"{message} | "
             f"{status}"
         )
+        processed_branches += 1
+        last_processed = relative_date
 
     if skipped_branches > 0:
-        console.print(f"\nNote: [red]{skipped_branches}[/red] hidden branches older than [red]{since}[/red]. Oldest branch [red]{last_skipped}[/red].")
-        console.print("Use --since with a longer time period to see them.")
+        console.print(
+            f"\nNote: [red]{skipped_branches}[/red] hidden branches older than [red]{last_processed}[/red]. Oldest branch [red]{last_skipped}[/red].")
+        console.print(f"Use --since with a longer time period (default [green]{since}[/green]) to see them.")
+
 
 if __name__ == '__main__':
     main()

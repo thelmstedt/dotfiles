@@ -28,7 +28,7 @@
 	p = pull
 	pr = pull --rebase 
 
-    recent = "!~/bin/.venv/bin/python ~/bin/git-recent.py"
+    recent = "!uv run ~/bin/git-recent.py"
     r = recent
     pushf = push --force-with-lease
         
@@ -95,9 +95,6 @@
 
 
 [delta]
-    plus-style = "syntax #012800"
-    minus-style = "syntax #340001"
-    syntax-theme = Monokai Extended
     navigate = true
     features = side-by-side linenumbers decorations
 
