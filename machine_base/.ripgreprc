@@ -1,0 +1,15 @@
+# Don't let ripgrep vomit really long lines to my terminal, and show a preview.
+--max-columns=150
+--max-columns-preview
+
+# Search hidden files and directories
+--hidden
+
+# Follow symbolic links
+--follow
+
+# Case insensitive search by default
+--smart-case
+
+# Sort by file path
+--sort=path

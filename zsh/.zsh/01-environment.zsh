@@ -28,7 +28,9 @@ fi
 [[ -s "$HOME/.cabal/bin" ]] && PATH=$PATH:$HOME/.cabal/bin
 [[ -s "$HOME/.ghcup/bin" ]] && PATH=$PATH:$HOME/.ghcup/bin
 [[ -s "/opt/homebrew/opt/rustup/bin" ]] && PATH="/opt/homebrew/opt/rustup/bin:$PATH"
-
+if (( $+commands[rg] )); then
+  export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
+fi
 
 # bun
 [[ -s "$HOME/.bun/bin" ]] && PATH=$PATH:$HOME/.bun/bin
