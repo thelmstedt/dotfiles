@@ -26,6 +26,7 @@ testingdumps
 .vagrant
 allprodmappings
 .terraform
+.jqwik-database
 
 /logomatch/tests/es/dumps/
 full_sync_debug_cache.json

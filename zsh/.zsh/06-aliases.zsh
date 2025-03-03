@@ -51,10 +51,11 @@ alias -g apatms='AWS_PROFILE=atms'
 
 # corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
 alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat --proxy-type socks5 --proxy localhost:1080 %h %p\""'
-alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat -x localhost:1080 %h %p\""'
 alias -g pph="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"
 alias -g pp="ppg pph"
 
+# if you want to ssh to somewhere
+alias -g pssh="ssh -o ProxyCommand='nc -x localhost:1080 %h %p'"
 
 alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
