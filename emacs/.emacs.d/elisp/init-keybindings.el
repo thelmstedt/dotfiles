@@ -1,104 +1,82 @@
-(global-set-key (kbd "C-c f") 'find-file-in-project)
 
-;; Font size
-(define-key global-map (kbd "C-+") 'text-scale-increase)
-(define-key global-map (kbd "C--") 'text-scale-decrease)
+(use-package general
+  :config
 
-;; Use regex searches by default.
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "\C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
+  (general-create-definer my/leader-keys
+    :prefix "C-c")
 
-;; useful commands
-(global-set-key (kbd "C-c r") 'revert-buffer)
-(windmove-default-keybindings) ;; Shift+direction
-(global-set-key (kbd "C-c x") 'execute-extended-command)
-(global-set-key (kbd "C-h a") 'apropos)  ;; Help should search more than just commands
-(global-set-key (kbd "C-c e") 'esk-eval-and-replace)  ;; Should be able to eval-and-replace anywhere.
-(global-set-key "\C-w" 'backward-delete-word)
-(global-set-key "\C-c\C-j" 'join-line)
-(global-set-key "\M- " 'just-one-space) ;; useful after joinline
-(global-set-key [f5] 'call-last-kbd-macro)
-(global-set-key (kbd "C-c g") 'magit-status)
-(global-set-key (kbd "C-c n") 'esk-cleanup-buffer)  ;; Perform general cleanup.
-(global-set-key (kbd "s-S") 'save-some-buffers) ;; save all
+  (general-create-definer my/local-leader
+    :prefix "C-c l")
 
+  ;; global bindings including consult
+  (general-define-key
+   ;; core consult bindings
+   "M-x" '(execute-extended-command :which-key "M-x")
+   "C-x B  (general-evil-setup)" '(consult-buffer :which-key "switch buffer")
+   "C-s" '(consult-line :which-key "search")
+   "M-y" '(consult-yank-pop :which-key "yank ring")
 
-(let ((map minibuffer-local-map))
-  (define-key map "\C-w"   'backward-delete-word)
-)
+   ;; existing bindings
+   "C-+" '(text-scale-increase :which-key "zoom in")
+   "C--" '(text-scale-decrease :which-key "zoom out")
+   "C-w" '(backward-delete-word :which-key "kill word")
+   "M-/" '(comment-sexp :which-key "comment")
+   "s-w" '(my-kill-buffer :which-key "kill buffer")
+   "s-W" '(my-unkill-buffer :which-key "unkill buffer")
+   "s-r" '(my-revert-buffer :which-key "revert buffer")
+   "s-S" '(save-some-buffers :which-key "save all")
 
+   ;; window movement
+   "s-h" '(windmove-left :which-key "window left")
+   "s-j" '(windmove-down :which-key "window down")
+   "s-k" '(windmove-up :which-key "window up")
+   "s-l" '(windmove-right :which-key "window right"))
 
-(defun delete-word (arg)
-"Delete characters forward until encountering the end of a word.
-With argument, do this that many times."
-(interactive "p")
-(delete-region (point) (progn (forward-word arg) (point))))
+  ;; leader key bindings including consult
+  (my/leader-keys
+   "f" '(consult-find :which-key "find file")
+   "g" '(consult-ripgrep :which-key "ripgrep")
+   "x" '(execute-extended-command :which-key "M-x")
+   "r" '(revert-buffer :which-key "revert")
+   "m" '(magit-status :which-key "magit"))
 
-(defun backward-delete-word (arg)
-"Delete characters backward until encountering the end of a word.
-With argument, do this that many times."
-(interactive "p")
-(delete-word (- arg)))
+  ;; goto menu with consult
+  (general-def
+    :prefix "M-g"
+    "g" '(consult-goto-line :which-key "goto line")
+    "i" '(consult-imenu :which-key "imenu"))
 
-(defun comment-sexp ()
-  "Comment out the sexp at point."
-  (interactive)
-  (save-excursion
-    (mark-sexp)
-    (paredit-comment-dwim)))
-(global-set-key "\M-/" 'comment-sexp)
+  ;; minibuffer maps including consult
+  (general-def
+    :keymaps '(minibuffer-local-map
+               minibuffer-local-ns-map
+               minibuffer-local-completion-map
+               minibuffer-local-must-match-map)
+    "M-s" 'consult-history
+    "M-r" 'consult-history
+    "C-w" 'backward-kill-word)
+
+  ;; isearch integration with consult
+  (general-def
+    :keymaps 'isearch-mode-map
+    "M-e" 'consult-isearch-history
+    "C-o" (lambda ()
+            (interactive)
+            (let ((case-fold-search isearch-case-fold-search))
+              (occur (if isearch-regexp
+                        isearch-string
+                        (regexp-quote isearch-string))))))
+
+  ;; vc stuff
+  (general-def
+    :keymaps 'vc-prefix-map
+    "i" (lambda ()
+          (interactive)
+          (if (not (eq 'Git (vc-backend buffer-file-name)))
+              (vc-register)
+            (shell-command (format "git add %s" buffer-file-name))
+            (message "Staged changes.")))))
 
 (defalias 'qrr 'query-replace-regexp)
-
-;; This is a little hacky since VC doesn't support git add internally
-(eval-after-load 'vc
-  (define-key vc-prefix-map "i"
-    '(lambda () (interactive)
-       (if (not (eq 'Git (vc-backend buffer-file-name)))
-           (vc-register)
-         (shell-command (format "git add %s" buffer-file-name))
-         (message "Staged changes.")))))
-
-;; Activate occur easily inside isearch
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda () (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
-
-
-;;; buffers
-(defun my-revert-buffer()
-  "revert buffer without asking for confirmation"
-  (interactive "")
-  (revert-buffer t t))
-(global-set-key (kbd "s-r") 'my-revert-buffer)
-
-(defvar killed-buffers '())
-
-(defun my-kill-buffer()
-  "kills the current buffer without confirmation, appending it to a list of killed buffers"
-  (interactive)
-
-  (let ((filename (buffer-file-name))
-        (buffername (buffer-name)))
-    (if filename
-        (setq killed-buffers (append (list filename) killed-buffers)))
-    (kill-buffer buffername)))
-(global-set-key (kbd "s-w") 'my-kill-buffer)
-
-(defun my-unkill-buffer()
-  "reinstates the last killed buffer, removing all instances of it from the list of killed buffers"
-  (interactive)
-  (let* ((last-killed (first killed-buffers))
-         (remaining (remq last-killed killed-buffers)))
-    (message (format "unkilling buffer %s, state: %s" last-killed remaining))
-    (setq killed-buffers remaining)
-    (find-file last-killed)))
-
-(global-set-key (kbd "s-W") 'my-unkill-buffer)
-
-
 
 (provide 'init-keybindings)

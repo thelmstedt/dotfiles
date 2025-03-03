@@ -1,241 +1,255 @@
-;;; prelude-packages.el --- Emacs Prelude: default package selection.
-;;
-;; Copyright © 2011-2021 Bozhidar Batsov
-;;
-;; Author: Bozhidar Batsov <bozhidar@batsov.com>
-;; URL: https://github.com/bbatsov/prelude
+;; core utilities
 
-;; This file is not part of GNU Emacs.
+(use-package diminish)                           ;; hide minor modes from modeline
 
-;;; Commentary:
+(use-package editorconfig)                       ;; support for .editorconfig files
+(use-package find-file-in-project)               ;; quickly find files in projects
 
-;; Takes care of the automatic installation of all the packages required by
-;; Emacs Prelude.  This module also adds a couple of package.el extensions
-;; and provides functionality for auto-installing major modes on demand.
+(use-package desktop                             ;; restore state on reopen
+  :init
+  (desktop-save-mode 1)
+  :custom
+  (desktop-restore-eager 5)                      ;; restore first 5 buffers eagerly
+  (desktop-auto-save-timeout 30)                 ;; save desktop every 30 seconds
+  (desktop-load-locked-desktop t)                ;; load even if locked
+  (desktop-save t)                               ;; always save
+  :config
+  (setq desktop-path (list user-emacs-directory)
+        desktop-dirname user-emacs-directory
+        desktop-base-file-name "emacs.desktop"))
 
-;;; License:
 
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License
-;; as published by the Free Software Foundation; either version 3
-;; of the License, or (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-;; Boston, MA 02110-1301, USA.
+;; completion system
+(use-package vertico                             ;; vertical completion UI for minibuffer
+  :init
+  (vertico-mode)
+  :custom
+  (vertico-cycle t))
 
-;;; Code:
-(require 'cl-lib)
-(require 'package)
+(use-package marginalia                          ;; add helpful annotations to completion candidates
+  :init
+  (marginalia-mode))
 
-;;;; Package setup and additional utility functions
+(use-package consult
+  :init
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :config
+  (consult-customize
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-recent-file consult--source-project-recent-file
+   :preview-key '(:debounce 0.4 any))
+  :hook (completion-list-mode . consult-preview-at-point-mode))
 
-;; accessing a package repo over https on Windows is a no go, so we
-;; fallback to http there
-(if (eq system-type 'windows-nt)
-    (add-to-list 'package-archives
-                 '("melpa" . "http://melpa.org/packages/") t)
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t))
+(use-package orderless                           ;; powerful completion style for fuzzy matching
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion))))
+  :init
+  (setq completion-category-defaults nil))
 
-;; load the pinned packages
-(let ((prelude-pinned-packages-file (expand-file-name "prelude-pinned-packages.el" prelude-dir)))
-  (if (file-exists-p prelude-pinned-packages-file)
-      (load prelude-pinned-packages-file)))
+(use-package embark                              ;; context menu for completions
+  :bind
+  (("C-." . embark-act)
+   ("C-;" . embark-dwim)
+   ("C-h B" . embark-bindings))
+  :init
+  (setq prefix-help-command #'embark-prefix-help-command)
+  :config
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
 
-;; set package-user-dir to be relative to Prelude install path
-(setq package-user-dir (expand-file-name "elpa" prelude-dir))
-(package-initialize)
+(use-package embark-consult                      ;; integration between embark and consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
 
-(defvar prelude-packages
-  '(
-    ace-window
-    ag
-    anzu
-    avy
-    browse-kill-ring
-    crux
-    deft
-    diff-hl
-    diminish
-    discover-my-major
-    easy-kill
-    editorconfig
-    epl
-    expand-region
-    find-file-in-project
-    flycheck
-    fuzzy
-    gist
-    git-modes
-    git-timemachine
-    guru-mode
-    hl-todo
-    ibuffer-vc fullframe
-    ido-completing-read+
-    imenu-anywhere
-    magit
-    markdown-mode
-    move-text
-    org
-    neotree
-    nlinum
-    operate-on-number
-    paredit
-    popup
-    projectile
-    rainbow-delimiters
-    smartparens
-    smartrep
-    smex
-    super-save
-    undo-tree
-    volatile-highlights
-    which-key
-    zenburn-theme
-    zop-to-char
-    )
-  "A list of packages to ensure are installed at launch.")
+;; navigation and search
+(use-package ace-window)                         ;; efficient window switching
+(use-package avy)                                ;; jump to visible text using char-based search
 
-(defun prelude-packages-installed-p ()
-  "Check if all packages in `prelude-packages' are installed."
-  (cl-every #'package-installed-p prelude-packages))
+(use-package imenu-anywhere)                     ;; search for symbols across buffers
 
-(defun prelude-require-package (package)
-  "Install PACKAGE unless already installed."
-  (unless (memq package prelude-packages)
-    (add-to-list 'prelude-packages package))
-  (unless (package-installed-p package)
-    (package-install package)))
+;;treemacs
 
-(defun prelude-require-packages (packages)
-  "Ensure PACKAGES are installed.
-Missing packages are installed automatically."
-  (mapc #'prelude-require-package packages))
+(use-package all-the-icons
+  :if (display-graphic-p)
+  :config
+  (when (not (member "all-the-icons" (font-family-list)))
+    (all-the-icons-install-fonts t)))
 
-(defun prelude-install-packages ()
-  "Install all packages listed in `prelude-packages'."
-  (unless (prelude-packages-installed-p)
-    ;; check for new packages (package versions)
-    (message "%s" "Emacs Prelude is now refreshing its package database...")
-    (package-refresh-contents)
-    (message "%s" " done.")
-    ;; install the missing packages
-    (prelude-require-packages prelude-packages)))
+(use-package treemacs
+  :bind
+  ("C-1"       . treemacs-select-window)
+  ("M-0"       . treemacs)
+  ("C-x t 1"   . treemacs-delete-other-windows)
+  ("C-x t t"   . treemacs)
+  ("C-x t d"   . treemacs-select-directory)
+  ("C-x t B"   . treemacs-bookmark)
+  ("C-x t C-t" . treemacs-find-file)
+  ("C-x t M-t" . treemacs-find-tag)
+  :config
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-git-mode 'deferred)
+  (treemacs-fringe-indicator-mode 'always)
+  :custom
+  (treemacs-sorting 'alphabetic-asc)
+  (treemacs-is-never-other-window t)
+  (treemacs-width 35))
 
-;; run package installation
-(prelude-install-packages)
+(use-package treemacs-projectile
+  :after (treemacs projectile))
 
-(defun prelude-list-foreign-packages ()
-  "Browse third-party packages not bundled with Prelude.
-Behaves similarly to `package-list-packages', but shows only the packages that
-are installed and are not in `prelude-packages'.  Useful for
-removing unwanted packages."
-  (interactive)
-  (package-show-package-list
-   (cl-set-difference package-activated-list prelude-packages)))
+(use-package treemacs-magit
+  :after (treemacs magit))
 
-;;;; Auto-installation of major modes on demand
+(use-package treemacs-icons-dired
+  :hook (dired-mode . treemacs-icons-dired-enable-once))
 
-(defmacro prelude-auto-install (extension package mode)
-  "When file with EXTENSION is opened triggers auto-install of PACKAGE.
-PACKAGE is installed only if not already present.  The file is opened in MODE."
-  `(add-to-list 'auto-mode-alist
-                `(,extension . (lambda ()
-                                 (unless (package-installed-p ',package)
-                                   (package-install ',package))
-                                 (,mode)))))
+(use-package treemacs-all-the-icons
+  :after (treemacs all-the-icons)
+  :config
+  (treemacs-load-theme "all-the-icons"))
 
-(defvar prelude-auto-install-alist
-  '(("\\.adoc\\'" adoc-mode adoc-mode)
-    ("\\.clj\\'" clojure-mode clojure-mode)
-    ("\\.cljc\\'" clojure-mode clojurec-mode)
-    ("\\.cljs\\'" clojure-mode clojurescript-mode)
-    ("\\.edn\\'" clojure-mode clojure-mode)
-    ("\\.cmake\\'" cmake-mode cmake-mode)
-    ("CMakeLists\\.txt\\'" cmake-mode cmake-mode)
-    ("\\.coffee\\'" coffee-mode coffee-mode)
-    ("\\.css\\'" css-mode css-mode)
-    ("\\.csv\\'" csv-mode csv-mode)
-    ("Cask" cask-mode cask-mode)
-    ("\\.d\\'" d-mode d-mode)
-    ("\\.dart\\'" dart-mode dart-mode)
-    ("\\.elm\\'" elm-mode elm-mode)
-    ("\\.ex\\'" elixir-mode elixir-mode)
-    ("\\.exs\\'" elixir-mode elixir-mode)
-    ("\\.elixir\\'" elixir-mode elixir-mode)
-    ("\\.erl\\'" erlang erlang-mode)
-    ("\\.feature\\'" feature-mode feature-mode)
-    ("\\.go\\'" go-mode go-mode)
-    ("\\.graphql\\'" graphql-mode graphql-mode)
-    ("\\.groovy\\'" groovy-mode groovy-mode)
-    ("\\.haml\\'" haml-mode haml-mode)
-    ("\\.hs\\'" haskell-mode haskell-mode)
-    ("\\.jl\\'" julia-mode julia-mode)
-    ("\\.json\\'" json-mode json-mode)
-    ("\\.kt\\'" kotlin-mode kotlin-mode)
-    ("\\.kv\\'" kivy-mode kivy-mode)
-    ("\\.latex\\'" auctex LaTeX-mode)
-    ("\\.less\\'" less-css-mode less-css-mode)
-    ("\\.lua\\'" lua-mode lua-mode)
-    ("\\.markdown\\'" markdown-mode markdown-mode)
-    ("\\.md\\'" markdown-mode markdown-mode)
-    ("\\.ml\\'" tuareg tuareg-mode)
-    ("\\.pp\\'" puppet-mode puppet-mode)
-    ("\\.php\\'" php-mode php-mode)
-    ("\\.proto\\'" protobuf-mode protobuf-mode)
-    ("\\.pyd\\'" cython-mode cython-mode)
-    ("\\.pyi\\'" cython-mode cython-mode)
-    ("\\.pyx\\'" cython-mode cython-mode)
-    ("PKGBUILD\\'" pkgbuild-mode pkgbuild-mode)
-    ("\\.rkt\\'" racket-mode racket-mode)
-    ("\\.rs\\'" rust-mode rust-mode)
-    ("\\.sass\\'" sass-mode sass-mode)
-    ("\\.scala\\'" scala-mode scala-mode)
-    ("\\.scss\\'" scss-mode scss-mode)
-    ("\\.slim\\'" slim-mode slim-mode)
-    ("\\.styl\\'" stylus-mode stylus-mode)
-    ("\\.swift\\'" swift-mode swift-mode)
-    ("\\.textile\\'" textile-mode textile-mode)
-    ("\\.thrift\\'" thrift thrift-mode)
-    ("\\.yml\\'" yaml-mode yaml-mode)
-    ("\\.yaml\\'" yaml-mode yaml-mode)
-    ("Dockerfile\\'" dockerfile-mode dockerfile-mode)))
+(use-package treemacs-tab-bar
+  :after (treemacs)
+  :config (treemacs-set-scope-type 'Tabs))
 
-;; markdown-mode doesn't have autoloads for the auto-mode-alist
-;; so we add them manually if it's already installed
-(when (package-installed-p 'markdown-mode)
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . gfm-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . gfm-mode)))
 
-;; same with adoc-mode
-(when (package-installed-p 'adoc-mode)
-  (add-to-list 'auto-mode-alist '("\\.adoc\\'" . adoc-mode))
-  (add-to-list 'auto-mode-alist '("\\.asciidoc\\'" . adoc-mode)))
 
-;; and pkgbuild-mode
-(when (package-installed-p 'pkgbuild-mode)
-  (add-to-list 'auto-mode-alist '("PKGBUILD\\'" . pkgbuild-mode)))
+(use-package which-key                           ;; display available keybindings
+  :config (which-key-mode))
 
-;; build auto-install mappings
-(mapc
- (lambda (entry)
-   (let ((extension (car entry))
-         (package (cadr entry))
-         (mode (cadr (cdr entry))))
-     (unless (package-installed-p package)
-       (prelude-auto-install extension package mode))))
- prelude-auto-install-alist)
+;; search
+(use-package rg                                  ;; ripgrep interface
+  :config
+  (rg-enable-default-bindings))
+
+;; editing
+
+
+
+(use-package smartparens                         ;; automatic insertion of paired delimiters
+  :hook ((clojure-mode
+          emacs-lisp-mode
+          eval-expression-minibuffer-setup
+          ielm-mode
+          lisp-mode
+          lisp-interaction-mode
+          scheme-mode) . smartparens-strict-mode)
+  :config
+  (require 'smartparens-config)
+  (sp-use-paredit-bindings)
+  (show-smartparens-global-mode t))
+
+(use-package undo-tree                           ;; better undo/redo visualization
+  :config
+  (global-undo-tree-mode)
+  (defalias 'redo 'undo-tree-redo)
+  :bind
+  ("s-z" . undo)
+  ("s-S-z" . redo))
+
+
+;; syntax highlighting
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)  ; ask before installing grammars
+  :config
+  (global-treesit-auto-mode)
+
+  ;; map legacy modes to tree-sitter ones
+  (setq major-mode-remap-alist
+        '((python-mode . python-ts-mode)
+          (javascript-mode . js-ts-mode)
+          (typescript-mode . typescript-ts-mode)
+          (json-mode . json-ts-mode)
+          (css-mode . css-ts-mode)
+          (yaml-mode . yaml-ts-mode)
+          (bash-mode . bash-ts-mode)
+          (rust-mode . rust-ts-mode)))
+
+  ;; languages to auto-install
+  (setq treesit-auto-langs
+        '(bash
+          cpp
+          css
+          elisp
+          go
+          html
+          javascript
+          json
+          python
+          rust
+          typescript
+          yaml))
+
+  ;; optional but recommended font locks
+  (setq treesit-font-lock-level 4))
+
+
+;; git and version control
+(use-package diff-hl)                            ;; highlight uncommitted changes
+(use-package magit                               ;; complete git interface
+  :bind ("C-x C-z" . magit-status))
+(use-package forge                               ;; github integration for magit
+  :after magit)
+
+;; project management
+(use-package projectile                          ;; project interaction library
+  :config
+  (setq projectile-use-git-grep t))
+
+;; modes for specific file types
+(use-package deft                                ;; quick note taking and searching
+  :custom
+  (deft-directory "~/Dropbox/deft")
+  (deft-extension "org")
+  (deft-text-mode 'org-mode)
+  :bind ([f1] . deft)
+  :hook (deft-mode . deft-filter-clear)
+  :config
+  (define-key deft-mode-map (kbd "C-w") 'deft-filter-clear))
+
+(use-package markdown-mode                       ;; markdown editing
+  :mode (("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . gfm-mode)))
+
+;; built-in customizations
+(use-package paren                               ;; highlight matching parentheses
+  :config
+  (show-paren-mode t)
+  (setq show-paren-style 'parenthesis)
+  (setq show-paren-delay 0))
+
+;; shell stuff
+(add-to-list 'auto-mode-alist '("\\.zsh$" . sh-mode))
+
+;; syntax checking
+(use-package flycheck)                           ;; on-the-fly syntax checking
+(use-package hl-todo)                            ;; highlight TODO/FIXME/etc comments
+
+;; themes and visual
+(use-package zenburn-theme                       ;; low contrast color theme
+  :config
+  (load-theme 'zenburn t))
+
+
+;; terminal
+(use-package vterm                               ;; better terminal
+  :bind ("C-c t" . vterm))
+
+;; server
+(use-package server                              ;; emacs server for fast startup
+  :config
+  (unless (server-running-p)
+    (server-start)))
+
+(defalias 'list-buffers 'ibuffer)                ;; use ibuffer for buffer list
+
+
 
 (provide 'init-packages)
-;; Local Variables:
-;; byte-compile-warnings: (not cl-functions)
-;; End:
-
-;;; prelude-packages.el ends here

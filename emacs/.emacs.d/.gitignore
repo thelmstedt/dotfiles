@@ -16,3 +16,5 @@ transient
 smex-items
 recentf
 ido.last
+*.desktop
+*.desktop.lock
