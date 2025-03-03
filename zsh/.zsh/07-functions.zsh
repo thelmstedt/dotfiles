@@ -113,3 +113,21 @@ function vv() {
   [ -f pyproject.toml ] && echo "Installing deps from pyproject.toml" && uv pip install -r pyproject.toml
 }
 
+function __tigr() {
+  if [ -z "$1" ]
+  then
+    if [ $(git rev-parse --verify master 2>/dev/null) ]
+    then
+      branch='master'
+    elif [ $(git rev-parse --verify main 2>/dev/null) ]
+    then
+      branch='main'
+    fi
+  else
+    branch=$1
+  fi
+  echo tig $branch.. --reverse
+  tig $branch.. --reverse
+}
+
+alias tigr=__tigr
