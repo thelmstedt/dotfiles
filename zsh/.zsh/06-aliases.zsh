@@ -73,3 +73,8 @@ alias -g gbd='GRADLE_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspen
 alias -g nt="-xcheck -xtest"
 alias r='gradle'
 alias gw='$(git rev-parse --show-toplevel)/gradlew'
+
+# desk
+alias deskup="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 1150"
+alias deskdown="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 730"
+
