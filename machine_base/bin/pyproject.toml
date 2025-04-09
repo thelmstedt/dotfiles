@@ -8,4 +8,5 @@ dependencies = [
     "click",
     "dateparser",
     "rich",
+    "textual>=2.1.2",
 ]

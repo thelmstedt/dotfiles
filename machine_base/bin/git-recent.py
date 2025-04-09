@@ -16,6 +16,8 @@ from rich.console import Console
 
 console = Console()
 
+def get_current_user() -> str:
+    return run_git_command(['git', 'config', 'user.name']).strip()
 
 def run_git_command(cmd: list[str]) -> str:
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -53,7 +55,8 @@ def parse_since(since: str) -> datetime:
 @click.command()
 @click.option('--since', default='2 months ago',
               help='Show branches updated since (e.g. "2 weeks ago", "3 months ago", "2023-01-01")')
-def main(since: str):
+@click.option('--mine', is_flag=True, help='Show only branches created by the current user')
+def main(since: str, mine:bool):
     """Show git branch status"""
     since_date = parse_since(since)
     default_branch = get_default_branch()
@@ -70,12 +73,18 @@ def main(since: str):
     last_skipped = None
     last_processed = None
 
+    current_user = get_current_user()
+
     for line in branches.split('\n'):
         if not line:
             continue
 
         date_str, branch, fullref, author, message, relative_date = line.split('|')
         commit_date = datetime.fromisoformat(date_str.strip()).astimezone(timezone.utc)
+
+        if mine and author.strip() != current_user:
+            skipped_branches += 1
+            continue
 
         if commit_date < since_date and processed_branches > 10:
             last_skipped = relative_date

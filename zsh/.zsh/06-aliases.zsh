@@ -43,20 +43,6 @@ function de() {
  docker exec -it $(docker ps | grep $1 | awk '{print $1}') $2
 }
 
-# aws profiles
-alias -g apcd='AWS_PROFILE=clarivate'
-alias -g apwa='AWS_PROFILE=wa-dev'
-alias -g apcp='AWS_PROFILE=clarivate-prod'
-alias -g apatms='AWS_PROFILE=atms'
-
-# corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
-alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat --proxy-type socks5 --proxy localhost:1080 %h %p\""'
-alias -g pph="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"
-alias -g pp="ppg pph"
-
-# if you want to ssh to somewhere
-alias -g pssh="ssh -o ProxyCommand='nc -x localhost:1080 %h %p'"
-
 alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
 

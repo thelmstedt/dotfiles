@@ -21,23 +21,19 @@ Provided we've stowed `~/.config/aconfmgr` in the previous step - we can restore
 
 # App Notes
 
-## fonts
-
-https://old.reddit.com/r/archlinux/comments/5r5ep8/make_your_arch_fonts_beautiful_easily/
-
 ## Firefox
 
-https://github.com/yourduskquibbles/webannoyances
+link `./extrabits/firefox/userChrome.css` to `~/.mozilla/firefox/$PROFILE/chrome/userChrome.css`
+link `./extrabits/firefox/user.css` to `~/.mozilla/firefox/$PROFILE/user.js`
 
-### Tree Style Tabs
-
-link `./extrabits/firefox/userChrome.css` to `~/.mozilla/firefox/PROFILE/chrome/userChrome.css`
-
-For tree style tabs, everything must open as a nested tab, no new windows for target=_blank
-    
-    browser.link.open_newwindow.restriction=0
 
 ## IntelliJ 
+
+### Python debugging slow?
+
+As of `2024.3` python debugging has MASSIVELY slowed down. Edit this registry value 
+
+    python.debug.low.impact.monitoring.api=False
 
 
 ### Focus follows mouse
