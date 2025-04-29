@@ -15,6 +15,7 @@ fi
 ##
 if [[ "$OS" == "linux" ]]; then
   export PATH=/usr/local/bin:/var/lib/snapd/snap/bin:$PATH
+  export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 fi
 if [[ "$OS" == "mac" ]]; then
   export PATH=/opt/homebrew/bin/:$PATH
@@ -31,6 +32,12 @@ fi
 if (( $+commands[rg] )); then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
+
+[[ -s "/opt/cuda/bin" ]] && export PATH=/opt/cuda/bin:$PATH
+[[ -s "/opt/cuda/lib64" ]] && export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH
+[[ -s "/opt/cusparselt/lib/" ]] && export LD_LIBRARY_PATH=/opt/cusparselt/lib/:$LD_LIBRARY_PATH
+
+
 
 # bun
 [[ -s "$HOME/.bun/bin" ]] && PATH=$PATH:$HOME/.bun/bin

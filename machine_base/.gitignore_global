@@ -12,7 +12,6 @@ hs_err_*.log
 .stack-work/
 *.pyc
 indexinglog
-*.pem
 *.#*
 node_modules
 pip-selfcheck.json

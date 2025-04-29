@@ -12,11 +12,11 @@
  * "Ad meliora"                                                             *
  * version: 135                                                             *
  * url: https://github.com/yokoffing/Betterfox                              *
- ****************************************************************************/
+****************************************************************************/
 
 /****************************************************************************
  * SECTION: FASTFOX                                                         *
- ****************************************************************************/
+****************************************************************************/
 /** GENERAL ***/
 user_pref("content.notify.interval", 100000);
 
@@ -55,7 +55,7 @@ user_pref("layout.css.grid-template-masonry-value.enabled", true);
 
 /****************************************************************************
  * SECTION: SECUREFOX                                                       *
- ****************************************************************************/
+****************************************************************************/
 /** TRACKING PROTECTION ***/
 user_pref("browser.contentblocking.category", "strict");
 user_pref("urlclassifier.trackingSkipURLs", "*.reddit.com, *.twitter.com, *.twimg.com, *.tiktok.com");
@@ -77,6 +77,7 @@ user_pref("security.tls.enable_0rtt_data", false);
 
 /** DISK AVOIDANCE ***/
 user_pref("browser.privatebrowsing.forceMediaMemoryCache", true);
+user_pref("browser.sessionstore.interval", 60000);
 
 /** SHUTDOWN & SANITIZING ***/
 user_pref("browser.privatebrowsing.resetPBM.enabled", true);
@@ -160,7 +161,7 @@ user_pref("network.connectivity-service.enabled", false);
 
 /****************************************************************************
  * SECTION: PESKYFOX                                                        *
- ****************************************************************************/
+****************************************************************************/
 /** MOZILLA UI ***/
 user_pref("browser.privatebrowsing.vpnpromourl", "");
 user_pref("extensions.getAddons.showPane", false);
@@ -215,46 +216,49 @@ user_pref("layout.word_select.eat_space_to_next_word", false);
 
 /****************************************************************************
  * START: MY OVERRIDES                                                      *
- ****************************************************************************/
+****************************************************************************/
 // visit https://github.com/yokoffing/Betterfox/wiki/Common-Overrides
 // visit https://github.com/yokoffing/Betterfox/wiki/Optional-Hardening
 // Enter your personal overrides below this line:
 
-// enable containers
+user_pref("browser.contentblocking.category", "standard");
+user_pref("permissions.default.geo", 0);
+user_pref("permissions.default.desktop-notification", 0);
 user_pref("privacy.userContext.enabled", true);
 
-// strict is too bad
-user_pref("browser.contentblocking.category", "standard");
-
-// 1: opens links in the current tab
-// 2: opens links in a new window
-// 3: opens links in a new tab
-user_pref("browser.link.open_newwindow", 3);
-
-// ALL new windows open according to browser.link.open_newwindow
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 user_pref("browser.link.open_newwindow.restriction", 0);
-
-// 0: allow all
-// 1: block audio
-// 5: block audio and video
 user_pref("media.autoplay.default", 1);
-
-// allowed
 user_pref("media.autoplay.allow-muted", 1);
+
+
 
 /****************************************************************************
  * SECTION: SMOOTHFOX                                                       *
- ****************************************************************************/
+****************************************************************************/
 // visit https://github.com/yokoffing/Betterfox/blob/main/Smoothfox.js
 // Enter your scrolling overrides below this line:
 
+
+/****************************************************************************************
+ * OPTION: NATURAL SMOOTH SCROLLING V3 [MODIFIED]                                      *
+ ****************************************************************************************/
+// credit: https://github.com/AveYo/fox/blob/cf56d1194f4e5958169f9cf335cd175daa48d349/Natural%20Smooth%20Scrolling%20for%20user.js
+// recommended for 120hz+ displays
+// largely matches Chrome flags: Windows Scrolling Personality and Smooth Scrolling
 user_pref("apz.overscroll.enabled", true); // DEFAULT NON-LINUX
 user_pref("general.smoothScroll", true); // DEFAULT
-user_pref("mousewheel.min_line_scroll_amount", 10); // 10-40; adjust this number to your liking; default=5
-user_pref("general.smoothScroll.mouseWheel.durationMinMS", 80); // default=50
-user_pref("general.smoothScroll.currentVelocityWeighting", "0.15"); // default=.25
-user_pref("general.smoothScroll.stopDecelerationWeighting", "0.6"); // default=.4
+user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 12);
+user_pref("general.smoothScroll.msdPhysics.enabled", true);
+user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant", 600);
+user_pref("general.smoothScroll.msdPhysics.regularSpringConstant", 650);
+user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaMS", 25);
+user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaRatio", "2");
+user_pref("general.smoothScroll.msdPhysics.slowdownSpringConstant", 250);
+user_pref("general.smoothScroll.currentVelocityWeighting", "1");
+user_pref("general.smoothScroll.stopDecelerationWeighting", "1");
+user_pref("mousewheel.default.delta_multiplier_y", 300); // 250-400; adjust this number to your liking
 
 /****************************************************************************
  * END: BETTERFOX                                                           *
- ****************************************************************************/
+****************************************************************************/

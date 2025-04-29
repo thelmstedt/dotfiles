@@ -2,7 +2,7 @@ add_newline = true
 
 format = """
 $cmd_duration\
-${username}@${hostname}$aws | ${time} | ${directory} ${python}\
+${custom.vpnns}${username}@${hostname}$aws | ${time} | ${directory} ${python}\
 ${git_branch}${git_commit}${git_state}${git_status}${custom.sincelastcommit}${custom.lastcommit}\
 $line_break${jobs}${status}${character}\
 """
@@ -90,3 +90,13 @@ success_symbol = "[#](bold green)"
 format = "( on [$symbol$profile]($style) )"
 style = "bold blue"
 symbol = "🅰 "
+
+##
+## vpn
+##
+
+[custom.vpnns]
+command = "ip link show | grep -q tun0 && echo \"VPN\""
+when = "ip link show | grep -q tun0"
+style = "bg:red fg:white"
+format = "[$output]($style) "

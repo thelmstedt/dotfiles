@@ -30,6 +30,7 @@
 
     recent = "!uv run ~/bin/git-recent.py"
     r = recent
+    rl = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
     pushf = push --force-with-lease
         
 	lastweek = shortlog --since '1 weeks ago'

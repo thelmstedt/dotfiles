@@ -1,0 +1,113 @@
+// -*- mode: jsonc -*-
+{
+  "height": 30,
+  "spacing": 4,
+  "modules-left": [
+    "hyprland/workspaces",
+    "hyprland/window"
+  ],
+  "modules-center": [
+  ],
+  "modules-right": [
+    "custom/spotify",
+    "pulseaudio",
+    "network#enp5s0",
+    "cpu",
+    "memory",
+    "temperature",
+    "clock",
+    "tray"
+  ],
+  "hyprland/submap": {
+    "format": "<span style=\"italic\">{}</span>"
+  },
+  "hyprland/window": {
+    "max-length": 500,
+    "separate-outputs": true
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "tray": {
+    // "icon-size": 21,
+    "spacing": 10
+  },
+  "clock": {
+    // "timezone": "America/New_York",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format": "{:%Y-%m-%d %H:%M:%S}",
+    "interval": 1
+  },
+  "cpu": {
+    "format": "{usage}% ",
+    "tooltip": false
+  },
+  "memory": {
+    "format": "{}% "
+  },
+  "temperature": {
+    "thermal-zone": 2,
+    "hwmon-path": "/sys/class/hwmon/hwmon4/temp1_input",
+    "critical-threshold": 80,
+    "format-critical": "{icon} {temperatureC}°C",
+    "format": "{icon} {temperatureC}°C",
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
+    "interval": 1
+  },
+  "network#enp5s0": {
+    "interface": "enp6s0",
+    "format": "{bandwidthUpBytes} ↑ {bandwidthDownBytes} ↓",
+    "format-disconnected": "Disconnected",
+    "interval": 1,
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{volume}% {icon} {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        "",
+        "",
+        ""
+      ]
+    },
+    "on-click": "pavucontrol"
+  },
+  "custom/spotify": {
+    "format": "{text}",
+    "exec": "~/.config/waybar/media.sh",
+    "interval": 1,
+    "on-click": "playerctl play-pause",
+    "max-length": 100
+  },
+  "custom/cpu_freq": {
+    "format": "{text}",
+    "exec": "~/.config/waybar/cpu_freq.sh",
+    "interval": 1
+  },
+  "custom/cpu_fanspeed": {
+    "format": "{text}",
+    "exec": "~/.config/waybar/cpu_fanspeed.sh",
+    "interval": 1
+  }
+
+}

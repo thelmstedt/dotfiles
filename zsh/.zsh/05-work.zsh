@@ -36,11 +36,4 @@ function aws_login () {
 #
 # VPN shenanigans
 #
-
-# corporate vpn running in a docker container publishing socks proxy (for git) and http proxy (for everything else)
-alias -g ppg='GIT_SSH_COMMAND="ssh -o ProxyCommand=\"ncat --proxy-type socks5 --proxy localhost:1080 %h %p\""'
-alias -g pph="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"
-alias -g pp="ppg pph"
-
-# if you want to ssh to somewhere
-alias -g pssh="ssh -o ProxyCommand='nc -x localhost:1080 %h %p'"
+alias -g pp="https_proxy=http://localhost:8118 http_proxy=http://localhost:8118"

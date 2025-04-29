@@ -12,7 +12,7 @@ else
   alias ll="ls -l"
 fi
 
-
+alias startx=Hyprland
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
 alias lower="tr '[:upper:]' '[:lower:]'"
 alias upper="tr '[:lower:]' '[:upper:]'"
@@ -42,6 +42,9 @@ function ktt() {
 function de() {
  docker exec -it $(docker ps | grep $1 | awk '{print $1}') $2
 }
+alias dc="docker compose"
+alias vpndo='nsenter --target $(docker inspect --format "{{.State.Pid}}" vpn-vpn-1) --net --setuid $(id -u)'
+
 
 alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
@@ -65,3 +68,6 @@ alias gw='$(git rev-parse --show-toplevel)/gradlew'
 alias deskup="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 1150"
 alias deskdown="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 730"
 
+
+# wayland
+alias postman="postman --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations"
