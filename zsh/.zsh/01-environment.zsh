@@ -33,11 +33,14 @@ if (( $+commands[rg] )); then
   export RIPGREP_CONFIG_PATH="$HOME/.ripgreprc"
 fi
 
+# cuda
 [[ -s "/opt/cuda/bin" ]] && export PATH=/opt/cuda/bin:$PATH
 [[ -s "/opt/cuda/lib64" ]] && export LD_LIBRARY_PATH=/opt/cuda/lib64:$LD_LIBRARY_PATH
 [[ -s "/opt/cusparselt/lib/" ]] && export LD_LIBRARY_PATH=/opt/cusparselt/lib/:$LD_LIBRARY_PATH
 
-
+# TODO - does this actually do anything? I've had to manually alias postman/spotify with flags
+# wayland support for electron
+export ELECTRON_OZONE_PLATFORM_HINT=auto
 
 # bun
 [[ -s "$HOME/.bun/bin" ]] && PATH=$PATH:$HOME/.bun/bin

@@ -33,14 +33,9 @@ function ke() {
     echo kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
     kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
 }
-# for TmvTail
-function ktt() {
-    echo ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
-    ke "$1" tail -f /tmv/ceeqtm/logs/django/exceptions.log "${@:2}"
-}
 
 function de() {
- docker exec -it $(docker ps | grep $1 | awk '{print $1}') $2
+ docker exec -it "$(docker ps | grep $1 | awk '{print $1}')" "$2"
 }
 alias dc="docker compose"
 alias vpndo='nsenter --target $(docker inspect --format "{{.State.Pid}}" vpn-vpn-1) --net --setuid $(id -u)'
@@ -71,3 +66,4 @@ alias deskdown="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385
 
 # wayland
 alias postman="postman --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations"
+alias spotify="spotify --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations"

@@ -16,22 +16,18 @@ alias -g apcd='AWS_PROFILE=clarivate'
 alias -g apcp='AWS_PROFILE=clarivate-prod'
 
 function aws_login () {
-  echo
-  echo apcd aws sso login
-  apcd aws sso login
-
-  echo
-  echo apcp aws sso login
-  apcp aws sso login
-
-  echo
-  echo apcp aws sts get-caller-identity
-  apcp aws sts get-caller-identity
-
-  echo
-  echo apcd aws sts get-caller-identity
-  apcd aws sts get-caller-identity
+  set -x
+  apcd BROWSER=/usr/bin/chromium aws sso login
+  apcp BROWSER=/usr/bin/chromium aws sso login
+  apcp BROWSER=/usr/bin/chromium aws sts get-caller-identity
+  apcd BROWSER=/usr/bin/chromium aws sts get-caller-identity
 }
+
+#
+#
+#
+
+alias keeper='BROWSER=/usr/bin/chromium keeperpasswordmanager'
 
 #
 # VPN shenanigans
