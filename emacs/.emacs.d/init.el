@@ -96,8 +96,7 @@
  '(menu-bar-mode nil)
  '(mouse-autoselect-window t)
  '(org-agenda-files nil nil nil "Customized with use-package org")
- '(package-selected-packages
-   '(org-journal treemacs-tab-bar treemacs-all-the-icons treemacs-icons-dired treemacs-magit treemacs-projectile treemacs zop-to-char zenburn-theme which-key vterm volatile-highlights vertico undo-tree treesit-auto super-save smex smartrep smartparens rg rainbow-delimiters projectile popup paredit orderless operate-on-number nlinum neotree move-text marginalia imenu-anywhere ido-completing-read+ ibuffer-vc hydra hl-todo guru-mode git-timemachine git-modes gist general fuzzy fullframe forge flycheck find-file-in-project expand-region epl embark-consult editorconfig easy-kill discover-my-major diminish diff-hl deft crux browse-kill-ring anzu ag ace-window))
+ '(package-selected-packages nil)
  '(tab-width 2)
  '(tool-bar-mode nil)
  '(treesit-simple-indent-rules nil t)

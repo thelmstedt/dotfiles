@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+out_file=/tmp/hyprprop.out
+error_file=/tmp/hyprprop.error
+
+visible_workspaces=$(hyprctl monitors -j \
+                    | jq -r '[.[].activeWorkspace.id,
+                              .[].specialWorkspace.id | select(. != null and . != 0)]
+                             | flatten
+                             | unique')
+
+hyprctl clients -j | jq --argjson visibleWorkspaces "$visible_workspaces" \
+                        -r '.[] | select(.workspace.id | IN($visibleWorkspaces[]))
+                                | [.at[0], .at[1], .size[0], .size[1]]
+                                | "\(.[0]),\(.[1]) \(.[2])x\(.[3])"' \
+                   | slurp -r > $out_file 2> $error_file &
+PID=$!
+wait $PID
+
+error=$(cat $error_file)
+rm $error_file
+
+selection=$(cat $out_file)
+rm $out_file
+
+[ -n "$error" ] && echo "ERROR" && echo $error
+[ -z "$selection" ] && echo "No output - exiting"
+
+x=$(echo "$selection" | awk -F'[, x]' '{print $1}')
+y=$(echo "$selection" | awk -F'[, x]' '{print $2}')
+w=$(echo "$selection" | awk -F'[, x]' '{print $3}')
+h=$(echo "$selection" | awk -F'[, x]' '{print $4}')
+
+hyprctl clients -j | jq --argjson visibleWorkspaces "$visible_workspaces" \
+                        --argjson x "$x" --argjson y "$y" \
+                        --argjson w "$w" --argjson h "$h" \
+                        '.[] | select(.workspace.id | IN($visibleWorkspaces[]))
+                             | select(.at | type == "array")
+                             | select(.size | type == "array")
+                             | select(.at[0] == ($x | tonumber)
+                             and .at[1] == ($y | tonumber)
+                             and .size[0] == ($w | tonumber)
+                             and .size[1] == ($h | tonumber))'
