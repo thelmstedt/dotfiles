@@ -28,7 +28,8 @@
 	p = pull
 	pr = pull --rebase 
 
-    recent = "!uv run ~/bin/git-recent.py"
+    latest = "!uv run ~/bin/latest_branch.py"
+    recent = "latest"
     r = recent
     rl = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
     pushf = push --force-with-lease
