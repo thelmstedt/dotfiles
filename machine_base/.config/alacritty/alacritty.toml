@@ -576,7 +576,7 @@ y = 0
 hide_when_typing = true
 
 [scrolling]
-history = 10000
+history = 100000
 multiplier = 3
 
 [selection]
