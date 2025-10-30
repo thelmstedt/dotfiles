@@ -1,0 +1,3 @@
+theme = Adwaita
+window-theme = light
+copy-on-select = clipboard

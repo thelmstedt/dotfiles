@@ -85,7 +85,7 @@ format = " | [$output](grey)"
 ##
 
 [character]
-success_symbol = "[#](bold green)"
+#success_symbol = "[\\$](bold green)"
 
 ##
 ## aws
