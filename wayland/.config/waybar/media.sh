@@ -2,7 +2,6 @@
 status=$(playerctl status 2>/dev/null)
 icon="🎜"
 
-
 if [ "$status" = "Playing" ]; then
   icon="♫"  # simple music note
 elif [ "$status" = "Paused" ]; then
@@ -12,4 +11,5 @@ elif [ "$status" = "Stopped" ]; then
 fi
 
 metadata=$(playerctl metadata --format '{{ artist }} - {{ title }}' 2>/dev/null || echo "")
-echo "$icon $metadata"
+long_metadata=$(playerctl metadata --format '{{ artist }} - {{ album }} - {{ title }}' 2>/dev/null || echo "")
+echo "{\"text\": \"$icon $long_metadata\", \"class\": \"spotify\", \"alt\": \"$status\"}"
