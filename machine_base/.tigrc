@@ -1,1 +1,18 @@
-set ignore-case = yes
+# display
+set vertical-split = auto
+set split-view-height = 70%
+set diff-options = --histogram
+set log-options = --oneline --graph --decorate
+set line-graphics = utf-8
+set tab-size = 2
+
+# search
+set ignore-case = smart-case
+
+# actually readable
+set main-view = line-number:no,interval=100 id:width=6 date:custom author:width=6 commit-title:graph=v2,refs=yes
+
+# date switching, defaults to custom
+set main-view-date-format = "%Y-%m-%d %H:%M"
+bind main T :set main-view-date = relative
+bind main t :set main-view-date = custom

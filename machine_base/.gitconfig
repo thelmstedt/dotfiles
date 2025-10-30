@@ -28,9 +28,9 @@
 	p = pull
 	pr = pull --rebase 
 
-    latest = "!uv run ~/bin/latest_branch.py"
-    recent = "latest"
-    r = recent
+    recent = r
+    r = "!uv run ~/bin/latest_branch.py"
+    rr = "!uv run ~/bin/latest_branch.py --no-fetch"
     rl = for-each-ref --sort=committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'
     pushf = push --force-with-lease
         

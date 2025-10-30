@@ -221,6 +221,12 @@ class BranchCommit:
 
         return " ".join(parts) if parts else "up to date"
 
+    @property
+    def is_merged(self) -> bool:
+        """check if branch is merged (only behind, not ahead)"""
+        return (self.behind is not None and self.ahead is not None and
+                self.behind > 0 and self.ahead == 0)
+
 
 # =============================================================================
 # BRANCH LOGIC
@@ -377,6 +383,56 @@ def render_branch_group(
     console.print(table)
 
 
+def render_merged_branches(commits: List[BranchCommit]):
+    """render merged branches for easy deletion"""
+    merged = [c for c in commits if c.is_merged and not c.is_main_branch and not c.is_current]
+
+    if not merged:
+        console.print('\n[green]no merged branches to delete[/green]')
+        return
+
+    console.print(f'\n[yellow]merged branches ({len(merged)} total):[/yellow]')
+
+    # sort by date (oldest first for cleanup)
+    merged.sort(key=lambda c: c.commit_epoch)
+
+    local_branches = []
+    remote_branches = []
+
+    for commit in merged:
+        branch_name = commit.branch_name
+
+        # collect local branches that can be deleted
+        if commit.branch_type in (BranchType.LOCAL_ONLY, BranchType.TRACKED):
+            if not branch_name.startswith('origin/'):
+                local_branches.append(branch_name)
+
+        # collect remote branches (check if corresponding remote exists)
+        if commit.branch_type == BranchType.TRACKED:
+            # for tracked branches, we know there's a remote
+            remote_branches.append(branch_name)
+        elif commit.branch_type == BranchType.REMOTE_ONLY and branch_name.startswith('origin/'):
+            # for remote-only, strip the origin/ prefix
+            remote_branches.append(branch_name.replace('origin/', ''))
+
+        console.print(f'  [dim]{commit.relative_date}[/dim] [red]{branch_name}[/red] [dim]({commit.author})[/dim]')
+
+    if local_branches or remote_branches:
+        console.print(f'\n[dim]copy/paste to delete:[/dim]')
+
+        if local_branches:
+            console.print(f'git branch -D {" ".join(local_branches)}')
+
+        if remote_branches:
+            # modern syntax is cleaner than the old :branch syntax
+
+            for branch in remote_branches:
+                console.print(f'git checkout {branch}')
+
+            for branch in remote_branches:
+                console.print(f'git push origin --delete {branch}')
+
+
 def render_commands(latest: BranchCommit, filepath: str):
     """render helpful git commands"""
     console.print(f'\n[dim]commands:[/dim]')
@@ -403,8 +459,12 @@ def render_commands(latest: BranchCommit, filepath: str):
     '--no-fetch', is_flag=True,
     help='skip fetching from remotes'
 )
+@click.option(
+    '--list-merged', is_flag=True,
+    help='show merged branches ready for deletion'
+)
 @click.argument('filepath', default='.')
-def main(single: bool, base: Optional[str], no_fetch: bool, filepath: str):
+def main(single: bool, base: Optional[str], no_fetch: bool, list_merged: bool, filepath: str):
     """find latest commit across all git branches"""
 
     if not is_git_repo():
@@ -468,12 +528,17 @@ def main(single: bool, base: Optional[str], no_fetch: bool, filepath: str):
     latest = all_sorted[0]
 
     # render output
-    render_main_result(latest, target, base, author_colors)
+    if not list_merged:
+        render_main_result(latest, target, base, author_colors)
 
-    if not single:
-        render_branch_group(local_only, "local only branches", latest, author_colors)
-        render_branch_group(tracked, "tracked branches", latest, author_colors, show_diverged=True)
-        render_branch_group(remote_only, "remote only branches", latest, author_colors)
+        if not single:
+            render_branch_group(tracked, "tracked branches", latest, author_colors, show_diverged=True)
+            render_branch_group(local_only, "local only branches", latest, author_colors)
+            render_branch_group(remote_only, "remote only branches", latest, author_colors)
+
+    # always show merged branches if requested
+    if list_merged:
+        render_merged_branches(valid_commits)
 
 
 if __name__ == '__main__':

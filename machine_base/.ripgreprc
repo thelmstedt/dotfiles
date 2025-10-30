@@ -13,3 +13,6 @@
 
 # Sort by file path
 --sort=path
+
+# ignore .git, since we've enabled --hidden above and TECHNICALLY .git isn't gitignored
+--glob=!.git/
