@@ -57,17 +57,36 @@ function awk_column() {
   zparseopts -D -E -- F+:=separator
   separator=("${(@)separator:#-F}")
 
-  cmd="\$$1" #required arg
-  if [ ! -z "$2" ]
-  then
-    cmd="$cmd$(printf '" "$%s' "${@:2}")" #optionally additional args separated by space
+  # check if first arg starts with 'x' for exclusion
+  if [[ "$1" =~ ^x[0-9]+$ ]]; then
+    # exclusion mode - collect all x args
+    excluded=()
+    for arg in "$@"; do
+      if [[ "$arg" =~ ^x([0-9]+)$ ]]; then
+        excluded+=(${match[1]})
+      else
+        break
+      fi
+    done
+
+    # build awk script for exclusions
+    exclude_list=$(IFS=,; echo "${excluded[*]}")
+    awk_script="BEGIN{split(\"$exclude_list\",ex,\",\"); for(i in ex) exclude[ex[i]]=1} {for(i=1;i<=NF;i++) if(!exclude[i]) printf \"%s%s\", \$i, (i==NF||exclude[i+1]?\"\":\" \")} {print \"\"}"
+  else
+    # normal mode - existing logic
+    cmd="\$$1"
+    if [ ! -z "$2" ]
+    then
+      cmd="$cmd$(printf '" "$%s' "${@:2}")"
+    fi
+    awk_script="{print $cmd}"
   fi
-  # shellcheck disable=SC2128
+
   if [ -n "$separator" ]
   then
-    awk -F "$separator" "{print $cmd}" #-F separator
+    awk -F "$separator" "$awk_script"
   else
-    awk "{print $cmd}"
+    awk "$awk_script"
   fi
 }
 alias ac=awk_column
@@ -132,3 +151,19 @@ function __tigr() {
 
 alias tigr=__tigr
 
+function count_open_files() {
+limit=$(ulimit -n)
+  for pid in /proc/[0-9]*; do
+    count=$(ls $pid/fd 2>/dev/null | wc -l)
+    [ $count -gt 100 ] && printf "%6d (%3d%%) %s\n" $count $((count*100/limit)) "$(cat $pid/comm 2>/dev/null)"
+  done | sort -rn
+}
+
+function count_watches() {
+  max_watches=$(cat /proc/sys/fs/inotify/max_user_watches)
+  for pid in $(find /proc/*/fdinfo -type f 2>/dev/null | xargs grep -l inotify 2>/dev/null | cut -d/ -f3 | sort -u); do
+    count=$(ls /proc/$pid/fdinfo 2>/dev/null | xargs -I {} grep -l inotify /proc/$pid/fdinfo/{} 2>/dev/null | wc -l)
+    name=$(ps -p $pid -o comm= 2>/dev/null)
+    [ -n "$name" ] && printf "%6d (%3d%%) %s\n" $count $((count*100/max_watches)) "$name"
+  done | sort -rn
+}

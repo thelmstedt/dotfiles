@@ -30,8 +30,13 @@ alias tf="terraform"
 # k8s
 alias k="kubectl"
 function ke() {
-    echo kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
-    kubectl exec --stdin --tty -n "$2" "$1" -- "${@:2}"
+    local pod namespace
+    zparseopts -D n:=namespace
+    namespace=${namespace[2]:-default}
+    pod="$1"
+    shift
+    set -x
+    kubectl exec --stdin --tty -n "$namespace" "$pod" -- "$@"
 }
 
 function de() {

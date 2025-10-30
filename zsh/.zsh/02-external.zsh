@@ -8,6 +8,7 @@ PATH_SYNTAX_HIGHLIGHTING="/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syn
 PATH_FZF_KEY="/usr/share/fzf/key-bindings.zsh"
 PATH_FZF_COMP="/usr/share/fzf/completion.zsh"
 PATH_ZSH_SITE_FUNCTIONS="/usr/share/zsh/site-functions"
+PATH_JUST="/usr/bin/just"
 
 if [[ "$OS" == "mac" ]]; then
   PATH_Z="/opt/homebrew/etc/profile.d/z.sh"
@@ -15,6 +16,7 @@ if [[ "$OS" == "mac" ]]; then
   PATH_SYNTAX_HIGHLIGHTING="/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
   PATH_FZF_KEY="/opt/homebrew/opt/fzf/shell/completion.zsh"
   PATH_FZF_COMP="/opt/homebrew/opt/fzf/shell/key-bindings.zsh"
+  PATH_JUST="/opt/homebrew/bin/just"
 
    if type brew &>/dev/null; then
       PATH_ZSH_SITE_FUNCTIONS=$(brew --prefix)/share/zsh-completions
@@ -124,3 +126,6 @@ if [[ -r "/usr/bin/aws_completer" ]] ; then
   complete -C '/usr/bin/aws_completer' aws
 fi
 
+if [[ -r "$PATH_JUST" ]] ; then
+  eval "$(just --completions zsh)"
+fi
