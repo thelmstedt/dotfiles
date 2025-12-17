@@ -33,3 +33,5 @@ system/local_media
 .kotlin
 local.org
 ElasticSearchPlugin/docker-compose.yml
+fil-result
+kubeconfig

@@ -1,7 +1,11 @@
+
+DESK_MAC="F7:7B:4D:D9:B1:6B"
 if [[ "$OS" == "mac" ]]; then
   # missing commands in osx
   alias tac="tail -r"
+  DESK_MAC="AD739686-0D5B-06A9-5D81-68385BD54DC4"
 fi
+
 
 alias ls='ls --color=auto'
 if [[ -r "/usr/bin/exa" ]] ; then
@@ -24,9 +28,6 @@ alias g="git"
 alias gs="git status --short"
 alias e="emacsclient -t"
 
-# terraform
-alias tf="terraform"
-
 # k8s
 alias k="kubectl"
 function ke() {
@@ -43,10 +44,10 @@ function de() {
  docker exec -it "$(docker ps | grep $1 | awk '{print $1}')" "$2"
 }
 alias dc="docker compose"
-alias vpndo='nsenter --target $(docker inspect --format "{{.State.Pid}}" vpn-vpn-1) --net --setuid $(id -u)'
 
 
-alias aws-display="~/work/aws-pricing/.venv/bin/python ~/work/aws-pricing/aws-display.py"
+alias -g aws-display="uv run --directory ~/work/aws-pricing python aws-display.py"
+alias -g ktopm="uv run --directory ~/work/aws-pricing python ktopm.py"
 alias git-recent="~/bin/.venv/bin/python ~/bin/git-recent.py"
 
 
@@ -65,8 +66,8 @@ alias r='gradle'
 alias gw='$(git rev-parse --show-toplevel)/gradlew'
 
 # desk
-alias deskup="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 1150"
-alias deskdown="uvx linak-controller --mac-address AD739686-0D5B-06A9-5D81-68385BD54DC4 --move-to 730"
+alias deskup="uvx linak-controller --mac-address $DESK_MAC --move-to 1150"
+alias deskdown="uvx linak-controller --mac-address $DESK_MAC --move-to 730"
 
 
 # wayland
