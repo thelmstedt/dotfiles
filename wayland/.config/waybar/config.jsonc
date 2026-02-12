@@ -12,8 +12,10 @@
     "custom/spotify"
   ],
   "modules-right": [
-    "network#enp5s0",
-    "pulseaudio",
+    "network#up",
+    "network#down",
+    "pulseaudio#spk",
+    "pulseaudio#mic",
     "cpu",
     "memory",
     "temperature",
@@ -44,11 +46,11 @@
     "interval": 1
   },
   "cpu": {
-    "format": "{usage}% ",
+    "format": "CPU {usage}%",
     "tooltip": false
   },
   "memory": {
-    "format": "{}% "
+    "format": "MEM {}%"
   },
   "temperature": {
     "thermal-zone": 2,
@@ -57,38 +59,41 @@
     "format-critical": "{icon} {temperatureC}°C",
     "format": "{icon} {temperatureC}°C",
     "format-icons": [
-      "",
-      "",
-      ""
+      "TEMP"
     ],
     "interval": 1
   },
-  "network#enp5s0": {
+  "network#up": {
     "interface": "enp6s0",
-    "format": "{bandwidthUpBytes} ↑ {bandwidthDownBytes} ↓",
+    "format": "UP {bandwidthUpBytes}",
     "format-disconnected": "Disconnected",
     "interval": 1,
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
   },
-  "pulseaudio": {
+  "network#down": {
+    "interface": "enp6s0",
+    "format": "DOWN {bandwidthDownBytes}",
+    "format-disconnected": "Disconnected",
+    "interval": 1,
+    "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "pulseaudio#spk": {
     // "scroll-step": 1, // %, can be a float
-    "format": "{volume}% {icon} {format_source}",
-    "format-bluetooth": "{volume}% {icon} {format_source}",
-    "format-bluetooth-muted": " {icon} {format_source}",
-    "format-muted": " {format_source}",
-    "format-source": " {volume}% ",
-    "format-source-muted": "",
+    "format": "{icon} {volume}%",
     "format-icons": {
-      "headphone": "",
-      "hands-free": "",
-      "headset": "",
-      "phone": "",
-      "portable": "",
-      "car": "",
       "default": [
-        "",
-        "",
-        ""
+        "VOL"
+      ]
+    },
+    "on-click": "pavucontrol"
+  },
+  "pulseaudio#mic": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{format_source}",
+    "format-source": "MIC {volume}%",
+    "format-icons": {
+      "default": [
+        "VOL"
       ]
     },
     "on-click": "pavucontrol"

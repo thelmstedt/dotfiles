@@ -16,7 +16,7 @@ else
   alias ll="ls -l"
 fi
 
-alias startx=Hyprland
+alias startx=start-hyprland
 alias trim="sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'"
 alias lower="tr '[:upper:]' '[:lower:]'"
 alias upper="tr '[:lower:]' '[:upper:]'"

@@ -89,3 +89,4 @@ In the registry  (Ctrl+Shift+A and look for "Registry...")
 
     yay -S cuda cudnn cuSPARSELt nccl 
 
+

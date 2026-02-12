@@ -61,7 +61,7 @@ tf() {
   local profile=""
   if [[ -z "$AWS_PROFILE" ]]; then
     case "$module" in
-      prod|prod-129|prod-upgrade) profile="clarivate-prod" ;;
+      prod*) profile="clarivate-prod" ;;
       *) profile="clarivate" ;;
     esac
   fi

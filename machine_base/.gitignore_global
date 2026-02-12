@@ -35,3 +35,7 @@ local.org
 ElasticSearchPlugin/docker-compose.yml
 fil-result
 kubeconfig
+
+
+.terraform.lock.hcl
+*.hprof

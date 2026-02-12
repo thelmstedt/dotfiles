@@ -1,2 +1,0 @@
-#!/bin/sh
-exec setsid -f /opt/idea/bin/idea.sh "$@" </dev/null &>/dev/null

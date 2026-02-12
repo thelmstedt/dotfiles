@@ -1,3 +1,7 @@
 theme = Adwaita
 window-theme = light
 copy-on-select = clipboard
+window-decoration = false
+gtk-titlebar = false
+font-thicken = false
+gtk-single-instance = true

@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+ alacritty msg --socket "$XDG_RUNTIME_DIR/alacritty.sock" create-window \
+    || alacritty --socket "$XDG_RUNTIME_DIR/alacritty.sock"
