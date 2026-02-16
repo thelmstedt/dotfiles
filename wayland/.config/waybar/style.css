@@ -1,61 +1,94 @@
 @define-color foreground #cdd6f4;
 @define-color background #1a1b26;
-@define-color alert red;
+@define-color alert #ff0000;
+@define-color dim #414868;
 
 * {
-    background-color: @background;
-    color: @foreground;
-
     border: none;
     border-radius: 0;
+    font-family: 'CaskaydiaMono Nerd Font', monospace;
+    font-size: 13px; /* Slightly larger for readability */
+    font-weight: bold;
     min-height: 0;
-    font-family: 'CaskaydiaMono Nerd Font';
-    font-size: 12px;
 }
 
-.modules-left {
-    margin-left: 8px;
+.icon {
+    background: #cdd6f4;
+    color: #1a1b26;
 }
 
-.modules-right {
-    margin-right: 8px;
+window#waybar {
+    background-color: @background;
+    color: @foreground;
+}
+
+/* hard borders between modules */
+.modules-left > widget:not(:last-child) > #workspaces,
+.modules-left > widget:not(:last-child) > label,
+.modules-right > widget:not(:last-child) > box,
+.modules-right > widget:not(:last-child) > label {
+    border-right: 2px solid @dim;
+}
+#clock {
+    border-left: 2px solid @dim;
+    border-right: 2px solid @dim;
+}
+
+/* Module Styling */
+#cpu,
+#memory,
+#battery,
+#pulseaudio,
+#network,
+#mpris,
+#custom-media,
+#custom-netup,
+#custom-netdown,
+#temperature,
+#clock,
+#window {
+    padding: 0 10px;
+    background-color: @background;
+    color: @foreground;
+}
+
+/* Alert States */
+#battery.warning,
+#battery.critical,
+#pulseaudio.muted,
+.disconnected {
+    background-color: @alert;
+    color: @background;
+}
+
+/* Workspaces: The "Block" Look */
+#workspaces {
+    background-color: @background;
+    padding: 0;
+    margin: 0;
 }
 
 #workspaces button {
-    all: initial;
-    padding: 0 6px;
-    margin: 0 1.5px;
-    min-width: 9px;
+    padding: 0 8px;
+    background-color: @background;
+    color: @dim;
+    border-bottom: 2px solid @background; /* Hidden border for alignment */
 }
 
-#workspaces button.empty {
-    opacity: 0.5;
+/* Active workspace acts like a lit LED or active terminal cursor */
+#workspaces button.active {
+    background-color: @foreground;
+    color: @background;
 }
 
-#cpu,
-#battery,
-#pulseaudio,
-#custom-omarchy,
-#custom-screenrecording-indicator,
-#custom-update,
-#tray,
-#bluetooth,
-#network {
-    min-width: 12px;
-    margin: 0 7.5px;
+#workspaces button.urgent {
+    background-color: @alert;
+    color: @background;
 }
 
+/* Tooltip: Raw text box look */
 tooltip {
-    padding: 2px;
-}
-
-#custom-update {
-    font-size: 10px;
-}
-
-.hidden {
-    opacity: 0;
-}
-.disconnected {
-    color: @alert;
+    background-color: @background;
+    color: @foreground;
+    border: 2px solid @dim;
 }

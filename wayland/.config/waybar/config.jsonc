@@ -1,7 +1,7 @@
 // -*- mode: jsonc -*-
 {
   "height": 30,
-  "spacing": 10,
+  "spacing": 0,
   "modules-left": [
     "hyprland/workspaces",
     "hyprland/window"
@@ -9,11 +9,11 @@
   "modules-center": [
     "custom/kvm",
     "clock",
-    "custom/spotify"
+    "mpris"
   ],
   "modules-right": [
-    "network#up",
-    "network#down",
+    "custom/netup",
+    "custom/netdown",
     "pulseaudio#spk",
     "pulseaudio#mic",
     "cpu",
@@ -40,17 +40,17 @@
     "spacing": 10
   },
   "clock": {
-     "timezone": "Australia/Brisbane",
+    "timezone": "Australia/Brisbane",
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format": "{:%Y-%m-%d %H:%M:%S}",
     "interval": 1
   },
   "cpu": {
-    "format": "CPU {usage}%",
+    "format": "CPU {usage:2}%",
     "tooltip": false
   },
   "memory": {
-    "format": "MEM {}%"
+    "format": "MEM {percentage:2}%"
   },
   "temperature": {
     "thermal-zone": 2,
@@ -59,52 +59,51 @@
     "format-critical": "{icon} {temperatureC}°C",
     "format": "{icon} {temperatureC}°C",
     "format-icons": [
-      "TEMP"
+      "TMP"
     ],
     "interval": 1
   },
   "network#up": {
     "interface": "enp6s0",
-    "format": "UP {bandwidthUpBytes}",
+    "format": "UP {bandwidthUpBytes:2}",
     "format-disconnected": "Disconnected",
     "interval": 1,
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
   },
   "network#down": {
     "interface": "enp6s0",
-    "format": "DOWN {bandwidthDownBytes}",
+    "format": "DOWN {bandwidthDownBytes:2}",
     "format-disconnected": "Disconnected",
     "interval": 1,
     "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
   },
   "pulseaudio#spk": {
     // "scroll-step": 1, // %, can be a float
-    "format": "{icon} {volume}%",
-    "format-icons": {
-      "default": [
-        "VOL"
-      ]
-    },
+    "format": "VOL {volume}%",
+    "format-muted": "VOL MUT",
     "on-click": "pavucontrol"
   },
   "pulseaudio#mic": {
     // "scroll-step": 1, // %, can be a float
     "format": "{format_source}",
     "format-source": "MIC {volume}%",
-    "format-icons": {
-      "default": [
-        "VOL"
-      ]
-    },
+    "format-muted": "MIC MUT",
     "on-click": "pavucontrol"
   },
-  "custom/spotify": {
-    "format": "{text}",
-    "exec": "~/.config/waybar/media.sh",
-    "interval": 1,
-    "on-click": "playerctl play-pause",
-    "max-length": 100,
-    "return-type": "json"
+  "mpris": {
+    "format": "{status_icon} {artist} - {album} - {title}",
+    "status-icons": {
+      "playing": "PLY",
+      "paused": "HLT",
+      "stopped": "STP"
+    },
+    "custom/netup": {
+      "format": "{}",
+      "exec": "~/.config/waybar/pif.sh enp6s0 rx",
+      "interval": 1,
+      "return-type": "json"
+    }
+    // "ignored-players": ["firefox"]
   },
   "custom/cpu_freq": {
     "format": "{text}",
@@ -121,5 +120,15 @@
     "exec": "~/.config/waybar/kvm-status.sh",
     "interval": 1,
     "return-type": "json"
+  },
+  "custom/netdown": {
+    "format": "DNL {}",
+    "exec": "~/.config/waybar/pif.sh enp6s0 rx",
+    "interval": 1
+  },
+  "custom/netup": {
+    "format": "UPL {}",
+    "exec": "~/.config/waybar/pif.sh enp6s0 tx",
+    "interval": 1
   }
 }
