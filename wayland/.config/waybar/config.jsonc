@@ -8,10 +8,10 @@
   ],
   "modules-center": [
     "custom/kvm",
-    "clock",
-    "mpris"
+    "clock"
   ],
   "modules-right": [
+    "mpris",
     "custom/netup",
     "custom/netdown",
     "pulseaudio#spk",
@@ -46,62 +46,40 @@
     "interval": 1
   },
   "cpu": {
-    "format": "CPU {usage:2}%",
+    "format": "<span background='#cdd6f4' color='#1a1b26'>CPU</span> {usage:2}%",
     "tooltip": false
   },
   "memory": {
-    "format": "MEM {percentage:2}%"
+    "format": "<span background='#cdd6f4' color='#1a1b26'>MEM</span> {percentage:2}%"
   },
   "temperature": {
     "thermal-zone": 2,
     "hwmon-path": "/sys/class/hwmon/hwmon3/temp1_input",
     "critical-threshold": 80,
-    "format-critical": "{icon} {temperatureC}°C",
-    "format": "{icon} {temperatureC}°C",
-    "format-icons": [
-      "TMP"
-    ],
+    "format": "<span background='#cdd6f4' color='#1a1b26'>TMP</span> {temperatureC}°C",
     "interval": 1
   },
-  "network#up": {
-    "interface": "enp6s0",
-    "format": "UP {bandwidthUpBytes:2}",
-    "format-disconnected": "Disconnected",
-    "interval": 1,
-    "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
-  },
-  "network#down": {
-    "interface": "enp6s0",
-    "format": "DOWN {bandwidthDownBytes:2}",
-    "format-disconnected": "Disconnected",
-    "interval": 1,
-    "tooltip-format": "{ifname}: {ipaddr}/{cidr}"
-  },
   "pulseaudio#spk": {
-    // "scroll-step": 1, // %, can be a float
-    "format": "VOL {volume}%",
-    "format-muted": "VOL MUT",
+    "format": "<span background='#cdd6f4' color='#1a1b26'>VOL</span> {volume}%",
+    "format-muted": "<span background='#cdd6f4' color='#1a1b26'>VOL MUT</span>",
     "on-click": "pavucontrol"
   },
   "pulseaudio#mic": {
-    // "scroll-step": 1, // %, can be a float
     "format": "{format_source}",
-    "format-source": "MIC {volume}%",
-    "format-muted": "MIC MUT",
+    "format-source": "<span background='#cdd6f4' color='#1a1b26'>MIC</span> {volume}%",
+    "format-muted": "<span background='#cdd6f4' color='#1a1b26'>MIC MUT</span>",
     "on-click": "pavucontrol"
   },
   "mpris": {
-    "format": "{status_icon} {artist} - {album} - {title}",
+    "format": "{status_icon} {dynamic}",
+    "dynamic-order": ["artist", "album", "title"],
+    "dynamic-importance-order": ["title", "artist", "album"],
+    "max-length": 50,
+    "dynamic-len": 50,
     "status-icons": {
-      "playing": "PLY",
-      "paused": "HLT",
-      "stopped": "STP"
-    },
-    "custom/netup": {
-      "format": "{}",
-      "exec": "~/.config/waybar/pif.sh enp6s0 rx",
-      "interval": 1,
-      "return-type": "json"
+      "playing": "<span background='#cdd6f4' color='#1a1b26'>PLY</span>",
+      "paused": "<span background='#cdd6f4' color='#1a1b26'>HLT</span>",
+      "stopped": "<span background='#cdd6f4' color='#1a1b26'>STP</span>"
     }
     // "ignored-players": ["firefox"]
   },
@@ -122,12 +100,12 @@
     "return-type": "json"
   },
   "custom/netdown": {
-    "format": "DNL {}",
+    "format": "<span background='#cdd6f4' color='#1a1b26'>DNL</span> {}",
     "exec": "~/.config/waybar/pif.sh enp6s0 rx",
     "interval": 1
   },
   "custom/netup": {
-    "format": "UPL {}",
+    "format": "<span background='#cdd6f4' color='#1a1b26'>UPL</span> {}",
     "exec": "~/.config/waybar/pif.sh enp6s0 tx",
     "interval": 1
   }

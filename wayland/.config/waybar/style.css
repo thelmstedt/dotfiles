@@ -52,15 +52,6 @@ window#waybar {
     color: @foreground;
 }
 
-/* Alert States */
-#battery.warning,
-#battery.critical,
-#pulseaudio.muted,
-.disconnected {
-    background-color: @alert;
-    color: @background;
-}
-
 /* Workspaces: The "Block" Look */
 #workspaces {
     background-color: @background;
@@ -91,4 +82,8 @@ tooltip {
     background-color: @background;
     color: @foreground;
     border: 2px solid @dim;
+}
+
+#tray {
+    min-width: 100px;
 }
