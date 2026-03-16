@@ -29,7 +29,7 @@ RowLayout {
     Process {
         id: proc
         command: ["bash", "-c",
-            "lsusb | grep -qE '04d9:4545|046d:c52b' && echo local || echo remote"]
+            "grep -qsE '04d9|046d' /sys/bus/usb/devices/*/idVendor && echo local || echo remote"]
         stdout: StdioCollector {
             onStreamFinished: root._local = (this.text.trim() === "local")
         }
@@ -40,6 +40,6 @@ RowLayout {
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: proc.running = true
+        onTriggered: if (!proc.running) proc.running = true
     }
 }

@@ -5,8 +5,8 @@ import qs.component
 
 StyledText {
     required property var monitor
-    leftPadding: 10
-    rightPadding: 10
+    leftPadding: 4
+    rightPadding: 4
     font.weight: Font.Bold
     verticalAlignment: Text.AlignVCenter
     text: {

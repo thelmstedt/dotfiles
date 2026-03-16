@@ -12,7 +12,7 @@ RowLayout {
     spacing: 0
 
     Repeater {
-        model: Hyprland.workspaces
+        model: [...Hyprland.workspaces.values].sort((a, b) => a.id - b.id)
 
         delegate: Rectangle {
             required property var modelData

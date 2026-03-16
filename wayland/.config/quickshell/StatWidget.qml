@@ -31,7 +31,7 @@ Item {
 
         StyledText {
             leftPadding: 6
-            rightPadding: 10
+            rightPadding: 4
             text: root._value + root.suffix
             font.weight: Font.Bold
             verticalAlignment: Text.AlignVCenter
@@ -57,6 +57,6 @@ Item {
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: proc.running = true
+        onTriggered: if (!proc.running) proc.running = true
     }
 }

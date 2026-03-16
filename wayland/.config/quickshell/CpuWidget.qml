@@ -1,4 +1,4 @@
-// CpuWidget.qml — native /proc/stat diff, no subshell
+// CpuWidget.qml — native /proc/stat diff, no subprocess
 import QtQuick
 import QtQuick.Layouts
 import Quickshell.Io
@@ -28,7 +28,7 @@ Item {
 
         StyledText {
             leftPadding: 6
-            rightPadding: 10
+            rightPadding: 4
             text: root._value + "%"
             font.weight: Font.Bold
             verticalAlignment: Text.AlignVCenter
@@ -41,24 +41,21 @@ Item {
         hoverEnabled: true
     }
 
-    Process {
-        id: proc
-        command: ["cat", "/proc/stat"]
-        stdout: StdioCollector {
-            onStreamFinished: {
-                // first line: "cpu  user nice system idle iowait irq softirq ..."
-                const parts = this.text.split('\n')[0].trim().split(/\s+/).slice(1).map(Number)
-                const idle  = parts[3] + parts[4]  // idle + iowait
-                const total = parts.reduce((a, b) => a + b, 0)
-                if (root._prevTotal >= 0) {
-                    const dt = total - root._prevTotal
-                    const di = idle  - root._prevIdle
-                    const pct = dt > 0 ? Math.round((1 - di / dt) * 100) : 0
-                    root._value = String(Math.max(0, Math.min(100, pct))).padStart(3)
-                }
-                root._prevTotal = total
-                root._prevIdle  = idle
+    FileView {
+        id: statFile
+        path: "/proc/stat"
+        onTextChanged: {
+            const parts = text.split('\n')[0].trim().split(/\s+/).slice(1).map(Number)
+            const idle  = parts[3] + parts[4]  // idle + iowait
+            const total = parts.reduce((a, b) => a + b, 0)
+            if (root._prevTotal >= 0) {
+                const dt = total - root._prevTotal
+                const di = idle  - root._prevIdle
+                const pct = dt > 0 ? Math.round((1 - di / dt) * 100) : 0
+                root._value = String(Math.max(0, Math.min(100, pct))).padStart(3)
             }
+            root._prevTotal = total
+            root._prevIdle  = idle
         }
     }
 
@@ -67,6 +64,6 @@ Item {
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: proc.running = true
+        onTriggered: statFile.reload()
     }
 }

@@ -61,7 +61,7 @@ Item {
 
         StyledText {
             leftPadding: 6
-            rightPadding: 10
+            rightPadding: 4
             text: root.trackText
             font.weight: Font.Bold
             verticalAlignment: Text.AlignVCenter

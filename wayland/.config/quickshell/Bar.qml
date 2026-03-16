@@ -68,9 +68,9 @@ PanelWindow {
 
             Separator { visible: mprisWidget.visible }
 
-            NetWidget { direction: "UPL" }
+            NetWidget { direction: "UPL"; iface: Config.netIface }
             Separator {}
-            NetWidget { direction: "DNL" }
+            NetWidget { direction: "DNL"; iface: Config.netIface }
 
             Separator {}
 
@@ -93,7 +93,7 @@ PanelWindow {
 
             StatWidget {
                 label: "TMP"
-                pollCmd: ["awk", "{printf \"%2d\", int($1/1000)}", "/sys/class/hwmon/hwmon3/temp1_input"]
+                pollCmd: ["awk", "{printf \"%2d\", int($1/1000)}", Config.tempInput]
                 suffix: "°C"
                 interval: 2000
             }

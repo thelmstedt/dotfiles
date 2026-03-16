@@ -5,8 +5,8 @@ import qs.component
 
 StyledText {
     id: root
-    leftPadding: 10
-    rightPadding: 10
+    leftPadding: 4
+    rightPadding: 4
     verticalAlignment: Text.AlignVCenter
     font.weight: Font.Bold
 

@@ -45,7 +45,7 @@ Item {
 
         StyledText {
             leftPadding: 6
-            rightPadding: 10
+            rightPadding: 4
             text: root._vol + "%"
             font.weight: Font.Bold
             verticalAlignment: Text.AlignVCenter
@@ -62,6 +62,6 @@ Item {
         id: ma
         anchors.fill: parent
         hoverEnabled: true
-        onClicked: pavucontrol.running = true
+        onClicked: if (!pavucontrol.running) pavucontrol.running = true
     }
 }
