@@ -64,6 +64,7 @@ tf() {
       prod*) profile="clarivate-prod" ;;
       *) profile="clarivate" ;;
     esac
+    echo "detected [$profile] from [$module] directory"
   fi
 
   if [[ -n "$profile" ]]; then
