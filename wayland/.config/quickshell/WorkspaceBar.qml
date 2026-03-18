@@ -17,6 +17,7 @@ RowLayout {
         delegate: Rectangle {
             required property var modelData
             property bool isActive: modelData.id === (root.monitor?.activeWorkspace?.id ?? -1)
+            property bool isActiveElsewhere: !isActive && [...Hyprland.monitors.values].some(m => m.activeWorkspace?.id === modelData.id)
 
             implicitWidth: wsLabel.implicitWidth + 16
             implicitHeight: Theme.barHeight
@@ -26,7 +27,7 @@ RowLayout {
                 id: wsLabel
                 anchors.centerIn: parent
                 text: modelData.id
-                color: isActive ? Theme.bg : (hover.containsMouse ? Theme.fg : Theme.dim)
+                color: isActive ? Theme.bg : (isActiveElsewhere || hover.containsMouse ? Theme.fg : Theme.dim)
                 font.weight: Font.Bold
             }
 
