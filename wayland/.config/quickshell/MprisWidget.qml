@@ -11,8 +11,38 @@ Item {
     implicitHeight: Theme.barHeight
     visible: Mpris.players.values.length > 0
 
-    property var player: Mpris.players.values.length > 0 ? Mpris.players.values[0] : null
-    property var limit: 50
+    property var lastPlayingPlayer: null
+
+    // Reactively picks the playing player; accessing playbackState in the loop
+    // creates a binding dependency on every player's state, so this re-evaluates
+    // whenever any player starts/stops playing.
+    property var player: {
+        const values = Mpris.players.values
+        for (let i = 0; i < values.length; i++) {
+            if (values[i].playbackState === 1) return values[i]
+        }
+        // Nothing playing — fall back to last known playing player if still around
+        if (lastPlayingPlayer) {
+            for (let i = 0; i < values.length; i++) {
+                if (values[i] === lastPlayingPlayer) return lastPlayingPlayer
+            }
+        }
+        return values.length > 0 ? values[0] : null
+    }
+
+    onPlayerChanged: {
+        if (player?.playbackState === 1) lastPlayingPlayer = player
+    }
+
+    // Catch state changes on the same player (no player change, but playbackState change)
+    Connections {
+        target: root.player
+        function onPlaybackStateChanged() {
+            if (root.player?.playbackState === 1) root.lastPlayingPlayer = root.player
+        }
+    }
+
+    property var limit: 150
 
     property string statusLabel: {
         if (!player) return "STP"
@@ -37,7 +67,7 @@ Item {
         // build from order, drop lowest priority until fits
         let active = order.filter(k => fields[k])
         while (active.length > 1) {
-            const candidate = active.map(k => fields[k]).join(" – ")
+            const candidate = active.map(k => fields[k]).join(" - ")
             if (candidate.length <= limit) break
             // find lowest priority field still active
             const toDrop = [...priority].reverse().find(k => active.includes(k))

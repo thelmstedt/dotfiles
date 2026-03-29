@@ -43,17 +43,6 @@ PanelWindow {
             WindowTitle { monitor: root.hyprlandMonitor }
         }
 
-        // CENTER: kvm + clock
-        RowLayout {
-            anchors.centerIn: parent
-            spacing: 0
-
-            KvmStatus {}
-
-            Separator {}
-            ClockWidget {}
-            Separator {}
-        }
 
         // RIGHT: everything else
         RowLayout {
@@ -68,6 +57,10 @@ PanelWindow {
 
             Separator { visible: mprisWidget.visible }
 
+            KvmStatus { id: kvmWidget }
+            // Separator { visible: kvmWidget.visible }
+
+
             NetWidget { direction: "UPL"; iface: Config.netIface }
             Separator {}
             NetWidget { direction: "DNL"; iface: Config.netIface }
@@ -80,15 +73,10 @@ PanelWindow {
 
             Separator {}
 
-            CpuWidget {}
+            CpuWidget { barWindow: root }
             Separator {}
 
-            StatWidget {
-                label: "MEM"
-                pollCmd: ["awk", "/MemTotal/{t=$2} /MemAvailable/{a=$2} END{printf \"%3d\", int((t-a)/t*100)}", "/proc/meminfo"]
-                suffix: "%"
-                interval: 2000
-            }
+            MemWidget { barWindow: root }
             Separator {}
 
             StatWidget {
@@ -101,6 +89,10 @@ PanelWindow {
             Separator {}
 
             TrayWidget { barWindow: root }
+
+            Separator {}
+
+            ClockWidget {}
         }
     }
 }

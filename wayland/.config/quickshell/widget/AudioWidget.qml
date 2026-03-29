@@ -62,6 +62,12 @@ Item {
         id: ma
         anchors.fill: parent
         hoverEnabled: true
+        scrollGestureEnabled: false
         onClicked: if (!pavucontrol.running) pavucontrol.running = true
+        onWheel: (event) => {
+            if (!root._node) return
+            const delta = event.angleDelta.y > 0 ? 0.05 : -0.05
+            root._node.audio.volume = Math.max(0, Math.min(1, root._node.audio.volume + delta))
+        }
     }
 }
