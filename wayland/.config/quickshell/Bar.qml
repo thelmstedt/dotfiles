@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import qs.service
+import qs.component
 import qs.widget
 
 PanelWindow {
