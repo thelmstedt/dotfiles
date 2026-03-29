@@ -75,3 +75,7 @@ tf() {
     ./terraform.sh "$module" "$cmd" "$@"
   fi
 }
+
+clvssh () {
+  SSH_ASKPASS=~/.ssh-askpass.sh SSH_ASKPASS_REQUIRE=force vpndo ssh $1
+}
