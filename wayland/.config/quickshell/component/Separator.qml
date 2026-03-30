@@ -2,7 +2,7 @@ import QtQuick
 import qs.service
 
 Item {
-    implicitWidth: 5
+    implicitWidth: 1
     implicitHeight: parent.height
 
     Rectangle {

@@ -9,7 +9,7 @@ Singleton {
     readonly property color alert:   "#f7768e"
     readonly property color label_bg: "#cdd6f4"
     readonly property color label_fg: "#1a1b26"
-    readonly property string font:   "CaskaydiaMono Nerd Font"
+    readonly property string font:   "Noto Sans Mono"
     readonly property int fontSize:  14
-    readonly property int barHeight: 30
+    property int barHeight: 30
 }

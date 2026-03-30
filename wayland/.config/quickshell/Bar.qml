@@ -80,6 +80,9 @@ PanelWindow {
             MemWidget { barWindow: root }
             Separator {}
 
+            IoWidget { barWindow: root }
+            Separator {}
+
             StatWidget {
                 label: "TMP"
                 pollCmd: ["awk", "{printf \"%2d\", int($1/1000)}", Config.tempInput]

@@ -52,10 +52,10 @@ Item {
                 const now = parseInt(this.text.trim())
                 if (root._prev >= 0) {
                     const bps = now - root._prev
-                    if (bps >= 1048576)
-                        root._value = String(Math.floor(bps / 1048576)).padStart(3, "0") + "M/s"
-                    else if (bps >= 1024)
-                        root._value = String(Math.floor(bps / 1024)).padStart(3, "0") + "K/s"
+                    if (bps >= 1000000)
+                        root._value = String(Math.floor(bps / 1000000)).padStart(3, "0") + "M/s"
+                    else if (bps >= 1000)
+                        root._value = String(Math.floor(bps / 1000)).padStart(3, "0") + "K/s"
                     else
                         root._value = String(Math.max(0, bps)).padStart(3, "0") + "B/s"
                 }
