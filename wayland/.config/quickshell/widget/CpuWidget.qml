@@ -14,6 +14,7 @@ Item {
     property real _prevIdle: -1
     property real _prevTotal: -1
     property string _value: "  0"
+    property var _history: []
 
     property var _prevCoreIdle: []
     property var _prevCoreTotal: []
@@ -58,45 +59,57 @@ Item {
         Column {
             id: col
             anchors { top: parent.top; left: parent.left; topMargin: 6; leftMargin: 8 }
-            spacing: 3
+            spacing: 6
 
-            Repeater {
-                model: root._coreValues
+            SparkLine {
+                width: col.implicitWidth
+                height: 40
+                values: root._history
+                maxVal: 100
+                lineColor: Theme.label_bg
+            }
 
-                Row {
-                    required property var modelData
-                    spacing: 6
+            Column {
+                spacing: 3
 
-                    StyledText {
-                        text: modelData.label
-                        width: 36
-                        color: Theme.fg
-                        verticalAlignment: Text.AlignVCenter
-                    }
+                Repeater {
+                    model: root._coreValues
 
-                    Rectangle {
-                        width: 100
-                        height: 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Theme.dim
+                    Row {
+                        required property var modelData
+                        spacing: 6
+
+                        StyledText {
+                            text: modelData.label
+                            width: 36
+                            color: Theme.fg
+                            verticalAlignment: Text.AlignVCenter
+                        }
 
                         Rectangle {
-                            width: parent.width * modelData.pct / 100
-                            height: parent.height
-                            color: modelData.pct > 80 ? Theme.alert : Theme.label_bg
+                            width: 100
+                            height: 12
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: Theme.dim
+
+                            Rectangle {
+                                width: parent.width * modelData.pct / 100
+                                height: parent.height
+                                color: modelData.pct > 80 ? Theme.alert : Theme.label_bg
+                            }
                         }
-                    }
 
-                    StyledText {
-                        text: String(modelData.pct).padStart(3) + "%"
-                        color: Theme.fg
-                        verticalAlignment: Text.AlignVCenter
-                    }
+                        StyledText {
+                            text: String(modelData.pct).padStart(3) + "%"
+                            color: Theme.fg
+                            verticalAlignment: Text.AlignVCenter
+                        }
 
-                    StyledText {
-                        text: modelData.freq > 0 ? (modelData.freq / 1000).toFixed(2) + "G" : ""
-                        color: Theme.dim
-                        verticalAlignment: Text.AlignVCenter
+                        StyledText {
+                            text: modelData.freq > 0 ? (modelData.freq / 1000).toFixed(2) + "G" : ""
+                            color: Theme.dim
+                            verticalAlignment: Text.AlignVCenter
+                        }
                     }
                 }
             }
@@ -116,8 +129,10 @@ Item {
             if (root._prevTotal >= 0) {
                 const dt = total - root._prevTotal
                 const di = idle  - root._prevIdle
-                const pct = dt > 0 ? Math.round((1 - di / dt) * 100) : 0
-                root._value = String(Math.max(0, Math.min(100, pct))).padStart(3)
+                const pct = Math.max(0, Math.min(100,
+                    dt > 0 ? Math.round((1 - di / dt) * 100) : 0))
+                root._value = String(pct).padStart(3)
+                root._history = root._history.concat([pct]).slice(-60)
             }
             root._prevTotal = total
             root._prevIdle  = idle
