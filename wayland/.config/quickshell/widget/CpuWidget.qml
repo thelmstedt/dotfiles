@@ -18,8 +18,7 @@ Item {
 
     property var _prevCoreIdle: []
     property var _prevCoreTotal: []
-    property var _coreFreqs: []
-    property var _coreValues: []  // [{label, pct, freq}, ...]
+    property var _coreValues: []  // [{label, pct}, ...]
 
     Rectangle {
         anchors.fill: parent
@@ -69,46 +68,47 @@ Item {
                 lineColor: Theme.label_bg
             }
 
-            Column {
-                spacing: 3
+            Grid {
+                columns: 4
+                spacing: 2
 
                 Repeater {
                     model: root._coreValues
 
-                    Row {
+                    Rectangle {
                         required property var modelData
-                        spacing: 6
+                        width: 54
+                        height: 54
+                        color: Theme.dim
+                        clip: true
 
-                        StyledText {
-                            text: modelData.label
-                            width: 36
-                            color: Theme.fg
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
+                        // Fill from bottom proportional to usage
                         Rectangle {
-                            width: 100
-                            height: 12
-                            anchors.verticalCenter: parent.verticalCenter
-                            color: Theme.dim
-
-                            Rectangle {
-                                width: parent.width * modelData.pct / 100
-                                height: parent.height
-                                color: modelData.pct > 80 ? Theme.alert : Theme.label_bg
-                            }
+                            anchors.bottom: parent.bottom
+                            width: parent.width
+                            height: parent.height * modelData.pct / 100
+                            color: modelData.pct > 80 ? Theme.alert : Theme.label_bg
+                            opacity: 0.5
                         }
 
-                        StyledText {
-                            text: String(modelData.pct).padStart(3) + "%"
+                        // Core index
+                        // Text {
+                        //     anchors { top: parent.top; horizontalCenter: parent.horizontalCenter; topMargin: 4 }
+                        //     text: modelData.label.replace("cpu", "")
+                        //     font.family: Theme.font
+                        //     font.pixelSize: 9
+                        //     color: Theme.fg
+                        //     opacity: 0.6
+                        // }
+
+                        // Percentage
+                        Text {
+                            anchors { centerIn: parent; verticalCenterOffset: 4 }
+                            text: modelData.pct + "%"
+                            font.family: Theme.font
+                            font.pixelSize: Theme.fontSize
+                            font.bold: true
                             color: Theme.fg
-                            verticalAlignment: Text.AlignVCenter
-                        }
-
-                        StyledText {
-                            text: modelData.freq > 0 ? (modelData.freq / 1000).toFixed(2) + "G" : ""
-                            color: Theme.dim
-                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                 }
@@ -140,7 +140,6 @@ Item {
             // Per-core
             const coreLines = lines.filter(l => /^cpu\d/.test(l))
             const newIdle = [], newTotal = [], newVals = []
-            const freqs = root._coreFreqs
             for (let i = 0; i < coreLines.length; i++) {
                 const cp = coreLines[i].trim().split(/\s+/).slice(1).map(Number)
                 const ci = cp[3] + cp[4]
@@ -154,24 +153,11 @@ Item {
                 }
                 newIdle.push(ci)
                 newTotal.push(ct)
-                newVals.push({ label: "cpu" + i, pct: pct, freq: freqs[i] ?? 0 })
+                newVals.push({ label: "cpu" + i, pct })
             }
             root._prevCoreIdle = newIdle
             root._prevCoreTotal = newTotal
             root._coreValues = newVals
-        }
-    }
-
-    FileView {
-        id: cpuinfoFile
-        path: "/proc/cpuinfo"
-        onTextChanged: {
-            const freqs = []
-            text().split('\n').forEach(line => {
-                const m = line.match(/^cpu MHz\s*:\s*([\d.]+)/)
-                if (m) freqs.push(Math.round(parseFloat(m[1])))
-            })
-            root._coreFreqs = freqs
         }
     }
 
@@ -180,6 +166,6 @@ Item {
         running: true
         repeat: true
         triggeredOnStart: true
-        onTriggered: { statFile.reload(); cpuinfoFile.reload() }
+        onTriggered: statFile.reload()
     }
 }
