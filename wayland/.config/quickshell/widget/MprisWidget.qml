@@ -54,8 +54,8 @@ Item {
     }
 
     property string trackText: {
-        if (!player) return ""
-        const fields = {
+            if (!player) return ""
+            const fields = {
                 artist: player.trackArtist || "",
                 album: player.trackAlbum || "",
                 title: player.trackTitle || "",
@@ -63,17 +63,16 @@ Item {
         }
         const order = ["artist", "album", "tracknumber", "title"]
         const priority = ["title", "artist", "album", "tracknumber"]
-        // priority[0] = most important (last to drop)
-        // build from order, drop lowest priority until fits
+        const sep = { album: " | ", artist: " - ", tracknumber: ". " }
+
         let active = order.filter(k => fields[k])
         while (active.length > 1) {
-            const candidate = active.map(k => fields[k]).join(" - ")
+            const candidate = active.map((k, i) => fields[k] + (i < active.length - 1 ? sep[k] : "")).join("")
             if (candidate.length <= limit) break
-            // find lowest priority field still active
             const toDrop = [...priority].reverse().find(k => active.includes(k))
             active = active.filter(k => k !== toDrop)
         }
-        const full = active.map(k => fields[k]).join(" – ")
+        const full = active.map((k, i) => fields[k] + (i < active.length - 1 ? sep[k] : "")).join("")
         return full.length > limit ? full.substring(0, limit - 3) + "..." : full
     }
 

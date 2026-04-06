@@ -13,6 +13,11 @@ StyledText {
         const t = Hyprland.toplevels.values.find(
             tl => tl.activated && tl.monitor?.id === monitor?.id
         )
-        return t?.title ?? ""
+        const title =t?.title ?? ""
+        const limit = 130
+        if(title.length > limit) {
+            return title.substring(0, limit -3) + "..."
+        }
+        return title;
     }
 }

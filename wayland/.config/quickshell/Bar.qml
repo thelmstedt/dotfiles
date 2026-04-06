@@ -74,21 +74,7 @@ PanelWindow {
 
             Separator {}
 
-            CpuWidget { barWindow: root }
-            Separator {}
-
-            MemWidget { barWindow: root }
-            Separator {}
-
-            IoWidget { barWindow: root }
-            Separator {}
-
-            StatWidget {
-                label: "TMP"
-                pollCmd: ["awk", "{printf \"%2d\", int($1/1000)}", Config.tempInput]
-                suffix: "°C"
-                interval: 2000
-            }
+            SysWidget { barWindow: root }
 
             Separator {}
 

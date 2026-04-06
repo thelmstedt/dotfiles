@@ -15,6 +15,7 @@ Canvas {
     onValuesChanged: requestPaint()
     onLineColorChanged: requestPaint()
     onWidthChanged: requestPaint()
+    onVisibleChanged: if (visible) requestPaint()
 
     onPaint: {
         const ctx = getContext("2d")
