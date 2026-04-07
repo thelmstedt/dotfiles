@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 
-# sometimes they change names
-SPEAKERS=$(pactl list short sinks | grep 'SMSL' | awk '{print $2}')
-HEADPHONES=$(pactl list short sinks | grep 'SDAC' | awk '{print $2}')
+HEADPHONES="alsa_output.usb-JDS_Labs_JDS_Labs_Atom_DAC_2-00.iec958-stereo"
+SPEAKERS="alsa_output.usb-SMSL_AUDIO_SMSL_AD18_AMP-00.iec958-stereo"
 
-# RUNNING vs SUSPENDED
-CURRENT=$(pactl list short sinks | grep 'RUNNING' | awk '{print $2}')
+CURRENT=$(pactl get-default-sink)
 
-IDX=$SPEAKERS
-if [[ "$CURRENT" == "$SPEAKERS" ]]; then
-  IDX=$HEADPHONES
+if [ "$CURRENT" = "$HEADPHONES" ]; then
+    TARGET="$SPEAKERS"
+else
+    TARGET="$HEADPHONES"
 fi
 
-pactl set-default-sink "$IDX"
-for input_idx in $(pactl list short sink-inputs | awk '{print $1}'); do
-  pactl move-sink-input "$input_idx" "$IDX"
+pactl set-default-sink "$TARGET"
+
+# move all active streams
+pactl list short sink-inputs | awk '{print $1}' | while read -r input; do
+    pactl move-sink-input "$input" "$TARGET"
 done
+
+echo "switched to: $TARGET"

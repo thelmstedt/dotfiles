@@ -26,12 +26,13 @@ PanelWindow {
     Item {
         anchors.fill: parent
 
-        // LEFT: workspaces + window title
+        // LEFT: workspaces + mpris + window title (bounded by right group)
         RowLayout {
             anchors {
                 left: parent.left
                 top: parent.top
                 bottom: parent.bottom
+                right: rightRow.left
             }
             spacing: 0
 
@@ -41,12 +42,16 @@ PanelWindow {
 
             Separator {}
 
-            WindowTitle { monitor: root.hyprlandMonitor }
+            WindowTitle {
+                monitor: root.hyprlandMonitor
+                Layout.fillWidth: true
+            }
         }
 
 
         // RIGHT: everything else
         RowLayout {
+            id: rightRow
             anchors {
                 right: parent.right
                 top: parent.top
@@ -58,19 +63,11 @@ PanelWindow {
 
             Separator { visible: mprisWidget.visible }
 
-            KvmStatus { id: kvmWidget }
-            // Separator { visible: kvmWidget.visible }
-
-
-            NetWidget { direction: "UPL"; iface: Config.netIface }
-            Separator {}
-            NetWidget { direction: "DNL"; iface: Config.netIface }
+            SinkWidget {}
 
             Separator {}
 
-            AudioWidget { label: "VOL"; isMic: false }
-            Separator {}
-            AudioWidget { label: "MIC"; isMic: true }
+            NetWidget { barWindow: root }
 
             Separator {}
 
@@ -80,7 +77,7 @@ PanelWindow {
 
             TrayWidget { barWindow: root }
 
-            Separator {}
+              Separator {}
 
             ClockWidget {}
         }

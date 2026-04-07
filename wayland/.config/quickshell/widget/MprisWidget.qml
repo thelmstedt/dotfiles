@@ -54,8 +54,8 @@ Item {
     }
 
     property string trackText: {
-            if (!player) return ""
-            const fields = {
+        if (!player) return ""
+        const fields = {
                 artist: player.trackArtist || "",
                 album: player.trackAlbum || "",
                 title: player.trackTitle || "",

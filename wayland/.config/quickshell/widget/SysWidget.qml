@@ -39,8 +39,6 @@ Item {
     // ── TMP state ──────────────────────────────────────────────────────────
     property int _tmpC: 0   // degrees Celsius
 
-    // ── alert ──────────────────────────────────────────────────────────────
-    property bool _alert: _cpuPct > 80 || _memPct > 80 || _tmpC > 85
 
     // ── helpers ────────────────────────────────────────────────────────────
     function _fmtIo(bps) {
@@ -62,17 +60,64 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         spacing: 0
 
-        TlaLabel { text: "SYS"; color: root._alert ? Theme.alert : Theme.label_bg }
+        Rectangle {
+            implicitWidth: cpuLbl.implicitWidth + 8
+            implicitHeight: parent.height
+            color: root._cpuPct > 80 ? Theme.alert : Theme.label_bg
+            StyledText {
+                id: cpuLbl
+                anchors.centerIn: parent
+                text: "CPU"
+                color: Theme.label_fg
+                font.weight: Font.Bold
+            }
+        }
+        StyledText {
+            leftPadding: 6
+            rightPadding: 8
+            text: String(root._cpuPct).padStart(2, "0")
+            font.weight: Font.Bold
+            verticalAlignment: Text.AlignVCenter
+        }
 
+        Rectangle {
+            implicitWidth: memLbl.implicitWidth + 8
+            implicitHeight: parent.height
+            color: root._memPct > 80 ? Theme.alert : Theme.label_bg
+            StyledText {
+                id: memLbl
+                anchors.centerIn: parent
+                text: "MEM"
+                color: Theme.label_fg
+                font.weight: Font.Bold
+            }
+        }
+        StyledText {
+            leftPadding: 6
+            rightPadding: 8
+            text: String(root._memPct).padStart(2, "0")
+            font.weight: Font.Bold
+            verticalAlignment: Text.AlignVCenter
+        }
+
+        Rectangle {
+            implicitWidth: tmpLbl.implicitWidth + 8
+            implicitHeight: parent.height
+            color: root._tmpC > 85 ? Theme.alert : Theme.label_bg
+            StyledText {
+                id: tmpLbl
+                anchors.centerIn: parent
+                text: "TEMP"
+                color: Theme.label_fg
+                font.weight: Font.Bold
+            }
+        }
         StyledText {
             leftPadding: 6
             rightPadding: 4
-            text: "C" + String(root._cpuPct).padStart(2, "0") +
-                  " M" + String(root._memPct).padStart(2, "0") +
-                  " T" + String(root._tmpC).padStart(2, "0") + "°"
+            text: String(root._tmpC).padStart(2, "0") + "°"
             font.weight: Font.Bold
             verticalAlignment: Text.AlignVCenter
-            color: root._alert ? Theme.alert : Theme.fg
         }
     }
 
@@ -99,7 +144,7 @@ Item {
 
             // ── CPU ────────────────────────────────────────────────────────
             StyledText {
-                text: "CPU  " + String(root._cpuPct).padStart(3, " ") + "%"
+                text: "CPU"
                 color: root._cpuPct > 80 ? Theme.alert : Theme.label_bg
                 font.weight: Font.Bold
             }
@@ -157,7 +202,8 @@ Item {
 
             // ── MEM ────────────────────────────────────────────────────────
             StyledText {
-                text: "MEM  " + String(root._memPct).padStart(3, " ") + "%"
+                // text: "MEM  " + String(root._memPct).padStart(3, " ") + "%"
+                text: "MEM"
                 color: root._memPct > 80 ? Theme.alert : Theme.label_bg
                 font.weight: Font.Bold
             }
@@ -227,7 +273,7 @@ Item {
 
             // ── IO ─────────────────────────────────────────────────────────
             StyledText {
-                text: "IO   " + root._ioRVal + "r  " + root._ioWVal + "w"
+                text: "IO"
                 color: Theme.label_bg
                 font.weight: Font.Bold
             }
@@ -324,13 +370,13 @@ Item {
             Item { width: 1; height: 8 }
 
             // ── TMP ────────────────────────────────────────────────────────
-            StyledText {
-                text: "TMP  " + root._tmpC + "°C"
-                color: root._tmpC > 85 ? Theme.alert : Theme.fg
-                font.weight: Font.Bold
-            }
-
-            Item { width: 1; height: 6 }
+            // StyledText {
+            //     text: "TMP  " + root._tmpC + "°C"
+            //     color: root._tmpC > 85 ? Theme.alert : Theme.fg
+            //     font.weight: Font.Bold
+            // }
+            //
+            // Item { width: 1; height: 6 }
         }
     }
 
