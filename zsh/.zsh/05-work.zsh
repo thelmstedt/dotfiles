@@ -19,7 +19,7 @@ awsenv() {
     export AWS_PROFILE="$profile"
     # this expands the profile to env vars - MOST tools will pick these up preferentially and avoid any subsequent sso
     # this is important for terraform because each separate module SSOs :eyeroll:
-    source <(aws configure export-credentials --profile "$profile" --format env-no-export)
+    source <(aws configure export-credentials --profile "$profile" --format env)
     "$@"
   )
 }
