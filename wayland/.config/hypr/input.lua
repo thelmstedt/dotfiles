@@ -1,0 +1,27 @@
+hl.config({
+  input = {
+    kb_layout = "us",
+    kb_variant = "",
+    kb_model = "",
+    kb_options = "ctrl:nocaps",
+    kb_rules = "",
+
+    follow_mouse = 1,
+    mouse_refocus = false,
+
+    sensitivity = -0.25,
+    accel_profile = "adaptive",
+
+    touchpad = {
+      natural_scroll = false,
+    },
+  },
+
+  cursor = {
+    hide_on_key_press = true,
+  },
+
+  binds = {
+    drag_threshold = 50,
+  },
+})
