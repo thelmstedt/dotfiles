@@ -2,12 +2,13 @@ local terminal = "alacritty"
 local fileManager = "thunar"
 local menu = "walker"
 local window_switcher = "walker -m windows"
+local xmonad = require("layouts/xmonad")
 
 local mainMod = "SUPER"
 
 local function unfloat()
   hl.dispatch(hl.dsp.window.float({ action = "unset" }))
-  hl.dispatch(hl.dsp.layout("mfact exact 0.5"))
+  hl.dispatch(hl.dsp.layout("reset"))
 end
 
 hl.bind(mainMod .. " + M", hl.dsp.exit())
@@ -15,12 +16,15 @@ hl.bind(mainMod .. " + M", hl.dsp.exit())
 hl.bind("SUPER + V", hl.dsp.exec_cmd("cliphist list | rofi -dmenu | cliphist decode | wl-copy"))
 hl.bind(mainMod .. " + SHIFT + period", hl.dsp.exec_cmd("1password --ozone-platform-hint=x11 --quick-access"))
 
-hl.bind(mainMod .. " + F1", hl.dsp.window.fullscreen(1))
-hl.bind(mainMod .. " + F2", hl.dsp.layout("orientationleft"))
-hl.bind(mainMod .. " + F3", hl.dsp.layout("orientationbottom"))
+hl.bind(mainMod .. " + F1", hl.dsp.layout("tabbed"))
+hl.bind(mainMod .. " + F2", hl.dsp.layout("vertical"))
+hl.bind(mainMod .. " + F3", hl.dsp.layout("horizontal"))
+hl.bind(mainMod .. " + F4", hl.dsp.layout("3col"))
+hl.bind(mainMod .. " + F12", hl.dsp.layout("grow"))
+hl.bind(mainMod .. " + F11", hl.dsp.layout("shrink"))
 
-hl.bind(mainMod .. " + Tab", hl.dsp.window.cycle_next())
-hl.bind(mainMod .. " + SHIFT + Tab", hl.dsp.window.cycle_next({ next = false }))
+hl.bind(mainMod .. " + Tab", function() xmonad.cycle_focus(true) end)
+hl.bind(mainMod .. " + SHIFT + Tab", function() xmonad.cycle_focus(false) end)
 hl.bind(mainMod .. " + Return", hl.dsp.layout("swapwithmaster"))
 
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "l" }))

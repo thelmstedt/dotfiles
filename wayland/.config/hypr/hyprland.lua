@@ -13,6 +13,7 @@ hl.monitor({
 })
 
 require("autostart")
+require("layouts/xmonad")
 require("bindings")
 require("envs")
 require("input")

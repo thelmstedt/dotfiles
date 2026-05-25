@@ -17,14 +17,20 @@ PanelWindow {
         left: true
         right: true
     }
-    implicitHeight: 30
+    implicitHeight: Theme.barHeight
     color: Theme.bg
 
     // Track which monitor this bar is on for workspace filtering
     property var hyprlandMonitor: Hyprland.monitorFor(root.screen)
 
     Item {
-        anchors.fill: parent
+        id: topRow
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
+        height: Theme.barHeight
 
         // LEFT: workspaces + mpris + window title (bounded by right group)
         RowLayout {
@@ -42,9 +48,29 @@ PanelWindow {
 
             Separator {}
 
-            WindowTitle {
-                monitor: root.hyprlandMonitor
+            Separator {}
+
+            Item {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+                clip: true
+
+                WindowTitle {
+                    monitor: root.hyprlandMonitor
+                    visible: !tabbedTabs.active
+                    anchors.fill: parent
+                }
+
+                TabbedTabs {
+                    id: tabbedTabs
+                    monitor: root.hyprlandMonitor
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: parent.left
+                        right: parent.right
+                    }
+                }
             }
         }
 
